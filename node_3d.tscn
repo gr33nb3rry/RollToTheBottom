@@ -1,0 +1,69 @@
+[gd_scene load_steps=9 format=3 uid="uid://cdgi742lfhjp7"]
+
+[ext_resource type="PackedScene" uid="uid://cxlkxr1ykhym6" path="res://scenes/player.tscn" id="1_5d007"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_otfbn"]
+sky_top_color = Color(0.169649, 0.473015, 0.683777, 1)
+sky_horizon_color = Color(0.476272, 0.687324, 0.8052, 1)
+ground_bottom_color = Color(0.0919586, 0.200774, 0.147171, 1)
+ground_horizon_color = Color(0.549752, 0.69185, 0.645296, 1)
+
+[sub_resource type="Sky" id="Sky_3yu67"]
+sky_material = SubResource("ProceduralSkyMaterial_otfbn")
+
+[sub_resource type="Environment" id="Environment_d3our"]
+background_mode = 2
+sky = SubResource("Sky_3yu67")
+tonemap_mode = 2
+ssao_enabled = true
+ssil_enabled = true
+sdfgi_enabled = true
+sdfgi_min_cell_size = 1.0
+glow_enabled = true
+glow_normalized = true
+glow_bloom = 0.01
+glow_blend_mode = 0
+
+[sub_resource type="BoxMesh" id="BoxMesh_nxek2"]
+size = Vector3(15, 1, 15)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_lt7gs"]
+size = Vector3(15, 1, 15)
+
+[sub_resource type="SphereMesh" id="SphereMesh_hltef"]
+radius = 2.0
+height = 4.0
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_4mtw0"]
+radius = 2.0
+
+[node name="Node3D" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_d3our")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 4.05262, 0)
+shadow_enabled = true
+
+[node name="Player" parent="." instance=ExtResource("1_5d007")]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.77817, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D"]
+mesh = SubResource("BoxMesh_nxek2")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+shape = SubResource("BoxShape3D_lt7gs")
+
+[node name="Ball" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.632493, -2.64189)
+mass = 25.0
+linear_damp = 1.0
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ball"]
+mesh = SubResource("SphereMesh_hltef")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ball"]
+shape = SubResource("SphereShape3D_4mtw0")
