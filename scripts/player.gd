@@ -3,7 +3,7 @@ extends CharacterBody3D
 @onready var model : Node3D = $Model
 @onready var animation_tree : AnimationTree = $Model/Sophia/AnimationTree
 @onready var animation_player: AnimationPlayer = $Model/Sophia/AnimationPlayer
-
+@onready var camera: Camera3D = $CamRoot/CamYaw/CamPitch/SpringArm3D/Camera3D
 #@onready var planet = $/root/World2/Planet
 
 var jump_buffer := 0.0
@@ -11,7 +11,12 @@ const ROTATION_SPEED := 10.0
 const JUMP_VELOCITY := 20.0
 const PUSH_FORCE := 1.0
 
+func _ready() -> void:
+	camera.current = is_multiplayer_authority()
+
 func _physics_process(delta: float) -> void:
+	if !is_multiplayer_authority(): return
+	
 	#var d = global_position - planet.global_position
 	#var gravity_force = (-d.normalized()).normalized()
 	var gravity_force = Vector3(0,-1,0)
@@ -25,7 +30,6 @@ func _physics_process(delta: float) -> void:
 	var orientation_direction = Quaternion(global_transform.basis.y, up_direction) * global_transform.basis.get_rotation_quaternion()
 	var rotation = global_transform.basis.get_rotation_quaternion().slerp(orientation_direction.normalized(), 5.0 * delta)
 	global_rotation = rotation.get_euler()
-	
 	
 	var movement := Vector3.ZERO
 	var forward : Vector3 = -$CamRoot/CamYaw.global_transform.basis.z

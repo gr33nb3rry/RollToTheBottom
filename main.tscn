@@ -1,0 +1,37 @@
+[gd_scene load_steps=3 format=3 uid="uid://0ldn133oa450"]
+
+[ext_resource type="Script" path="res://scripts/main.gd" id="1_7hsgq"]
+[ext_resource type="Script" path="res://scripts/Steam.gd" id="1_t60mr"]
+
+[node name="Main" type="Node2D"]
+script = ExtResource("1_7hsgq")
+
+[node name="Steam" type="Node" parent="."]
+script = ExtResource("1_t60mr")
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
+spawn_path = NodePath("..")
+
+[node name="HostButton" type="Button" parent="."]
+offset_right = 78.0
+offset_bottom = 51.0
+theme_override_font_sizes/font_size = 16
+text = "HOST"
+
+[node name="RefreshButton" type="Button" parent="."]
+offset_top = 51.0
+offset_right = 78.0
+offset_bottom = 102.0
+theme_override_font_sizes/font_size = 16
+text = "REFRESH"
+
+[node name="LobbiesContainer" type="ScrollContainer" parent="."]
+offset_left = 78.0
+offset_right = 578.0
+offset_bottom = 300.0
+
+[node name="Lobbies" type="VBoxContainer" parent="LobbiesContainer"]
+layout_mode = 2
+
+[connection signal="pressed" from="HostButton" to="." method="create_lobby"]
+[connection signal="pressed" from="RefreshButton" to="." method="refresh_lobby_list"]

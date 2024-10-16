@@ -1,0 +1,8 @@
+res://node_3d.tscn
+res://main.tscn
+res://scripts/Steam.gd
+res://scripts/multiplayer_spawner.gd
+res://scenes/player.tscn
+res://scripts/player.gd
+res://scripts/main.gd
+res://level.tscn

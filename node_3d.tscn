@@ -1,6 +1,6 @@
 [gd_scene load_steps=9 format=3 uid="uid://cdgi742lfhjp7"]
 
-[ext_resource type="PackedScene" uid="uid://cxlkxr1ykhym6" path="res://scenes/player.tscn" id="1_5d007"]
+[ext_resource type="Script" path="res://scripts/multiplayer_spawner.gd" id="1_ycrwh"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_otfbn"]
 sky_top_color = Color(0.169649, 0.473015, 0.683777, 1)
@@ -46,8 +46,6 @@ environment = SubResource("Environment_d3our")
 transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 4.05262, 0)
 shadow_enabled = true
 
-[node name="Player" parent="." instance=ExtResource("1_5d007")]
-
 [node name="StaticBody3D" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.77817, 0)
 
@@ -67,3 +65,7 @@ mesh = SubResource("SphereMesh_hltef")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Ball"]
 shape = SubResource("SphereShape3D_4mtw0")
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
+spawn_path = NodePath(".")
+script = ExtResource("1_ycrwh")
