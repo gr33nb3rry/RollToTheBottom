@@ -1,6 +1,7 @@
 extends MultiplayerSpawner
 
 @onready var player_scene = preload("res://scenes/player.tscn")
+@onready var ball_scene = preload("res://scenes/ball.tscn")
 var players = {}
 
 # Called when the node enters the scene tree for the first time.

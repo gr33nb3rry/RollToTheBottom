@@ -1,7 +1,9 @@
-VBoxContainer
-ScrollContainer
-Node2D
-Button
-MultiplayerSynchronizer
-MultiplayerSpawner
-Node
+CanvasLayer
+Label
+CollisionShape3D
+MeshInstance3D
+RigidBody3D
+CSGSphere3D
+StaticBody3D
+Camera3D
+Jigglebone

@@ -1,5 +1,6 @@
-[gd_scene load_steps=9 format=3 uid="uid://cdgi742lfhjp7"]
+[gd_scene load_steps=8 format=3 uid="uid://cdgi742lfhjp7"]
 
+[ext_resource type="PackedScene" uid="uid://bxbhg2i0pb78n" path="res://scenes/ball.tscn" id="1_0cf83"]
 [ext_resource type="Script" path="res://scripts/multiplayer_spawner.gd" id="1_ycrwh"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_otfbn"]
@@ -30,13 +31,6 @@ size = Vector3(15, 1, 15)
 [sub_resource type="BoxShape3D" id="BoxShape3D_lt7gs"]
 size = Vector3(15, 1, 15)
 
-[sub_resource type="SphereMesh" id="SphereMesh_hltef"]
-radius = 2.0
-height = 4.0
-
-[sub_resource type="SphereShape3D" id="SphereShape3D_4mtw0"]
-radius = 2.0
-
 [node name="Node3D" type="Node3D"]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
@@ -55,17 +49,9 @@ mesh = SubResource("BoxMesh_nxek2")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
 shape = SubResource("BoxShape3D_lt7gs")
 
-[node name="Ball" type="RigidBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.632493, -2.64189)
-mass = 25.0
-linear_damp = 1.0
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Ball"]
-mesh = SubResource("SphereMesh_hltef")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Ball"]
-shape = SubResource("SphereShape3D_4mtw0")
-
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
 spawn_path = NodePath(".")
 script = ExtResource("1_ycrwh")
+
+[node name="Ball" parent="MultiplayerSpawner" instance=ExtResource("1_0cf83")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.88714, -2.64189)
