@@ -1,13 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://w4nuv4h3gluq"]
+[gd_scene load_steps=2 format=3 uid="uid://w4nuv4h3gluq"]
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_7hsgq"]
-[ext_resource type="Script" path="res://scripts/Steam.gd" id="1_t60mr"]
 
 [node name="Main" type="Node3D"]
 script = ExtResource("1_7hsgq")
-
-[node name="Steam" type="Node" parent="."]
-script = ExtResource("1_t60mr")
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
 spawn_path = NodePath("..")

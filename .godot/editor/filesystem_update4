@@ -1,7 +1,8 @@
 res://main.tscn
 res://scripts/main.gd
-res://node_3d.tscn
+res://world.tscn
 res://scenes/player.tscn
 res://scenes/ball.tscn
 res://scripts/player.gd
+res://scripts/Steam.gd
 res://scripts/multiplayer_spawner.gd

@@ -1,7 +1,7 @@
-[gd_scene load_steps=8 format=3 uid="uid://cdgi742lfhjp7"]
+[gd_scene load_steps=10 format=3 uid="uid://cdgi742lfhjp7"]
 
-[ext_resource type="PackedScene" uid="uid://bxbhg2i0pb78n" path="res://scenes/ball.tscn" id="1_0cf83"]
-[ext_resource type="Script" path="res://scripts/multiplayer_spawner.gd" id="1_ycrwh"]
+[ext_resource type="Script" path="res://scripts/multiplayer_spawner.gd" id="1_ux5ce"]
+[ext_resource type="PackedScene" uid="uid://bxbhg2i0pb78n" path="res://scenes/ball.tscn" id="2_1brcy"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_otfbn"]
 sky_top_color = Color(0.169649, 0.473015, 0.683777, 1)
@@ -26,12 +26,21 @@ glow_bloom = 0.01
 glow_blend_mode = 0
 
 [sub_resource type="BoxMesh" id="BoxMesh_nxek2"]
-size = Vector3(15, 1, 15)
+size = Vector3(80, 1, 80)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_lt7gs"]
-size = Vector3(15, 1, 15)
+size = Vector3(80, 1, 80)
 
-[node name="Node3D" type="Node3D"]
+[sub_resource type="CylinderMesh" id="CylinderMesh_f1ysl"]
+top_radius = 7.5
+bottom_radius = 7.5
+height = 200.0
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_a5yi8"]
+height = 200.0
+radius = 7.5
+
+[node name="World" type="Node3D"]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_d3our")
@@ -40,18 +49,27 @@ environment = SubResource("Environment_d3our")
 transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 4.05262, 0)
 shadow_enabled = true
 
-[node name="StaticBody3D" type="StaticBody3D" parent="."]
+[node name="Ground" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.77817, 0)
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground"]
 mesh = SubResource("BoxMesh_nxek2")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground"]
 shape = SubResource("BoxShape3D_lt7gs")
+
+[node name="Steb" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 98.5, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Steb"]
+mesh = SubResource("CylinderMesh_f1ysl")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Steb"]
+shape = SubResource("CylinderShape3D_a5yi8")
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
 spawn_path = NodePath(".")
-script = ExtResource("1_ycrwh")
+script = ExtResource("1_ux5ce")
 
-[node name="Ball" parent="MultiplayerSpawner" instance=ExtResource("1_0cf83")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.88714, -2.64189)
+[node name="Ball" parent="MultiplayerSpawner" instance=ExtResource("2_1brcy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 200.811, -3.27735)

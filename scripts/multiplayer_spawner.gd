@@ -14,6 +14,7 @@ func _ready() -> void:
 
 func spawnPlayer(data):
 	var p = player_scene.instantiate()
+	p.position.y = 202.0
 	p.set_multiplayer_authority(data)
 	players[data] = p
 	return p
