@@ -1,3 +1,4 @@
+CSGSphere3D
 Camera3D
 PathFollow3D
 Path3D
@@ -12,4 +13,3 @@ RayCast3D
 CanvasLayer
 CollisionShape3D
 RigidBody3D
-CSGSphere3D

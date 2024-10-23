@@ -1,8 +1,6 @@
 res://world.tscn
-res://scripts/multiplayer_spawner.gd
+res://mud-bl/new_standard_material_3d.tres
 res://scenes/player.tscn
 res://main.tscn
 res://scenes/ball.tscn
 res://scripts/player.gd
-res://scripts/Steam.gd
-res://scripts/main.gd

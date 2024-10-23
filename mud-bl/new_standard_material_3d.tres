@@ -1,0 +1,19 @@
+[gd_resource type="StandardMaterial3D" load_steps=5 format=3 uid="uid://chj6uqgpsum46"]
+
+[ext_resource type="Texture2D" uid="uid://dxtmlaow0fw57" path="res://mud-bl/mud_albedo.png" id="1_tsv7n"]
+[ext_resource type="Texture2D" uid="uid://b6l3ebxslfi0a" path="res://mud-bl/mud_height.png" id="2_82jpx"]
+[ext_resource type="Texture2D" uid="uid://bv6mnnteiygub" path="res://mud-bl/mud_normal-ogl.png" id="3_kjl8n"]
+[ext_resource type="Texture2D" uid="uid://c6stq565x5fvu" path="res://mud-bl/mud_roughness.png" id="4_5uhtq"]
+
+[resource]
+albedo_color = Color(0.584314, 1, 0.341176, 1)
+albedo_texture = ExtResource("1_tsv7n")
+roughness_texture = ExtResource("4_5uhtq")
+normal_enabled = true
+normal_texture = ExtResource("3_kjl8n")
+heightmap_enabled = true
+heightmap_deep_parallax = true
+heightmap_min_layers = 8
+heightmap_max_layers = 32
+heightmap_texture = ExtResource("2_82jpx")
+uv1_scale = Vector3(1100, 10, 10)

@@ -134,8 +134,12 @@ func change_gravity() -> void:
 		#position = Vector3.ZERO
 		camera.current = false
 		path_camera.current = true
+		path.progress_ratio = 0.0
 		var t = get_tree().create_tween()
 		t.tween_property(path, "progress_ratio", 1.0, 10.0)
+		await get_tree().create_timer(10.0).timeout
+		camera.current = true
+		path_camera.current = false
 
 func _input(event) -> void:
 	if Input.is_action_just_pressed("ui_cancel"):
