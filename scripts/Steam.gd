@@ -14,6 +14,7 @@ func _ready() -> void:
 	
 func initialize_steam() -> void:
 	var initialize_response: Dictionary = Steam.steamInitEx()
+	Steam.initRelayNetworkAccess()
 
 	if initialize_response['status'] == 0:
 		is_on_steam_deck= Steam.isSteamRunningOnSteamDeck()

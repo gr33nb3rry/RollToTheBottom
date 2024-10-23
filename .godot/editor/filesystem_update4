@@ -1,8 +1,8 @@
-res://main.tscn
-res://scripts/main.gd
 res://world.tscn
+res://scripts/multiplayer_spawner.gd
 res://scenes/player.tscn
+res://main.tscn
 res://scenes/ball.tscn
 res://scripts/player.gd
 res://scripts/Steam.gd
-res://scripts/multiplayer_spawner.gd
+res://scripts/main.gd

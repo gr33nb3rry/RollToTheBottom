@@ -31,5 +31,14 @@ offset_bottom = 300.0
 [node name="Lobbies" type="VBoxContainer" parent="Canvas/LobbiesContainer"]
 layout_mode = 2
 
+[node name="PingLabel" type="Label" parent="Canvas"]
+offset_left = 7.59
+offset_right = 47.59
+offset_bottom = 23.0
+theme_override_colors/font_color = Color(7.21961e-06, 0.69624, 1.15514e-06, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+text = "ping"
+
 [connection signal="pressed" from="Canvas/HostButton" to="." method="create_lobby"]
 [connection signal="pressed" from="Canvas/RefreshButton" to="." method="refresh_lobby_list"]
