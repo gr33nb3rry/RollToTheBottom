@@ -1,6 +1,6 @@
 res://world.tscn
-res://mud-bl/new_standard_material_3d.tres
 res://scenes/player.tscn
 res://main.tscn
 res://scenes/ball.tscn
+res://kuwahara_shader.gdshader
 res://scripts/player.gd

@@ -1,3 +1,4 @@
+ColorRect
 CSGSphere3D
 Camera3D
 PathFollow3D
@@ -12,4 +13,3 @@ MultiplayerSpawner
 RayCast3D
 CanvasLayer
 CollisionShape3D
-RigidBody3D

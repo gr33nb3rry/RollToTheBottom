@@ -7,17 +7,16 @@ extends CharacterBody3D
 @onready var ray_hit: RayCast3D = $Model/Sophia/RayHit
 @onready var ray_push: RayCast3D = $Model/Sophia/RayPush
 @onready var ray_ground: RayCast3D = $RayGround
-@onready var ray_back: RayCast3D = $Model/Sophia/RayBack
 
 @onready var ms = $/root/Main/World/MultiplayerSpawner
 @onready var path = $/root/Main/World/Steb/Path3D/PathFollow3D
-@onready var path_camera = $/root/Main/World/Steb/Path3D/PathFollow3D/Camera3D
+#@onready var path_camera = $/root/Main/World/Steb/Path3D/PathFollow3D/Camera3D
 @onready var ball = $/root/Main/World/Ball
 
 var gravity_force = Vector3(0,-1,0)
 var gravity_acceleration := 0.0
 var is_changed_gravity_to_steb := false
-var is_rolling := false
+@export var is_rolling := false
 var is_jumping := false
 
 const GRAVITY := 9.8
@@ -35,50 +34,24 @@ const HIT_FORCE := 100.0
 
 func _ready() -> void:
 	camera.current = is_multiplayer_authority()
+	ray_push.add_exception(self)
+	ray_hit.add_exception(self)
 
 func _physics_process(delta: float) -> void:
 	if !is_multiplayer_authority() or !is_active: return
 	apply_impulse()
-	
 	apply_gravity(delta)
+	rotate_to_gravity(delta)
 	
-	if is_changed_gravity_to_steb and ray_back.is_colliding() and ray_back.get_collider().name == "Steb" and !is_jumping:
-		change_gravity()
-	if is_jumping and jump_buffer <= 10.0 or (!ray_ground.is_colliding() and !is_jumping):
+	var movement = move(delta)
+		
+	if !ray_ground.is_colliding() and velocity.y < 0 and animation_tree["parameters/playback"].get_fading_from_node() == "":
 		animation_tree["parameters/conditions/fall"] = true
-	
-	var up_direction = -gravity_force.normalized()
-	var orientation_direction = Quaternion(global_transform.basis.y, up_direction) * global_transform.basis.get_rotation_quaternion()
-	var rot = global_transform.basis.get_rotation_quaternion().slerp(orientation_direction.normalized(), 5.0 * delta)
-	global_rotation = rot.get_euler()
-	
-	var movement := Vector3.ZERO
-	var forward : Vector3 = -$CamRoot/CamYaw.global_transform.basis.z
-	var right : Vector3 = $CamRoot/CamYaw.global_transform.basis.x
-	var up : Vector3 = global_transform.basis.y
-	var direction = Input.get_vector("move_left", "move_right", "move_back", "move_forward")
-	forward *= direction.y
-	right *= direction.x
-	movement += forward + right
-	if movement != Vector3.ZERO:
-		#if jump_buffer <= 0.01: animation_tree["parameters/conditions/run"] = true
-		if ray_ground.is_colliding() and jump_buffer <= 0.01: 
-			is_jumping = false
-			gravity_acceleration = 0.0
-			animation_tree["parameters/conditions/run"] = true
-		$Look/Point.position = Vector3(direction.x, 0, -direction.y)
-		$Model/Sophia.rotation.y = lerp_angle($Model/Sophia.rotation.y, $CamRoot/CamYaw.rotation.y + deg_to_rad(180), ROTATION_SPEED * delta)
-		var model_transform = model.transform.interpolate_with(model.transform.looking_at($Look/Point.position), ROTATION_SPEED * delta)
-		model.transform = model_transform
-
-		velocity += movement.normalized() * (RUN_SPEED if Input.is_action_pressed("run") else WALK_SPEED)
-		#var anim_run_speed = sqrt(pow(velocity.x, 2) + pow(velocity.z, 2))
-		animation_tree["parameters/Run/TimeScale/scale"] = 1.5 if Input.is_action_pressed("run") else 1
-	#elif jump_buffer <= 0.01: animation_tree["parameters/conditions/idle"] = true
-	elif ray_ground.is_colliding() and jump_buffer <= 0.01: 
+	elif ray_ground.is_colliding(): 
 		is_jumping = false
 		gravity_acceleration = 0.0
-		animation_tree["parameters/conditions/idle"] = true
+		animation_tree["parameters/conditions/" + ("run" if movement != Vector3.ZERO else "idle")] = true
+		animation_tree["parameters/Run/TimeScale/scale"] = 1.5 if Input.is_action_pressed("run") else 1.0
 	
 	move_and_slide()
 	if ray_push.is_colliding() and ray_push.get_collider().name == "Ball" and !is_rolling:
@@ -100,6 +73,33 @@ func apply_gravity(delta:float) -> void:
 	gravity_acceleration += GRAVITY_ACCELERATION * delta
 	jump_buffer = clamp((jump_buffer - delta * 10.0), 0.0, 50.0)
 	velocity = gravity_force * (GRAVITY + GRAVITY * gravity_acceleration) + global_transform.basis.y * jump_buffer
+
+func rotate_to_gravity(delta:float) -> void :
+	var up_direction = -gravity_force.normalized()
+	var orientation_direction = Quaternion(global_transform.basis.y, up_direction) * global_transform.basis.get_rotation_quaternion()
+	var rot = global_transform.basis.get_rotation_quaternion().slerp(orientation_direction.normalized(), 5.0 * delta)
+	global_rotation = rot.get_euler()
+	
+func rotate_model(delta:float, direction:Vector2) -> void:
+	$Look/Point.position = Vector3(direction.x, 0, -direction.y)
+	$Model/Sophia.rotation.y = lerp_angle($Model/Sophia.rotation.y, $CamRoot/CamYaw.rotation.y + deg_to_rad(180), ROTATION_SPEED * delta)
+	var model_transform = model.transform.interpolate_with(model.transform.looking_at($Look/Point.position), ROTATION_SPEED * delta)
+	model.transform = model_transform
+	
+func move(delta:float) -> Vector3:
+	var movement := Vector3.ZERO
+	var forward : Vector3 = -$CamRoot/CamYaw.global_transform.basis.z
+	var right : Vector3 = $CamRoot/CamYaw.global_transform.basis.x
+	var up : Vector3 = global_transform.basis.y
+	var direction = Input.get_vector("move_left", "move_right", "move_back", "move_forward")
+	forward *= direction.y
+	right *= direction.x
+	movement += forward + right
+	if movement != Vector3.ZERO:
+		rotate_model(delta, direction)
+		velocity += movement.normalized() * (RUN_SPEED if Input.is_action_pressed("run") else WALK_SPEED)
+	return movement
+	
 	
 func apply_impulse() -> void:
 	for i in get_slide_collision_count():
@@ -108,6 +108,7 @@ func apply_impulse() -> void:
 			if get_multiplayer().get_unique_id() != 1:
 				rpc_id(1, "apply_impulse_to_ball", get_multiplayer().get_unique_id())
 			else:
+				RigidBody2D
 				collision.get_collider().apply_central_impulse(-collision.get_normal() * PUSH_FORCE)
 			break
 @rpc("any_peer")
@@ -125,6 +126,7 @@ func hit_request(requesting_peer_id: int) -> void:
 		player.ray_hit.get_collider().apply_central_impulse(-player.get_node("CamRoot/CamYaw").global_transform.basis.z * HIT_FORCE)
 
 func change_gravity() -> void:
+	return
 	is_changed_gravity_to_steb = !is_changed_gravity_to_steb
 	if is_changed_gravity_to_steb:
 		reparent(ms)
@@ -133,13 +135,14 @@ func change_gravity() -> void:
 		#reparent(path)
 		#position = Vector3.ZERO
 		camera.current = false
-		path_camera.current = true
+		#path_camera.current = true
 		path.progress_ratio = 0.0
 		var t = get_tree().create_tween()
 		t.tween_property(path, "progress_ratio", 1.0, 10.0)
 		await get_tree().create_timer(10.0).timeout
 		camera.current = true
-		path_camera.current = false
+		#path_camera.current = false
+		is_active = true
 
 func _input(event) -> void:
 	if Input.is_action_just_pressed("ui_cancel"):
@@ -155,5 +158,6 @@ func _input(event) -> void:
 	elif Input.is_action_just_pressed("jump") and !is_changed_gravity_to_steb and animation_tree["parameters/playback"].get_fading_from_node() == "": 
 		jump_buffer = JUMP_VELOCITY
 		is_jumping = true
+		gravity_acceleration = 0.0
 		animation_tree["parameters/conditions/jump"] = true
 	
