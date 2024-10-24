@@ -1,4 +1,6 @@
-[gd_scene load_steps=5 format=3 uid="uid://bxbhg2i0pb78n"]
+[gd_scene load_steps=6 format=3 uid="uid://bxbhg2i0pb78n"]
+
+[ext_resource type="Script" path="res://scripts/ball.gd" id="1_tkqkc"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_esjd1"]
 albedo_color = Color(0.460499, 0.202408, 0.0735655, 1)
@@ -30,16 +32,21 @@ properties/4/replication_mode = 1
 properties/5/path = NodePath(".:constant_torque")
 properties/5/spawn = true
 properties/5/replication_mode = 1
+properties/6/path = NodePath(".:scale")
+properties/6/spawn = true
+properties/6/replication_mode = 1
 
 [node name="Ball" type="RigidBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.632493, -2.64189)
 mass = 25.0
+freeze_mode = 1
 linear_damp = 1.0
+script = ExtResource("1_tkqkc")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+[node name="Mesh" type="MeshInstance3D" parent="."]
 mesh = SubResource("SphereMesh_hltef")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+[node name="Collision" type="CollisionShape3D" parent="."]
 shape = SubResource("SphereShape3D_4mtw0")
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
