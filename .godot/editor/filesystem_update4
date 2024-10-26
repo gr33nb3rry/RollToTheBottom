@@ -1,7 +1,6 @@
 res://world.tscn
+res://toon_shader.gdshader
 res://scenes/player.tscn
 res://main.tscn
 res://scenes/ball.tscn
-res://kuwahara_shader.gdshader
-res://scripts/player.gd
-res://scripts/ball.gd
+res://scenes/dung.tscn

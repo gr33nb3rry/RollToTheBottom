@@ -23,6 +23,7 @@ SteamGlobal="*res://scripts/Steam.gd"
 
 window/size/viewport_width=1280
 window/size/viewport_height=720
+window/vsync/vsync_mode=0
 
 [editor_plugins]
 
@@ -95,3 +96,5 @@ run={
 
 lights_and_shadows/directional_shadow/size=16000
 lights_and_shadows/directional_shadow/soft_shadow_filter_quality.mobile=5
+anti_aliasing/quality/msaa_3d=2
+anti_aliasing/quality/screen_space_aa=1

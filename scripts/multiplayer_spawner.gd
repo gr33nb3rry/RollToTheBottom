@@ -15,7 +15,7 @@ func _ready() -> void:
 
 func spawnPlayer(data):
 	var p = player_scene.instantiate()
-	p.position = Vector3(-70.0,1550.0,-40.0)
+	p.position = Vector3(-150.0,1583.0,57.0)
 	p.set_multiplayer_authority(data)
 	players[data] = p
 	return p

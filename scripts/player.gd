@@ -29,16 +29,18 @@ const ROTATION_SPEED := 10.0
 const WALK_SPEED := 10.0
 const RUN_SPEED := 20.0
 const JUMP_VELOCITY := 20.0
-const PUSH_FORCE := 5.0
+const PUSH_FORCE := 25.0
 const HIT_FORCE := 100.0
 
 func _ready() -> void:
-	camera.current = is_multiplayer_authority()
+	if is_multiplayer_authority():
+		camera.current = true
 	ray_push.add_exception(self)
 	ray_hit.add_exception(self)
 
 func _physics_process(delta: float) -> void:
-	if !is_multiplayer_authority() or !is_active: return
+	if !is_multiplayer_authority(): return
+	if !is_active: return
 	apply_impulse()
 	apply_gravity(delta)
 	rotate_to_gravity(delta)
@@ -108,13 +110,17 @@ func apply_impulse() -> void:
 			if get_multiplayer().get_unique_id() != 1:
 				rpc_id(1, "apply_impulse_to_ball", get_multiplayer().get_unique_id())
 			else:
-				RigidBody2D
-				collision.get_collider().apply_central_impulse(-collision.get_normal() * PUSH_FORCE)
+				apply_impulse_to_ball(1)
+				#collision.get_collider().apply_central_impulse(-collision.get_normal() * PUSH_FORCE)
 			break
 @rpc("any_peer")
 func apply_impulse_to_ball(requesting_peer_id: int) -> void:
 	var player = ms.get_player_by_id(requesting_peer_id)
-	ball.apply_central_impulse(-player.get_node("CamRoot/CamYaw").global_transform.basis.z * PUSH_FORCE)
+	#ball.apply_central_impulse(-player.get_node("CamRoot/CamYaw").global_transform.basis.z * PUSH_FORCE)
+	var max_linear_velocity = 20.0 / ball.get_node("Mesh").scale.x
+	if ball.get_linear_velocity().length_squared() < max_linear_velocity:
+		var push_normal : Vector3 = -player.ray_push.get_collision_normal()
+		ball.apply_central_impulse(Vector3(push_normal.x,0.0,push_normal.z) * PUSH_FORCE)
 		
 func hit() -> void:
 	if ray_hit.is_colliding() and ray_hit.get_collider().name == "Ball":

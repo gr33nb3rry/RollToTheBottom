@@ -96,3 +96,6 @@ func refresh_lobby_list() -> void:
 		for n in $Canvas/LobbiesContainer/Lobbies.get_children():
 			n.queue_free()
 		open_lobby_list()
+
+func _process(delta: float) -> void:
+	$Canvas/FPSLabel.text = str(Engine.get_frames_per_second())

@@ -23,6 +23,7 @@ var is_aiming := false
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	spring_arm.add_excluded_object(player.get_rid())
+	$CamYaw/CamPitch/SpringArm3D/RayCrosshair.add_exception(player)
 	#top_level = true
 
 func _input(event):
@@ -33,6 +34,9 @@ func _process(delta: float) -> void:
 	var view = Input.get_vector("view_left", "view_right", "view_down", "view_up")
 	yaw += -view.x * yaw_sensitivity * 5.0
 	pitch += view.y * pitch_sensitivity * 5.0
+	
+	if $CamYaw/CamPitch/SpringArm3D/RayCrosshair.is_colliding():
+		$"../Crosshair".global_position = $CamYaw/CamPitch/SpringArm3D/RayCrosshair.get_collision_point()
 
 func _physics_process(delta):
 	pitch = clamp(pitch, pitch_min, pitch_max)
