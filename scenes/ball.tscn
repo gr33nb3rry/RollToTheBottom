@@ -1,23 +1,11 @@
-[gd_scene load_steps=7 format=3 uid="uid://bxbhg2i0pb78n"]
+[gd_scene load_steps=9 format=3 uid="uid://bxbhg2i0pb78n"]
 
 [ext_resource type="Script" path="res://scripts/ball.gd" id="1_tkqkc"]
-[ext_resource type="Shader" path="res://toon_shader.gdshader" id="2_6so7e"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_bqbnd"]
-render_priority = 0
-shader = ExtResource("2_6so7e")
-shader_parameter/color = Color(0.623529, 0.411765, 0.360784, 1)
-shader_parameter/shadow = 0.5
-shader_parameter/shadow_width = 0.0
-shader_parameter/shadow_color = Color(0.705, 0.705, 0.705, 0.705)
-shader_parameter/_specular_smoothness = 0.01
-shader_parameter/_specular_strength = 0.075
-shader_parameter/_glossiness = 0.1
-shader_parameter/_rim_size = 0.5
-shader_parameter/_rim_smoothness = 0.01
+[ext_resource type="Shader" path="res://materials/toon_shader.gdshader" id="2_6so7e"]
+[ext_resource type="Material" uid="uid://coyyow4g50uv4" path="res://materials/dung_material.tres" id="2_duhg3"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_hltef"]
-material = SubResource("ShaderMaterial_bqbnd")
+material = ExtResource("2_duhg3")
 radius = 2.0
 height = 4.0
 
@@ -50,6 +38,22 @@ properties/7/path = NodePath("Collision:scale")
 properties/7/spawn = true
 properties/7/replication_mode = 1
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qbjlb"]
+render_priority = 0
+shader = ExtResource("2_6so7e")
+shader_parameter/color = Color(0.698989, 0.477598, 0.367781, 1)
+shader_parameter/shadow = 0.5
+shader_parameter/shadow_width = 0.0
+shader_parameter/shadow_color = Color(0.705, 0.705, 0.705, 0.705)
+shader_parameter/_specular_smoothness = 0.01
+shader_parameter/_specular_strength = 0.075
+shader_parameter/_glossiness = 0.1
+shader_parameter/_rim_size = 0.5
+shader_parameter/_rim_smoothness = 0.01
+
+[sub_resource type="SphereMesh" id="SphereMesh_7l2es"]
+material = SubResource("ShaderMaterial_qbjlb")
+
 [node name="Ball" type="RigidBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.632493, -2.64189)
 mass = 25.0
@@ -71,6 +75,38 @@ monitorable = false
 
 [node name="Collision" type="CollisionShape3D" parent="Area"]
 shape = SubResource("SphereShape3D_4mtw0")
+
+[node name="Pieces" type="Node3D" parent="."]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Pieces"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.75, 0, 0)
+mesh = SubResource("SphereMesh_7l2es")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Pieces"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.75)
+mesh = SubResource("SphereMesh_7l2es")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="Pieces"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.75, 0)
+mesh = SubResource("SphereMesh_7l2es")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="Pieces"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.75, 0, 0)
+mesh = SubResource("SphereMesh_7l2es")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D5" type="MeshInstance3D" parent="Pieces"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.75)
+mesh = SubResource("SphereMesh_7l2es")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D6" type="MeshInstance3D" parent="Pieces"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.75, 0)
+mesh = SubResource("SphereMesh_7l2es")
+skeleton = NodePath("../..")
 
 [connection signal="area_entered" from="Area" to="." method="_on_area_area_entered"]
 [connection signal="area_exited" from="Area" to="." method="_on_area_area_exited"]

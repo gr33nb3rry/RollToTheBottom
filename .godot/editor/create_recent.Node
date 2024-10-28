@@ -1,4 +1,5 @@
 MeshInstance3D
+Node3D
 RayCast3D
 CollisionShape3D
 Area3D
@@ -11,4 +12,3 @@ Path3D
 Timer
 Label
 Marker3D
-Node3D

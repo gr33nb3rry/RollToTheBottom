@@ -1,22 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://vr5g5ns41tgj"]
+[gd_scene load_steps=4 format=3 uid="uid://vr5g5ns41tgj"]
 
-[ext_resource type="Shader" path="res://toon_shader.gdshader" id="1_1846i"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_gwpho"]
-render_priority = 0
-shader = ExtResource("1_1846i")
-shader_parameter/color = Color(0.623529, 0.411765, 0.360784, 1)
-shader_parameter/shadow = 0.5
-shader_parameter/shadow_width = 0.0
-shader_parameter/shadow_color = Color(0.705, 0.705, 0.705, 0.705)
-shader_parameter/_specular_smoothness = 0.01
-shader_parameter/_specular_strength = 0.075
-shader_parameter/_glossiness = 0.1
-shader_parameter/_rim_size = 0.5
-shader_parameter/_rim_smoothness = 0.01
+[ext_resource type="Material" uid="uid://coyyow4g50uv4" path="res://materials/dung_material.tres" id="1_qlaiy"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_iot7y"]
-material = SubResource("ShaderMaterial_gwpho")
+material = ExtResource("1_qlaiy")
 radius = 0.25
 height = 0.5
 
