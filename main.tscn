@@ -40,5 +40,14 @@ theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 4
 text = "FPS"
 
+[node name="DebugLabel" type="Label" parent="Canvas"]
+offset_left = 79.67
+offset_right = 129.67
+offset_bottom = 23.0
+theme_override_colors/font_color = Color(0.725444, 0.539958, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+text = "Debug"
+
 [connection signal="pressed" from="Canvas/HostButton" to="." method="create_lobby"]
 [connection signal="pressed" from="Canvas/RefreshButton" to="." method="refresh_lobby_list"]

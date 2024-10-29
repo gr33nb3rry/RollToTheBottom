@@ -1,18 +1,29 @@
 extends RigidBody3D
 
 const INITIAL_MASS : float = 25.0
+const STRENGTH : float = 20.0
+const DUNG_PICKUP_VALUE_MULTIPLIER : float = 5.0
+
+var is_on_ground : bool = true
+var time_in_air : float = 0.0
+
+func _process(delta: float) -> void:
+	$/root/Main/Canvas/DebugLabel.text = str(is_on_ground) + "   " + str(time_in_air)
+	if !is_on_ground:
+		time_in_air += delta
+	else: time_in_air = 0.0
 
 func grow(value:float) -> void:
 	$Mesh.scale += Vector3(value, value, value)
 	$Collision.scale += Vector3(value, value, value)
 	$Area/Collision.scale += Vector3(value, value, value)
-	mass += clamp(INITIAL_MASS * value, 1.0, 75.0)
+	mass = clamp(mass + INITIAL_MASS * value, 1.0, 75.0)
 	update_pieces()
 func shrink(value:float) -> void:
 	$Mesh.scale -= Vector3(value, value, value)
 	$Collision.scale -= Vector3(value, value, value)
 	$Area/Collision.scale -= Vector3(value, value, value)
-	mass -= clamp(INITIAL_MASS * value, 1.0, 75.0)
+	mass = clamp(mass - INITIAL_MASS * value, 1.0, 75.0)
 	update_pieces()
 
 func _input(_event: InputEvent) -> void:
@@ -28,7 +39,7 @@ func _on_area_area_entered(area: Area3D) -> void:
 		var v1 = get_volume(r1)
 		var v2 = get_volume(r2)
 		var scale_increase : float = get_radius(v1+v2)/r1-1.0
-		grow(scale_increase * 5.0)
+		grow(scale_increase * DUNG_PICKUP_VALUE_MULTIPLIER)
 		item.queue_free()
 
 
@@ -38,9 +49,25 @@ func _on_area_area_exited(area: Area3D) -> void:
 func update_pieces() -> void:
 	for p in $Pieces.get_children():
 		var direction = (p.position - Vector3.ZERO).normalized()
-		p.position = direction * 2.0 * $Mesh.scale.x
+		p.position = direction * $Mesh.mesh.radius * $Mesh.scale.x - direction * 0.25
+	$Pieces.visible = $Mesh.scale.x > 0.7
+		
 
 func get_volume(r:float):
 	return (4.0/3.0)*PI*pow(r,3)
 func get_radius(v:float):
 	return pow((3.0 * v / (4.0 * PI)),(1.0 / 3.0))
+
+
+func _on_area_body_entered(body: Node3D) -> void:
+	if !is_on_ground and body.is_in_group("Ground"): 
+		is_on_ground = true
+		var break_value = time_in_air / STRENGTH
+		print(break_value)
+		if break_value < $Mesh.scale.x:
+			shrink(break_value)
+		else: queue_free()
+func _on_area_body_exited(body: Node3D) -> void:
+	for b in $Area.get_overlapping_bodies(): if b.is_in_group("Ground"): return
+	if body.is_in_group("Ground"): is_on_ground = false
+	

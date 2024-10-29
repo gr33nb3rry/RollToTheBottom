@@ -119,7 +119,9 @@ func apply_impulse_to_ball(requesting_peer_id: int) -> void:
 	#ball.apply_central_impulse(-player.get_node("CamRoot/CamYaw").global_transform.basis.z * PUSH_FORCE)
 	var max_linear_velocity = 20.0 / ball.get_node("Mesh").scale.x
 	if ball.get_linear_velocity().length_squared() < max_linear_velocity:
-		var push_normal : Vector3 = -player.ray_push.get_collision_normal()
+		#var push_normal : Vector3 = -player.ray_push.get_collision_normal()
+		#ball.apply_central_impulse(Vector3(push_normal.x,0.0,push_normal.z) * PUSH_FORCE)
+		var push_normal : Vector3 = ball.global_position - player.global_position
 		ball.apply_central_impulse(Vector3(push_normal.x,0.0,push_normal.z) * PUSH_FORCE)
 		
 func hit() -> void:

@@ -29,6 +29,10 @@ window/vsync/vsync_mode=0
 
 enabled=PackedStringArray("res://addons/jigglebones/plugin.cfg")
 
+[global_group]
+
+Ground="Ground for a ball"
+
 [input]
 
 move_left={
@@ -91,6 +95,7 @@ run={
 [physics]
 
 3d/physics_engine="JoltPhysics3D"
+jolt_3d/collisions/areas_detect_static_bodies=true
 
 [rendering]
 

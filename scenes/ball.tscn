@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://bxbhg2i0pb78n"]
+[gd_scene load_steps=10 format=3 uid="uid://bxbhg2i0pb78n"]
 
 [ext_resource type="Script" path="res://scripts/ball.gd" id="1_tkqkc"]
 [ext_resource type="Shader" path="res://materials/toon_shader.gdshader" id="2_6so7e"]
@@ -22,21 +22,15 @@ properties/1/replication_mode = 1
 properties/2/path = NodePath(".:linear_velocity")
 properties/2/spawn = true
 properties/2/replication_mode = 1
-properties/3/path = NodePath(".:angular_velocity")
+properties/3/path = NodePath("Mesh:scale")
 properties/3/spawn = true
 properties/3/replication_mode = 1
-properties/4/path = NodePath(".:constant_force")
+properties/4/path = NodePath("Collision:scale")
 properties/4/spawn = true
 properties/4/replication_mode = 1
-properties/5/path = NodePath(".:constant_torque")
-properties/5/spawn = true
-properties/5/replication_mode = 1
-properties/6/path = NodePath("Mesh:scale")
-properties/6/spawn = true
-properties/6/replication_mode = 1
-properties/7/path = NodePath("Collision:scale")
-properties/7/spawn = true
-properties/7/replication_mode = 1
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_dp5bp"]
+radius = 2.1
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_qbjlb"]
 render_priority = 0
@@ -74,39 +68,41 @@ replication_config = SubResource("SceneReplicationConfig_ej7vu")
 monitorable = false
 
 [node name="Collision" type="CollisionShape3D" parent="Area"]
-shape = SubResource("SphereShape3D_4mtw0")
+shape = SubResource("SphereShape3D_dp5bp")
 
 [node name="Pieces" type="Node3D" parent="."]
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Pieces"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.75, 0, 0)
+[node name="Piece" type="MeshInstance3D" parent="Pieces"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 0)
 mesh = SubResource("SphereMesh_7l2es")
 skeleton = NodePath("../..")
 
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="Pieces"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.75)
+[node name="Piece2" type="MeshInstance3D" parent="Pieces"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2)
 mesh = SubResource("SphereMesh_7l2es")
 skeleton = NodePath("../..")
 
-[node name="MeshInstance3D3" type="MeshInstance3D" parent="Pieces"]
+[node name="Piece3" type="MeshInstance3D" parent="Pieces"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.75, 0)
 mesh = SubResource("SphereMesh_7l2es")
 skeleton = NodePath("../..")
 
-[node name="MeshInstance3D4" type="MeshInstance3D" parent="Pieces"]
+[node name="Piece4" type="MeshInstance3D" parent="Pieces"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.75, 0, 0)
 mesh = SubResource("SphereMesh_7l2es")
 skeleton = NodePath("../..")
 
-[node name="MeshInstance3D5" type="MeshInstance3D" parent="Pieces"]
+[node name="Piece5" type="MeshInstance3D" parent="Pieces"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.75)
 mesh = SubResource("SphereMesh_7l2es")
 skeleton = NodePath("../..")
 
-[node name="MeshInstance3D6" type="MeshInstance3D" parent="Pieces"]
+[node name="Piece6" type="MeshInstance3D" parent="Pieces"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.75, 0)
 mesh = SubResource("SphereMesh_7l2es")
 skeleton = NodePath("../..")
 
 [connection signal="area_entered" from="Area" to="." method="_on_area_area_entered"]
 [connection signal="area_exited" from="Area" to="." method="_on_area_area_exited"]
+[connection signal="body_entered" from="Area" to="." method="_on_area_body_entered"]
+[connection signal="body_exited" from="Area" to="." method="_on_area_body_exited"]
