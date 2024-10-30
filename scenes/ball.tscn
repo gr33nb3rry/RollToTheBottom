@@ -1,8 +1,8 @@
-[gd_scene load_steps=10 format=3 uid="uid://bxbhg2i0pb78n"]
+[gd_scene load_steps=9 format=3 uid="uid://bxbhg2i0pb78n"]
 
 [ext_resource type="Script" path="res://scripts/ball.gd" id="1_tkqkc"]
-[ext_resource type="Shader" path="res://materials/toon_shader.gdshader" id="2_6so7e"]
 [ext_resource type="Material" uid="uid://coyyow4g50uv4" path="res://materials/dung_material.tres" id="2_duhg3"]
+[ext_resource type="Material" uid="uid://dsohxt1j2fi4o" path="res://materials/dung_piece_material.tres" id="3_5p6fn"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_hltef"]
 material = ExtResource("2_duhg3")
@@ -32,21 +32,8 @@ properties/4/replication_mode = 1
 [sub_resource type="SphereShape3D" id="SphereShape3D_dp5bp"]
 radius = 2.1
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_qbjlb"]
-render_priority = 0
-shader = ExtResource("2_6so7e")
-shader_parameter/color = Color(0.698989, 0.477598, 0.367781, 1)
-shader_parameter/shadow = 0.5
-shader_parameter/shadow_width = 0.0
-shader_parameter/shadow_color = Color(0.705, 0.705, 0.705, 0.705)
-shader_parameter/_specular_smoothness = 0.01
-shader_parameter/_specular_strength = 0.075
-shader_parameter/_glossiness = 0.1
-shader_parameter/_rim_size = 0.5
-shader_parameter/_rim_smoothness = 0.01
-
 [sub_resource type="SphereMesh" id="SphereMesh_7l2es"]
-material = SubResource("ShaderMaterial_qbjlb")
+material = ExtResource("3_5p6fn")
 
 [node name="Ball" type="RigidBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.632493, -2.64189)
@@ -73,12 +60,12 @@ shape = SubResource("SphereShape3D_dp5bp")
 [node name="Pieces" type="Node3D" parent="."]
 
 [node name="Piece" type="MeshInstance3D" parent="Pieces"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.75, 0, 0)
 mesh = SubResource("SphereMesh_7l2es")
 skeleton = NodePath("../..")
 
 [node name="Piece2" type="MeshInstance3D" parent="Pieces"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.75)
 mesh = SubResource("SphereMesh_7l2es")
 skeleton = NodePath("../..")
 

@@ -1,16 +1,16 @@
 [gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://1txcicrguhhs"]
 
-[ext_resource type="Shader" path="res://materials/toon_shader.gdshader" id="1_ryfp2"]
+[ext_resource type="Shader" path="res://materials/shaders/toon_shader.gdshader" id="1_ryfp2"]
 
 [resource]
 render_priority = 0
 shader = ExtResource("1_ryfp2")
-shader_parameter/color = Color(0.529412, 0.67451, 0.439216, 1)
+shader_parameter/color = Color(0.517647, 0.678431, 0.423529, 1)
 shader_parameter/shadow = 0.5
-shader_parameter/shadow_width = 0.001
-shader_parameter/shadow_color = Color(1, 1, 1, 0.705)
-shader_parameter/_specular_smoothness = 0.0
-shader_parameter/_specular_strength = 0.0
-shader_parameter/_glossiness = 0.0
-shader_parameter/_rim_size = 0.2
-shader_parameter/_rim_smoothness = 0.0
+shader_parameter/shadow_width = 0.375
+shader_parameter/shadow_color = Color(0.254902, 0.929412, 0.964706, 1)
+shader_parameter/_specular_smoothness = 0.4
+shader_parameter/_specular_strength = 0.075
+shader_parameter/_glossiness = 0.065
+shader_parameter/_rim_size = 0.175
+shader_parameter/_rim_smoothness = 0.08

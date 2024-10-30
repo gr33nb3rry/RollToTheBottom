@@ -1,14 +1,14 @@
 [gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://coyyow4g50uv4"]
 
-[ext_resource type="Shader" path="res://materials/toon_shader.gdshader" id="1_fdnuh"]
+[ext_resource type="Shader" path="res://materials/shaders/toon_shader.gdshader" id="1_ao1ge"]
 
 [resource]
 render_priority = 0
-shader = ExtResource("1_fdnuh")
+shader = ExtResource("1_ao1ge")
 shader_parameter/color = Color(0.623529, 0.411765, 0.360784, 1)
 shader_parameter/shadow = 0.5
-shader_parameter/shadow_width = 0.0
-shader_parameter/shadow_color = Color(0.705, 0.705, 0.705, 0.705)
+shader_parameter/shadow_width = 0.375
+shader_parameter/shadow_color = Color(0.9187, 0.458841, 0.376315, 1)
 shader_parameter/_specular_smoothness = 0.01
 shader_parameter/_specular_strength = 0.075
 shader_parameter/_glossiness = 0.1

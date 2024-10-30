@@ -3,6 +3,7 @@ extends RigidBody3D
 const INITIAL_MASS : float = 25.0
 const STRENGTH : float = 20.0
 const DUNG_PICKUP_VALUE_MULTIPLIER : float = 5.0
+const MIN_TIME_IN_AIR_TO_BREAK : float = 0.5
 
 var is_on_ground : bool = true
 var time_in_air : float = 0.0
@@ -62,11 +63,12 @@ func get_radius(v:float):
 func _on_area_body_entered(body: Node3D) -> void:
 	if !is_on_ground and body.is_in_group("Ground"): 
 		is_on_ground = true
-		var break_value = time_in_air / STRENGTH
-		print(break_value)
-		if break_value < $Mesh.scale.x:
-			shrink(break_value)
-		else: queue_free()
+		if time_in_air > MIN_TIME_IN_AIR_TO_BREAK:
+			var break_value = time_in_air / STRENGTH
+			print("Ball break: ",break_value)
+			if break_value < $Mesh.scale.x:
+				shrink(break_value)
+			else: queue_free()
 func _on_area_body_exited(body: Node3D) -> void:
 	for b in $Area.get_overlapping_bodies(): if b.is_in_group("Ground"): return
 	if body.is_in_group("Ground"): is_on_ground = false

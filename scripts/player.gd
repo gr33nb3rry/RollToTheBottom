@@ -30,7 +30,7 @@ const WALK_SPEED := 10.0
 const RUN_SPEED := 20.0
 const JUMP_VELOCITY := 20.0
 const PUSH_FORCE := 25.0
-const HIT_FORCE := 100.0
+const HIT_FORCE := 150.0
 
 func _ready() -> void:
 	if is_multiplayer_authority():
@@ -53,7 +53,7 @@ func _physics_process(delta: float) -> void:
 		is_jumping = false
 		gravity_acceleration = 0.0
 		animation_tree["parameters/conditions/" + ("run" if movement != Vector3.ZERO else "idle")] = true
-		animation_tree["parameters/Run/TimeScale/scale"] = 1.5 if Input.is_action_pressed("run") else 1.0
+		animation_tree["parameters/Run/TimeScale/scale"] = 1.3 if Input.is_action_pressed("run") else 0.8
 	
 	move_and_slide()
 	if ray_push.is_colliding() and ray_push.get_collider().name == "Ball" and !is_rolling:
