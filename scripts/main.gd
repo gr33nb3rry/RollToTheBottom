@@ -12,6 +12,7 @@ func _ready() -> void:
 	Steam.lobby_match_list.connect(show_lobby_list)
 	peer.lobby_joined.connect(_on_lobby_joined)
 	open_lobby_list()
+	#$Canvas/HostButton.emit_signal("pressed")
 
 func spawn_level(data):
 	var a = (load(data) as PackedScene).instantiate()

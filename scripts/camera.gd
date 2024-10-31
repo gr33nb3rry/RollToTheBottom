@@ -6,6 +6,7 @@ signal set_cam_rotation(_cam_rotation : float)
 @onready var pitch_node = $CamYaw/CamPitch
 @onready var spring_arm = $CamYaw/CamPitch/SpringArm3D
 @onready var camera = $CamYaw/CamPitch/SpringArm3D/Camera3D
+@onready var ray_crosshair: RayCast3D = $CamYaw/CamPitch/SpringArm3D/RayCrosshair
 
 var yaw : float = 0
 var pitch : float = 0
@@ -35,8 +36,8 @@ func _process(delta: float) -> void:
 	yaw += -view.x * yaw_sensitivity * 5.0
 	pitch += view.y * pitch_sensitivity * 5.0
 	
-	if $CamYaw/CamPitch/SpringArm3D/RayCrosshair.is_colliding():
-		$"../Crosshair".global_position = $CamYaw/CamPitch/SpringArm3D/RayCrosshair.get_collision_point()
+	if ray_crosshair.is_colliding():
+		$"../Crosshair".global_position = ray_crosshair.get_collision_point()
 
 func _physics_process(delta):
 	pitch = clamp(pitch, pitch_min, pitch_max)

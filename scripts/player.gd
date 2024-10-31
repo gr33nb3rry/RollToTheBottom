@@ -1,5 +1,6 @@
 extends CharacterBody3D
 
+@onready var projectile = preload("res://scenes/projectile.tscn")
 @onready var model : Node3D = $Model
 @onready var animation_tree : AnimationTree = $Model/Sophia/AnimationTree
 @onready var animation_player: AnimationPlayer = $Model/Sophia/AnimationPlayer
@@ -7,6 +8,7 @@ extends CharacterBody3D
 @onready var ray_hit: RayCast3D = $Model/Sophia/RayHit
 @onready var ray_push: RayCast3D = $Model/Sophia/RayPush
 @onready var ray_ground: RayCast3D = $RayGround
+@onready var ray_crosshair: RayCast3D = $CamRoot/CamYaw/CamPitch/SpringArm3D/RayCrosshair
 
 @onready var ms = $/root/Main/World/MultiplayerSpawner
 @onready var path = $/root/Main/World/Steb/Path3D/PathFollow3D
@@ -152,20 +154,39 @@ func change_gravity() -> void:
 		#path_camera.current = false
 		is_active = true
 
+func instantiate_projectile() -> void:
+	var min_distance_for_ballistic := 4.0
+	var is_ballistic : bool = $Model/Sophia/ProjectileInitialPosition.global_position.distance_to(ray_crosshair.get_collision_point()) > min_distance_for_ballistic
+	var direction : Vector3
+	if ray_crosshair.is_colliding():
+		direction = (ray_crosshair.get_collision_point() - global_position).normalized()
+		if is_ballistic: direction += Vector3(0,abs(direction.y * 2),0)
+	else:
+		direction = (-camera.global_transform.basis.z).normalized() + Vector3(0,abs(direction.y * 2),0)
+	var p = projectile.instantiate()
+	$".".add_child(p)
+	p.global_position = $Model/Sophia/ProjectileInitialPosition.global_position
+	p.direction = direction
+	p.is_ballistic = is_ballistic
+
 func _input(event) -> void:
 	if Input.is_action_just_pressed("ui_cancel"):
 		get_tree().quit()
-	elif Input.is_action_just_pressed("hit"):
+	elif !Input.is_action_pressed("aim") and Input.is_action_just_pressed("hit"):
 		if is_multiplayer_authority():
 			hit()
 		elif get_multiplayer().get_unique_id() != 1:
 			rpc_id(1, "hit_request", get_multiplayer().get_unique_id())
 	elif Input.is_action_just_pressed("change_gravity"):
 		change_gravity()
-	#elif Input.is_action_just_pressed("jump") and ray_ground.is_colliding() and !is_changed_gravity_to_steb and animation_tree["parameters/playback"].get_fading_from_node() == "": 
 	elif Input.is_action_just_pressed("jump") and !is_changed_gravity_to_steb and animation_tree["parameters/playback"].get_fading_from_node() == "": 
 		jump_buffer = JUMP_VELOCITY
 		is_jumping = true
 		gravity_acceleration = 0.0
 		animation_tree["parameters/conditions/jump"] = true
-	
+	elif Input.is_action_just_pressed("aim"):
+		$Crosshair.visible = true
+	elif Input.is_action_just_released("aim"):
+		$Crosshair.visible = false
+	elif Input.is_action_pressed("aim") and Input.is_action_just_pressed("hit"):
+		instantiate_projectile()

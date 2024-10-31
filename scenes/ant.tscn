@@ -1,0 +1,24 @@
+[gd_scene load_steps=5 format=3 uid="uid://dajif8e22m34y"]
+
+[ext_resource type="Script" path="res://scripts/ant.gd" id="1_fm6r3"]
+[ext_resource type="Material" uid="uid://dvv34qhhkps0q" path="res://materials/ant_material.tres" id="1_rfc2m"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_sbcn5"]
+material = ExtResource("1_rfc2m")
+radius = 0.3
+height = 0.6
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_q5sjf"]
+radius = 0.3
+
+[node name="Ant" type="RigidBody3D" groups=["Ant"]]
+script = ExtResource("1_fm6r3")
+
+[node name="Mesh" type="MeshInstance3D" parent="."]
+mesh = SubResource("SphereMesh_sbcn5")
+
+[node name="Collision" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_q5sjf")
+
+[node name="Agent" type="NavigationAgent3D" parent="."]
+path_metadata_flags = 0

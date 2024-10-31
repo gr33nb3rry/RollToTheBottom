@@ -27,10 +27,6 @@ func shrink(value:float) -> void:
 	mass = clamp(mass - INITIAL_MASS * value, 1.0, 75.0)
 	update_pieces()
 
-func _input(_event: InputEvent) -> void:
-	if Input.is_key_pressed(KEY_1): shrink(0.05)
-	elif Input.is_key_pressed(KEY_2): grow(0.05)
-
 
 func _on_area_area_entered(area: Area3D) -> void:
 	var item = area.get_parent()
@@ -42,8 +38,6 @@ func _on_area_area_entered(area: Area3D) -> void:
 		var scale_increase : float = get_radius(v1+v2)/r1-1.0
 		grow(scale_increase * DUNG_PICKUP_VALUE_MULTIPLIER)
 		item.queue_free()
-
-
 func _on_area_area_exited(area: Area3D) -> void:
 	pass
 	
@@ -69,6 +63,8 @@ func _on_area_body_entered(body: Node3D) -> void:
 			if break_value < $Mesh.scale.x:
 				shrink(break_value)
 			else: queue_free()
+	elif body.is_in_group("Ant"):
+		body.touch()
 func _on_area_body_exited(body: Node3D) -> void:
 	for b in $Area.get_overlapping_bodies(): if b.is_in_group("Ground"): return
 	if body.is_in_group("Ground"): is_on_ground = false
