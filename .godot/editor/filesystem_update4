@@ -1,4 +1,4 @@
-res://scenes/player.tscn
+res://world.tscn
 res://materials/shaders/toon_shader.gdshader
 res://materials/dung_material.tres
 res://materials/dung_piece_material.tres
@@ -9,12 +9,12 @@ res://materials/shaders/global_outline_shader.gdshader
 res://materials/shaders/global_pixel_shader.gdshader
 res://materials/ant_material.tres
 res://materials/shaders/outline_shader.gdshader
-res://world.tscn
+res://scenes/ant.tscn
+res://scripts/skills.gd
+res://scripts/ant.gd
+res://scenes/player.tscn
 res://main.tscn
 res://scenes/ball.tscn
 res://scenes/dung.tscn
-res://scenes/ant.tscn
 res://scenes/projectile.tscn
-res://scripts/ant.gd
-res://scripts/player.gd
-res://scripts/projectile.gd
+res://scripts/ball.gd

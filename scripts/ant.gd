@@ -3,7 +3,9 @@ extends RigidBody3D
 @onready var agent = $Agent
 @onready var ball = $/root/Main/World/Ball
 
-const MOVE_SPEED : float = 500.0
+const MOVE_SPEED : float = 700.0
+const PUSH_FORCE := 200.0
+const TIME_TO_DIE : float = 20.0
 
 var is_active := true
 
@@ -15,6 +17,8 @@ func _process(delta: float) -> void:
 		var new_velocity: Vector3 = agent.get_next_path_position() - global_position
 		var velocity = new_velocity.normalized() * MOVE_SPEED * delta
 		linear_velocity = velocity
+	if !ball.is_on_ground and ball.time_in_air > 1.0:
+		death()
 
 func update_path() -> void:
 	if !is_active: return
@@ -29,12 +33,18 @@ func update_path() -> void:
 	update_path()
 		
 func touch() -> void:
+	var push_normal : Vector3 = ball.global_position - global_position
+	ball.apply_central_impulse(Vector3(push_normal.x,0.0,push_normal.z) * PUSH_FORCE)
+	death()
+	
+func damage() -> void:
+	is_active = false
+	linear_velocity = Vector3.ZERO
+	gravity_scale = 1.0
+	var direction : Vector3 = (Vector3(randf_range(-1.0, 1.0), randf_range(1.0, 3.0), randf_range(-1.0, 1.0))).normalized()
+	apply_central_impulse(direction * 10.0)
+	await get_tree().create_timer(TIME_TO_DIE).timeout
 	queue_free()
 	
-
-func _input(event: InputEvent) -> void:
-	if Input.is_key_pressed(KEY_3):
-		is_active = false
-		linear_velocity = Vector3.ZERO
-		var direction : Vector3 = (Vector3(randf_range(-1.0, 1.0), 3.0, randf_range(-1.0, 1.0))).normalized()
-		apply_central_impulse(direction * 10.0)
+func death() -> void:
+	queue_free()

@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://dajif8e22m34y"]
+[gd_scene load_steps=6 format=3 uid="uid://dajif8e22m34y"]
 
 [ext_resource type="Script" path="res://scripts/ant.gd" id="1_fm6r3"]
 [ext_resource type="Material" uid="uid://dvv34qhhkps0q" path="res://materials/ant_material.tres" id="1_rfc2m"]
@@ -11,7 +11,13 @@ height = 0.6
 [sub_resource type="SphereShape3D" id="SphereShape3D_q5sjf"]
 radius = 0.3
 
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_5ed7r"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+
 [node name="Ant" type="RigidBody3D" groups=["Ant"]]
+gravity_scale = 0.0
 script = ExtResource("1_fm6r3")
 
 [node name="Mesh" type="MeshInstance3D" parent="."]
@@ -22,3 +28,6 @@ shape = SubResource("SphereShape3D_q5sjf")
 
 [node name="Agent" type="NavigationAgent3D" parent="."]
 path_metadata_flags = 0
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_5ed7r")

@@ -35,9 +35,6 @@ func _process(delta: float) -> void:
 	var view = Input.get_vector("view_left", "view_right", "view_down", "view_up")
 	yaw += -view.x * yaw_sensitivity * 5.0
 	pitch += view.y * pitch_sensitivity * 5.0
-	
-	if ray_crosshair.is_colliding():
-		$"../Crosshair".global_position = ray_crosshair.get_collision_point()
 
 func _physics_process(delta):
 	pitch = clamp(pitch, pitch_min, pitch_max)

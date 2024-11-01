@@ -84,11 +84,12 @@ func rotate_to_gravity(delta:float) -> void :
 	var rot = global_transform.basis.get_rotation_quaternion().slerp(orientation_direction.normalized(), 5.0 * delta)
 	global_rotation = rot.get_euler()
 	
-func rotate_model(delta:float, direction:Vector2) -> void:
+func rotate_model_to_direction(delta:float, direction:Vector2) -> void:
 	$Look/Point.position = Vector3(direction.x, 0, -direction.y)
-	$Model/Sophia.rotation.y = lerp_angle($Model/Sophia.rotation.y, $CamRoot/CamYaw.rotation.y + deg_to_rad(180), ROTATION_SPEED * delta)
 	var model_transform = model.transform.interpolate_with(model.transform.looking_at($Look/Point.position), ROTATION_SPEED * delta)
 	model.transform = model_transform
+func rotate_model_to_camera(delta:float) -> void:
+	$Model/Sophia.rotation.y = lerp_angle($Model/Sophia.rotation.y, $CamRoot/CamYaw.rotation.y + deg_to_rad(180), ROTATION_SPEED * delta)
 	
 func move(delta:float) -> Vector3:
 	var movement := Vector3.ZERO
@@ -100,8 +101,11 @@ func move(delta:float) -> Vector3:
 	right *= direction.x
 	movement += forward + right
 	if movement != Vector3.ZERO:
-		rotate_model(delta, direction)
+		rotate_model_to_direction(delta, direction if !Input.is_action_pressed("aim") else Vector2(0,1))
+		rotate_model_to_camera(delta)
 		velocity += movement.normalized() * (RUN_SPEED if Input.is_action_pressed("run") else WALK_SPEED)
+	elif Input.is_action_pressed("aim"):
+		rotate_model_to_camera(delta)
 	return movement
 	
 	
@@ -154,20 +158,20 @@ func change_gravity() -> void:
 		#path_camera.current = false
 		is_active = true
 
+func aim(is_aim:bool) -> void:
+	$/root/Main/Canvas/Crosshair.visible = is_aim
+	
 func instantiate_projectile() -> void:
-	var min_distance_for_ballistic := 4.0
-	var is_ballistic : bool = $Model/Sophia/ProjectileInitialPosition.global_position.distance_to(ray_crosshair.get_collision_point()) > min_distance_for_ballistic
+	var power := 20.0
 	var direction : Vector3
 	if ray_crosshair.is_colliding():
 		direction = (ray_crosshair.get_collision_point() - global_position).normalized()
-		if is_ballistic: direction += Vector3(0,abs(direction.y * 2),0)
 	else:
-		direction = (-camera.global_transform.basis.z).normalized() + Vector3(0,abs(direction.y * 2),0)
+		direction = (-camera.global_transform.basis.z).normalized()
 	var p = projectile.instantiate()
-	$".".add_child(p)
+	ms.add_child(p)
 	p.global_position = $Model/Sophia/ProjectileInitialPosition.global_position
-	p.direction = direction
-	p.is_ballistic = is_ballistic
+	p.apply_central_impulse(direction * power)
 
 func _input(event) -> void:
 	if Input.is_action_just_pressed("ui_cancel"):
@@ -185,8 +189,8 @@ func _input(event) -> void:
 		gravity_acceleration = 0.0
 		animation_tree["parameters/conditions/jump"] = true
 	elif Input.is_action_just_pressed("aim"):
-		$Crosshair.visible = true
+		aim(true)
 	elif Input.is_action_just_released("aim"):
-		$Crosshair.visible = false
+		aim(false)
 	elif Input.is_action_pressed("aim") and Input.is_action_just_pressed("hit"):
 		instantiate_projectile()

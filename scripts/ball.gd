@@ -69,3 +69,7 @@ func _on_area_body_exited(body: Node3D) -> void:
 	for b in $Area.get_overlapping_bodies(): if b.is_in_group("Ground"): return
 	if body.is_in_group("Ground"): is_on_ground = false
 	
+func freeze_on_time(time:float) -> void:
+	set_freeze_enabled(true)
+	await get_tree().create_timer(time).timeout
+	set_freeze_enabled(false)
