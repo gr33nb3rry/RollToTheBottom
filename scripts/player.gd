@@ -129,15 +129,6 @@ func apply_impulse_to_ball(requesting_peer_id: int) -> void:
 		#ball.apply_central_impulse(Vector3(push_normal.x,0.0,push_normal.z) * PUSH_FORCE)
 		var push_normal : Vector3 = ball.global_position - player.global_position
 		ball.apply_central_impulse(Vector3(push_normal.x,0.0,push_normal.z) * PUSH_FORCE)
-		
-func hit() -> void:
-	if ray_hit.is_colliding() and ray_hit.get_collider().name == "Ball":
-		ray_hit.get_collider().apply_central_impulse(-$CamRoot/CamYaw.global_transform.basis.z * HIT_FORCE)
-@rpc("any_peer")
-func hit_request(requesting_peer_id: int) -> void:
-	var player = ms.get_player_by_id(requesting_peer_id)
-	if player.ray_hit.is_colliding() and player.ray_hit.get_collider().name == "Ball":
-		player.ray_hit.get_collider().apply_central_impulse(-player.get_node("CamRoot/CamYaw").global_transform.basis.z * HIT_FORCE)
 
 func change_gravity() -> void:
 	return
@@ -178,9 +169,11 @@ func _input(event) -> void:
 		get_tree().quit()
 	elif !Input.is_action_pressed("aim") and Input.is_action_just_pressed("hit"):
 		if is_multiplayer_authority():
-			hit()
+			#hit()
+			pass
 		elif get_multiplayer().get_unique_id() != 1:
-			rpc_id(1, "hit_request", get_multiplayer().get_unique_id())
+			#rpc_id(1, "hit_request", get_multiplayer().get_unique_id())
+			pass
 	elif Input.is_action_just_pressed("change_gravity"):
 		change_gravity()
 	elif Input.is_action_just_pressed("jump") and !is_changed_gravity_to_steb and animation_tree["parameters/playback"].get_fading_from_node() == "": 

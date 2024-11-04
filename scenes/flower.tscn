@@ -1,0 +1,24 @@
+[gd_scene load_steps=5 format=3 uid="uid://4cgi0dr1n0e7"]
+
+[ext_resource type="PackedScene" uid="uid://dvbnay5rmqaxd" path="res://blender/flower.blend" id="1_qseui"]
+[ext_resource type="Material" uid="uid://bjnu7cxmrnglf" path="res://materials/flower_material.tres" id="2_274f2"]
+[ext_resource type="Material" uid="uid://rjgm2jfoghah" path="res://materials/flower_orb_material.tres" id="3_migki"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_kyrwl"]
+material = ExtResource("3_migki")
+radius = 0.35
+height = 0.7
+
+[node name="Flower" type="Node3D"]
+
+[node name="flower" parent="." instance=ExtResource("1_qseui")]
+transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, 0, 0, 0)
+
+[node name="Circle" parent="flower" index="0"]
+material_override = ExtResource("2_274f2")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.893046, 0)
+mesh = SubResource("SphereMesh_kyrwl")
+
+[editable path="flower"]

@@ -72,4 +72,12 @@ func _on_area_body_exited(body: Node3D) -> void:
 func freeze_on_time(time:float) -> void:
 	set_freeze_enabled(true)
 	await get_tree().create_timer(time).timeout
+	time_in_air = 0.0
 	set_freeze_enabled(false)
+
+func refresh_size() -> void:
+	$Mesh.scale = Vector3.ONE
+	$Collision.scale = Vector3.ONE
+	$Area/Collision.scale = Vector3.ONE
+	mass = INITIAL_MASS
+	update_pieces()

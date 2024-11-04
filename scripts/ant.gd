@@ -44,7 +44,11 @@ func damage() -> void:
 	var direction : Vector3 = (Vector3(randf_range(-1.0, 1.0), randf_range(1.0, 3.0), randf_range(-1.0, 1.0))).normalized()
 	apply_central_impulse(direction * 10.0)
 	await get_tree().create_timer(TIME_TO_DIE).timeout
-	queue_free()
+	death()
 	
 func death() -> void:
+	is_active = false
+	$Explosion.emitting = true
+	$Mesh.visible = false
+	await get_tree().create_timer(5.0).timeout
 	queue_free()

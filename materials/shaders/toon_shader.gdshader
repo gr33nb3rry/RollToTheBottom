@@ -1,6 +1,6 @@
 /*
 	Toon Shader by Firerabbit
-	
+
 	MIT License
 */
 
@@ -30,17 +30,17 @@ void fragment() {
 void light() {
 	float NdotL = dot(NORMAL, LIGHT) * ATTENUATION;
 	NdotL = smoothstep(shadow - shadow_width, shadow + shadow_width, NdotL);
-	
+
 	// specular
 	vec3 H = normalize(VIEW + LIGHT);
 	float NdotH = max(0, dot(NORMAL, H));
 	float specular_intensity = pow(NdotH, 1.0 / _glossiness);
 	vec3 specular = vec3(smoothstep(0.5 - _specular_smoothness, 0.5 + _specular_smoothness, specular_intensity));
-	
+
 	// rim
 	float rimDot = 1.0 - dot(VIEW, NORMAL);
 	float rim_intensity = rimDot * NdotL;
 	vec3 rim = vec3(smoothstep(1.0 -_rim_size - _rim_smoothness, 1.0 -_rim_size + _rim_smoothness, rim_intensity));
-	
+
 	DIFFUSE_LIGHT = mix(ALBEDO * shadow_color.rgb, (ALBEDO + (rim + specular) * _specular_strength) * LIGHT_COLOR.rgb * 0.33, NdotL + 0.33 * (smoothstep(1.0 -_rim_size - _rim_smoothness, 1.0 -_rim_size + _rim_smoothness, rimDot)));
 }

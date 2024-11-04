@@ -1,3 +1,4 @@
+res://explosion/BigExplosionScene.tscn
 res://world.tscn
 res://materials/shaders/toon_shader.gdshader
 res://materials/dung_material.tres
@@ -8,13 +9,18 @@ res://materials/leaf_base_material.tres
 res://materials/shaders/global_outline_shader.gdshader
 res://materials/shaders/global_pixel_shader.gdshader
 res://materials/ant_material.tres
+res://cloud.gdshader
 res://materials/shaders/outline_shader.gdshader
-res://scenes/ant.tscn
-res://scripts/skills.gd
-res://scripts/ant.gd
 res://scenes/player.tscn
 res://main.tscn
 res://scenes/ball.tscn
 res://scenes/dung.tscn
+res://scenes/ant.tscn
 res://scenes/projectile.tscn
-res://scripts/ball.gd
+res://ExplosionShader.tres
+res://ExplosionMaterial.tres
+res://scenes/explosion.tscn
+res://explosion/ExplosionMaterial.tres
+res://scripts/ant.gd
+res://scenes/flower.tscn
+res://scripts/skills.gd

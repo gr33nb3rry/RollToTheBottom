@@ -1,5 +1,9 @@
-Node
 Node3D
+MeshInstance3D
+CPUParticles3D
+GPUParticles3D
+FogVolume
+Node
 MultiplayerSynchronizer
 TextureRect
 CenterContainer
@@ -7,9 +11,4 @@ CollisionShape3D
 RigidBody3D
 Area3D
 Marker3D
-MeshInstance3D
 Timer
-NavigationAgent3D
-NavigationRegion3D
-CharacterBody3D
-RayCast3D
