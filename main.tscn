@@ -1,18 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://w4nuv4h3gluq"]
+[gd_scene load_steps=5 format=3 uid="uid://w4nuv4h3gluq"]
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_7hsgq"]
 [ext_resource type="Texture2D" uid="uid://daw00knq6lhld" path="res://crosshair.png" id="2_sr0mf"]
 [ext_resource type="Script" path="res://scripts/skills_panel.gd" id="3_67y33"]
-[ext_resource type="Texture2D" uid="uid://w6s5wuaopiun" path="res://icon.svg" id="4_l8vwn"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_trmhc"]
-bg_color = Color(0, 0, 0, 0.501961)
-corner_radius_top_left = 15
-corner_radius_top_right = 15
-corner_radius_bottom_right = 15
-corner_radius_bottom_left = 15
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_2t3yq"]
+[ext_resource type="PackedScene" uid="uid://cukenu20nexbb" path="res://scenes/skill.tscn" id="4_gilju"]
 
 [node name="Main" type="Node3D"]
 script = ExtResource("1_7hsgq")
@@ -83,203 +74,14 @@ theme_override_constants/separation = 15
 alignment = 1
 script = ExtResource("3_67y33")
 
-[node name="Skill" type="Panel" parent="Canvas/Skills"]
-custom_minimum_size = Vector2(250, 350)
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-theme_override_styles/panel = SubResource("StyleBoxFlat_trmhc")
-
-[node name="MarginContainer" type="MarginContainer" parent="Canvas/Skills/Skill"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/margin_left = 15
-theme_override_constants/margin_top = 15
-theme_override_constants/margin_right = 15
-theme_override_constants/margin_bottom = 15
-
-[node name="HBoxContainer" type="VBoxContainer" parent="Canvas/Skills/Skill/MarginContainer"]
+[node name="Skill" parent="Canvas/Skills" instance=ExtResource("4_gilju")]
 layout_mode = 2
 
-[node name="Image" type="TextureRect" parent="Canvas/Skills/Skill/MarginContainer/HBoxContainer"]
-layout_mode = 2
-texture = ExtResource("4_l8vwn")
-
-[node name="TitleLabel" type="RichTextLabel" parent="Canvas/Skills/Skill/MarginContainer/HBoxContainer"]
-custom_minimum_size = Vector2(0, 40)
-layout_mode = 2
-bbcode_enabled = true
-text = "[center]TITLE[/center]"
-scroll_active = false
-shortcut_keys_enabled = false
-
-[node name="DescriptionLabel" type="RichTextLabel" parent="Canvas/Skills/Skill/MarginContainer/HBoxContainer"]
-custom_minimum_size = Vector2(0, 40)
-layout_mode = 2
-bbcode_enabled = true
-text = "Description of possible skill. "
-scroll_active = false
-shortcut_keys_enabled = false
-
-[node name="FILLER" type="Control" parent="Canvas/Skills/Skill/MarginContainer/HBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="ValueLabel" type="RichTextLabel" parent="Canvas/Skills/Skill/MarginContainer/HBoxContainer"]
-custom_minimum_size = Vector2(0, 40)
-layout_mode = 2
-theme_override_font_sizes/bold_font_size = 24
-bbcode_enabled = true
-text = "[center][b]00[/b][/center]"
-scroll_active = false
-shortcut_keys_enabled = false
-
-[node name="Button" type="Button" parent="Canvas/Skills/Skill"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_styles/focus = SubResource("StyleBoxEmpty_2t3yq")
-flat = true
-
-[node name="Skill2" type="Panel" parent="Canvas/Skills"]
-custom_minimum_size = Vector2(250, 350)
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-theme_override_styles/panel = SubResource("StyleBoxFlat_trmhc")
-
-[node name="MarginContainer" type="MarginContainer" parent="Canvas/Skills/Skill2"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/margin_left = 15
-theme_override_constants/margin_top = 15
-theme_override_constants/margin_right = 15
-theme_override_constants/margin_bottom = 15
-
-[node name="HBoxContainer" type="VBoxContainer" parent="Canvas/Skills/Skill2/MarginContainer"]
+[node name="Skill2" parent="Canvas/Skills" instance=ExtResource("4_gilju")]
 layout_mode = 2
 
-[node name="Image" type="TextureRect" parent="Canvas/Skills/Skill2/MarginContainer/HBoxContainer"]
+[node name="Skill3" parent="Canvas/Skills" instance=ExtResource("4_gilju")]
 layout_mode = 2
-texture = ExtResource("4_l8vwn")
-
-[node name="TitleLabel" type="RichTextLabel" parent="Canvas/Skills/Skill2/MarginContainer/HBoxContainer"]
-custom_minimum_size = Vector2(0, 40)
-layout_mode = 2
-bbcode_enabled = true
-text = "[center]TITLE[/center]"
-scroll_active = false
-shortcut_keys_enabled = false
-
-[node name="DescriptionLabel" type="RichTextLabel" parent="Canvas/Skills/Skill2/MarginContainer/HBoxContainer"]
-custom_minimum_size = Vector2(0, 40)
-layout_mode = 2
-bbcode_enabled = true
-text = "Description of possible skill. "
-scroll_active = false
-shortcut_keys_enabled = false
-
-[node name="FILLER" type="Control" parent="Canvas/Skills/Skill2/MarginContainer/HBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="ValueLabel" type="RichTextLabel" parent="Canvas/Skills/Skill2/MarginContainer/HBoxContainer"]
-custom_minimum_size = Vector2(0, 40)
-layout_mode = 2
-theme_override_font_sizes/bold_font_size = 24
-bbcode_enabled = true
-text = "[center][b]00[/b][/center]"
-scroll_active = false
-shortcut_keys_enabled = false
-
-[node name="Button" type="Button" parent="Canvas/Skills/Skill2"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_styles/focus = SubResource("StyleBoxEmpty_2t3yq")
-flat = true
-
-[node name="Skill3" type="Panel" parent="Canvas/Skills"]
-custom_minimum_size = Vector2(250, 350)
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-theme_override_styles/panel = SubResource("StyleBoxFlat_trmhc")
-
-[node name="MarginContainer" type="MarginContainer" parent="Canvas/Skills/Skill3"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/margin_left = 15
-theme_override_constants/margin_top = 15
-theme_override_constants/margin_right = 15
-theme_override_constants/margin_bottom = 15
-
-[node name="HBoxContainer" type="VBoxContainer" parent="Canvas/Skills/Skill3/MarginContainer"]
-layout_mode = 2
-
-[node name="Image" type="TextureRect" parent="Canvas/Skills/Skill3/MarginContainer/HBoxContainer"]
-layout_mode = 2
-texture = ExtResource("4_l8vwn")
-
-[node name="TitleLabel" type="RichTextLabel" parent="Canvas/Skills/Skill3/MarginContainer/HBoxContainer"]
-custom_minimum_size = Vector2(0, 40)
-layout_mode = 2
-bbcode_enabled = true
-text = "[center]TITLE[/center]"
-scroll_active = false
-shortcut_keys_enabled = false
-
-[node name="DescriptionLabel" type="RichTextLabel" parent="Canvas/Skills/Skill3/MarginContainer/HBoxContainer"]
-custom_minimum_size = Vector2(0, 40)
-layout_mode = 2
-bbcode_enabled = true
-text = "Description of possible skill. "
-scroll_active = false
-shortcut_keys_enabled = false
-
-[node name="FILLER" type="Control" parent="Canvas/Skills/Skill3/MarginContainer/HBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="ValueLabel" type="RichTextLabel" parent="Canvas/Skills/Skill3/MarginContainer/HBoxContainer"]
-custom_minimum_size = Vector2(0, 40)
-layout_mode = 2
-theme_override_font_sizes/bold_font_size = 24
-bbcode_enabled = true
-text = "[center][b]00[/b][/center]"
-scroll_active = false
-shortcut_keys_enabled = false
-
-[node name="Button" type="Button" parent="Canvas/Skills/Skill3"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_styles/focus = SubResource("StyleBoxEmpty_2t3yq")
-flat = true
 
 [connection signal="pressed" from="Canvas/HostButton" to="." method="create_lobby"]
 [connection signal="pressed" from="Canvas/RefreshButton" to="." method="refresh_lobby_list"]
-[connection signal="pressed" from="Canvas/Skills/Skill/Button" to="Canvas/Skills" method="choose_skill" binds= [0]]
-[connection signal="pressed" from="Canvas/Skills/Skill2/Button" to="Canvas/Skills" method="choose_skill" binds= [1]]
-[connection signal="pressed" from="Canvas/Skills/Skill3/Button" to="Canvas/Skills" method="choose_skill" binds= [0]]

@@ -2,9 +2,18 @@ extends HBoxContainer
 
 
 const DESCRIPTIONS : Dictionary = {
-	"TITLE1": "Description of Title1",
-	"TITLE2": "Description of Title2",
-	"TITLE3": "Description of Title3"
+	"BALL KICKER": "Ability to kick the ball with N force",
+	"PULL THE BALL": "Ability to pull the ball with N force",
+	"FREEZE IT UP": "Ability to freeze the ball for N seconds",
+	"ANT KILLER": "Kill all ants",
+	"BALL REFRESHER": "Refresh ball size"
+}
+const POSSIBLE_VALUES : Dictionary = {
+	"BALL KICKER": [10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+	"PULL THE BALL": [10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+	"FREEZE IT UP": [1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5],
+	"ANT KILLER": [],
+	"BALL REFRESHER": []
 }
 var player : CharacterBody3D
 
@@ -24,12 +33,8 @@ func choose_skill(id:int) -> void:
 func get_skill() -> Dictionary:
 	var title : String = DESCRIPTIONS.keys()[randi() % DESCRIPTIONS.size()]
 	var description : String = DESCRIPTIONS[title]
-	var possible_values : Array
-	match title:
-		"TITLE1": possible_values = [10,20,30,40,50]
-		"TITLE2": possible_values = [10,20,30,40,50]
-		"TITLE3": possible_values = [10,20,30,40,50]
-	var value = possible_values[randi() % possible_values.size()]
+	var possible_values : Array = POSSIBLE_VALUES[title]
+	var value = str(possible_values[randi() % possible_values.size()]) if !possible_values.is_empty() else ""
 	return {"title":title,"value":value}
 	
 func update_skills(skills:Dictionary) -> void:
@@ -37,6 +42,6 @@ func update_skills(skills:Dictionary) -> void:
 		var title = skills[skill]["title"]
 		var description = DESCRIPTIONS[title]
 		var value = skills[skill]["value"]
-		get_child(skill).get_node("MarginContainer/HBoxContainer/TitleLabel").text = title
-		get_child(skill).get_node("MarginContainer/HBoxContainer/DescriptionLabel").text = description
-		get_child(skill).get_node("MarginContainer/HBoxContainer/ValueLabel").text = "[center][b]"+str(value)+"[/b][/center]"
+		get_child(skill).get_node("Container/Margin/HBox/TitleLabel").text = "[center]"+title+"[/center]"
+		get_child(skill).get_node("Container/Margin/HBox/DescriptionLabel").text = description
+		get_child(skill).get_node("Container/Margin/HBox/ValueLabel").text = "[center][b]"+value+"[/b][/center]"

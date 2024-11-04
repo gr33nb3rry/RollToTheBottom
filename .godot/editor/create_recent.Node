@@ -1,3 +1,4 @@
+MarginContainer
 Control
 Button
 RichTextLabel
@@ -5,11 +6,9 @@ Label
 TextureRect
 VBoxContainer
 HBoxContainer
-MarginContainer
 Panel
 CollisionShape3D
 Area3D
 Node3D
 MeshInstance3D
 CPUParticles3D
-GPUParticles3D

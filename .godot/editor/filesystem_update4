@@ -23,3 +23,5 @@ res://scenes/projectile.tscn
 res://scripts/skills_panel.gd
 res://scripts/camera.gd
 res://scripts/player.gd
+res://scripts/skill_panel.gd
+res://scenes/skill.tscn
