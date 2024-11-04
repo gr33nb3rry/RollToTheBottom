@@ -28,15 +28,18 @@ func _ready():
 	#top_level = true
 
 func _input(event):
+	if !player.is_active: return
 	if event is InputEventMouseMotion:
 		yaw += -event.relative.x * yaw_sensitivity
 		pitch += -event.relative.y * pitch_sensitivity
 func _process(delta: float) -> void:
+	if !player.is_active: return
 	var view = Input.get_vector("view_left", "view_right", "view_down", "view_up")
 	yaw += -view.x * yaw_sensitivity * 5.0
 	pitch += view.y * pitch_sensitivity * 5.0
 
 func _physics_process(delta):
+	if !player.is_active: return
 	pitch = clamp(pitch, pitch_min, pitch_max)
 	yaw_node.rotation_degrees.y = lerp(yaw_node.rotation_degrees.y, yaw, yaw_acceleration * delta)
 	pitch_node.rotation_degrees.x = lerp(pitch_node.rotation_degrees.x, pitch, pitch_acceleration * delta)

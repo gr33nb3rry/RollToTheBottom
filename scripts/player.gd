@@ -107,7 +107,10 @@ func move(delta:float) -> Vector3:
 	elif Input.is_action_pressed("aim"):
 		rotate_model_to_camera(delta)
 	return movement
-	
+
+func stop() -> void:
+	velocity = Vector3.ZERO
+	animation_tree["parameters/conditions/idle"] = true
 	
 func apply_impulse() -> void:
 	for i in get_slide_collision_count():

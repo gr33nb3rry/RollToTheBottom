@@ -1,5 +1,6 @@
-[gd_scene load_steps=5 format=3 uid="uid://4cgi0dr1n0e7"]
+[gd_scene load_steps=7 format=3 uid="uid://4cgi0dr1n0e7"]
 
+[ext_resource type="Script" path="res://scripts/flower.gd" id="1_061iq"]
 [ext_resource type="PackedScene" uid="uid://dvbnay5rmqaxd" path="res://blender/flower.blend" id="1_qseui"]
 [ext_resource type="Material" uid="uid://bjnu7cxmrnglf" path="res://materials/flower_material.tres" id="2_274f2"]
 [ext_resource type="Material" uid="uid://rjgm2jfoghah" path="res://materials/flower_orb_material.tres" id="3_migki"]
@@ -9,7 +10,11 @@ material = ExtResource("3_migki")
 radius = 0.35
 height = 0.7
 
+[sub_resource type="SphereShape3D" id="SphereShape3D_hjf06"]
+radius = 0.7
+
 [node name="Flower" type="Node3D"]
+script = ExtResource("1_061iq")
 
 [node name="flower" parent="." instance=ExtResource("1_qseui")]
 transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, 0, 0, 0)
@@ -17,8 +22,16 @@ transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, 0, 0, 0)
 [node name="Circle" parent="flower" index="0"]
 material_override = ExtResource("2_274f2")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+[node name="Orb" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.893046, 0)
 mesh = SubResource("SphereMesh_kyrwl")
+
+[node name="Area" type="Area3D" parent="."]
+
+[node name="Collision" type="CollisionShape3D" parent="Area"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.799624, 0)
+shape = SubResource("SphereShape3D_hjf06")
+
+[connection signal="body_entered" from="Area" to="." method="_on_area_body_entered"]
 
 [editable path="flower"]
