@@ -25,12 +25,12 @@ const ivec2 OffNE = ivec2(1, -1);
 const ivec2 OffNW = ivec2(-1, -1);
 
 // Scharr operator kernels
-const mat3 scharr_kernel_x = mat3(vec3(-3, 0, 3), 
-								  vec3(-10, 0, 10), 
+const mat3 scharr_kernel_x = mat3(vec3(-3, 0, 3),
+								  vec3(-10, 0, 10),
 								  vec3(-3, 0, 3));
 
-const mat3 scharr_kernel_y = mat3(vec3(-3, -10, -3), 
-								  vec3(0, 0, 0), 
+const mat3 scharr_kernel_y = mat3(vec3(-3, -10, -3),
+								  vec3(0, 0, 0),
 								  vec3(3, 10, 3));
 
 const mat3 gaussian_kernel = mat3(vec3(0.0625, 0.125, 0.0625),
@@ -85,7 +85,7 @@ float getDepthDifference(vec2 uv, vec2 texSize, mat4 inv_projection_matrix, out 
 			vec2 offset = vec2(float(x), float(y)) / texSize;
 			float neighborDepth = linearizeDepth(texture(DepthBufferTex, uv + offset).x, uv + offset, inv_projection_matrix);
 			if (neighborDepth < far) {
-				outOfBounds = false; 
+				outOfBounds = false;
 			}
 			maxDepthDifference = max(maxDepthDifference, abs(centerDepth - neighborDepth));
 		}
@@ -152,7 +152,7 @@ vec2 applyPrewitt(vec2 uv, vec2 tex_size) {
 	vec2 kernel_size = vec2(3, 3);
 	vec2 half_kernel = kernel_size / 2.0;
 	float sum_x = 0.0;
-	float sum_y = 0.0;	
+	float sum_y = 0.0;
 	for (int i = 0; i < 3; i++) {
 		for (int j = 0; j < 3; j++) {
 			vec2 uv_offset = (vec2(float(i), float(j)) - half_kernel) / tex_size;
@@ -169,7 +169,7 @@ vec2 applyPrewittToNormal(vec2 uv, vec2 tex_size) {
 	vec2 kernel_size = vec2(3, 3);
 	vec2 half_kernel = kernel_size / 2.0;
 	float sum_x = 0.0;
-	float sum_y = 0.0;	
+	float sum_y = 0.0;
 	for (int i = 0; i < 3; i++) {
 		for (int j = 0; j < 3; j++) {
 			vec2 uv_offset = (vec2(float(i), float(j)) - half_kernel) / tex_size;
@@ -186,7 +186,7 @@ void fragment() {
 	vec2 texSize = vec2(textureSize(BackBufferTex, 0));
 	vec2 uv = SCREEN_UV;
 	vec2 RCP2 = 2.0 / texSize;
-	
+
 	// Depth difference for depth-aware blending
 	bool outOfBounds;
 	float depthDifference = getDepthDifference(uv, texSize, INV_PROJECTION_MATRIX, outOfBounds);
@@ -194,7 +194,7 @@ void fragment() {
 		discard;
 	}
 	bool depthEdge = depthDifference > depth_threshold;
-	
+
 	// Scharr-based edge detection
 	vec2 gradient = applyScharr(uv, texSize);
 	float gradientMagnitude = length(gradient);
@@ -220,7 +220,7 @@ void fragment() {
 				vec2 neighborGradient = applyScharr(neighborUV, texSize); //neighborUV instead of uv here made it worse?
 				float neighborStrength = length(neighborGradient);
 				vec2 neighborNormalGradient = applyScharrToNormal(neighborUV, texSize); //neighborUV instead of uv here made it worse?
-				float neighborNormalStrength = length(neighborNormalGradient);				
+				float neighborNormalStrength = length(neighborNormalGradient);
 
 				if (neighborStrength > high_threshold || neighborNormalStrength > high_threshold) {
 					isConnectedToStrongEdge = true;
@@ -279,7 +279,7 @@ void fragment() {
 	if (cannyEdge) edge += 1;
 	//if (abs(offMMax - 1.0) < 0.0001 && passC) edge += 1;
 	bool isEdge = (edge > 0);
-	
+
 	// Blend colors based on combined edge detection
 	vec3 finalColor;
 	float finalAlpha = 1.0;
@@ -300,7 +300,7 @@ void fragment() {
 			}
 		}
 
-		// Calculate local variance	
+		// Calculate local variance
 		vec3 rgbM = sampleColor(uv);
 		float localVariance = 0.0;
 		for (int i = 0; i < 9; i++) {
@@ -332,10 +332,10 @@ void fragment() {
 		bool withinRange = false;
 		for (int i = 0; i < destab_iter; i++) {
 			float mixmul = clamp(0.4 + ((float(i) * 0.6 / float(destab_iter)) * float(((i % 2) * 2) - 1)), 0.0, 1.0);
-			vec3 rgbR = (rgbN + rgbP) * (1.0 - mixmul)/2.0 + rgbM * mixmul;			
+			vec3 rgbR = (rgbN + rgbP) * (1.0 - mixmul)/2.0 + rgbM * mixmul;
 			float lumaR = getLuma(rgbR);
 			vec3 chromaR = getChroma(rgbR);
-			bool lumaOutOfRange = lumaR < lumaMin || lumaR > lumaMax;		
+			bool lumaOutOfRange = lumaR < lumaMin || lumaR > lumaMax;
 			bool chromaOutOfRange = any(lessThan(chromaR, chromaMin)) || any(greaterThan(chromaR, chromaMax));
 			if (!lumaOutOfRange && !chromaOutOfRange) {
 				finalColor = rgbR;

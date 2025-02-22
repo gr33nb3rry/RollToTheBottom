@@ -1,0 +1,34 @@
+[gd_resource type="ShaderMaterial" load_steps=4 format=3 uid="uid://0vvd01gdikdl"]
+
+[ext_resource type="Shader" path="res://materials/r_shader.gdshader" id="1_oxcfe"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_iyjo2"]
+noise_type = 3
+frequency = 0.041
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_atixr"]
+width = 30000
+height = 300
+seamless = true
+as_normal_map = true
+bump_strength = 5.0
+noise = SubResource("FastNoiseLite_iyjo2")
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_oxcfe")
+shader_parameter/albedo = Color(0.521178, 0.713853, 0.254123, 1)
+shader_parameter/point_size = 1.0
+shader_parameter/roughness = 0.69
+shader_parameter/metallic_texture_channel = null
+shader_parameter/specular = 0.32
+shader_parameter/metallic = 0.0
+shader_parameter/normal_scale = 0.5
+shader_parameter/subsurface_scattering_strength = 0.0
+shader_parameter/uv1_scale = Vector3(1, 1, 1)
+shader_parameter/uv1_offset = Vector3(0, 0, 0)
+shader_parameter/uv2_scale = Vector3(1, 1, 1)
+shader_parameter/uv2_offset = Vector3(0, 0, 0)
+shader_parameter/size = 5.0
+shader_parameter/intensity = 0.02
+shader_parameter/texture_normal = SubResource("NoiseTexture2D_atixr")

@@ -23,11 +23,12 @@ SteamGlobal="*res://scripts/Steam.gd"
 
 window/size/viewport_width=1280
 window/size/viewport_height=720
+window/size/mode=4
 window/vsync/vsync_mode=0
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/jigglebones/plugin.cfg")
+enabled=PackedStringArray("res://addons/curvemesh3d/plugin.cfg", "res://addons/jigglebones/plugin.cfg")
 
 [global_group]
 
@@ -114,8 +115,8 @@ jolt_3d/collisions/areas_detect_static_bodies=true
 
 lights_and_shadows/directional_shadow/size=16000
 lights_and_shadows/directional_shadow/soft_shadow_filter_quality.mobile=5
+environment/screen_space_reflection/roughness_quality=3
 environment/volumetric_fog/volume_depth=256
 environment/volumetric_fog/use_filter=0
 anti_aliasing/quality/msaa_3d=2
 anti_aliasing/quality/screen_space_aa=1
-anti_aliasing/quality/use_taa=true

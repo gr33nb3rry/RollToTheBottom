@@ -26,7 +26,6 @@ void fragment() {
 	ALBEDO = pow(texture(tex, UV).rgb, vec3(2.2)) * color.rgb;
 }
 
-
 void light() {
 	float NdotL = dot(NORMAL, LIGHT) * ATTENUATION;
 	NdotL = smoothstep(shadow - shadow_width, shadow + shadow_width, NdotL);
