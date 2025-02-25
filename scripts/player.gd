@@ -31,8 +31,8 @@ const ROTATION_SPEED := 10.0
 const WALK_SPEED := 10.0
 const RUN_SPEED := 20.0
 const JUMP_VELOCITY := 20.0
-const PUSH_FORCE := 25.0
-const HIT_FORCE := 150.0
+const PUSH_FORCE := 7.0
+const HIT_FORCE := 14.0
 
 func _ready() -> void:
 	if is_multiplayer_authority():
@@ -64,16 +64,6 @@ func _physics_process(delta: float) -> void:
 		is_rolling = false
 
 func apply_gravity(delta:float) -> void:
-	#var d = global_position - planet.global_position
-	#var gravity_force = (-d.normalized()).normalized()
-	#if is_changed_gravity_to_steb:
-	#	var d = global_position - Vector3.ZERO
-		#var d = global_position - ray_ground.get_collision_point()
-	#	d.y = 0
-		#var d = ray_gravity.get_collision_normal()
-	#	gravity_force = (-d.normalized()).normalized()
-	#var d = ray_gravity.get_collision_normal()
-	#gravity_force = (-d.normalized()).normalized()
 	gravity_acceleration += GRAVITY_ACCELERATION * delta
 	jump_buffer = clamp((jump_buffer - delta * 10.0), 0.0, 50.0)
 	velocity = gravity_force * (GRAVITY + GRAVITY * gravity_acceleration) + global_transform.basis.y * jump_buffer
@@ -125,13 +115,7 @@ func apply_impulse() -> void:
 @rpc("any_peer")
 func apply_impulse_to_ball(requesting_peer_id: int) -> void:
 	var player = ms.get_player_by_id(requesting_peer_id)
-	#ball.apply_central_impulse(-player.get_node("CamRoot/CamYaw").global_transform.basis.z * PUSH_FORCE)
-	var max_linear_velocity = 20.0 / ball.get_node("Mesh").scale.x
-	if ball.get_linear_velocity().length_squared() < max_linear_velocity:
-		#var push_normal : Vector3 = -player.ray_push.get_collision_normal()
-		#ball.apply_central_impulse(Vector3(push_normal.x,0.0,push_normal.z) * PUSH_FORCE)
-		var push_normal : Vector3 = ball.global_position - player.global_position
-		ball.apply_central_impulse(Vector3(push_normal.x,0.0,push_normal.z) * PUSH_FORCE)
+	ball.add_impulse(player, PUSH_FORCE)
 
 func change_gravity() -> void:
 	return

@@ -1,18 +1,18 @@
-[gd_scene load_steps=9 format=3 uid="uid://bxbhg2i0pb78n"]
+[gd_scene load_steps=10 format=3 uid="uid://bxbhg2i0pb78n"]
 
 [ext_resource type="Script" path="res://scripts/ball.gd" id="1_tkqkc"]
-[ext_resource type="Material" uid="uid://coyyow4g50uv4" path="res://materials/dung_material.tres" id="2_duhg3"]
-[ext_resource type="Material" uid="uid://dsohxt1j2fi4o" path="res://materials/dung_piece_material.tres" id="3_5p6fn"]
+[ext_resource type="Material" uid="uid://cgcp3x5c7qwwy" path="res://materials/dung_m_s.tres" id="2_afjxn"]
+[ext_resource type="Material" uid="uid://2vdn8p5i0yc4" path="res://materials/dung_piece_m_s.tres" id="3_1psfg"]
 
-[sub_resource type="SphereMesh" id="SphereMesh_hltef"]
-material = ExtResource("2_duhg3")
+[sub_resource type="SphereMesh" id="SphereMesh_g01rw"]
+material = ExtResource("2_afjxn")
 radius = 2.0
 height = 4.0
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_4mtw0"]
+[sub_resource type="SphereShape3D" id="SphereShape3D_dtt3h"]
 radius = 2.0
 
-[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_ej7vu"]
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_sg357"]
 properties/0/path = NodePath(".:position")
 properties/0/spawn = true
 properties/0/replication_mode = 1
@@ -29,67 +29,63 @@ properties/4/path = NodePath("Collision:scale")
 properties/4/spawn = true
 properties/4/replication_mode = 1
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_dp5bp"]
+[sub_resource type="SphereShape3D" id="SphereShape3D_fg44r"]
 radius = 2.1
 
-[sub_resource type="SphereMesh" id="SphereMesh_7l2es"]
-material = ExtResource("3_5p6fn")
+[sub_resource type="SphereMesh" id="SphereMesh_xvjqq"]
+material = ExtResource("3_1psfg")
+
+[sub_resource type="SphereMesh" id="SphereMesh_g003n"]
+material = ExtResource("3_1psfg")
 
 [node name="Ball" type="RigidBody3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.632493, -2.64189)
 mass = 25.0
 freeze_mode = 1
-linear_damp = 1.0
 script = ExtResource("1_tkqkc")
 
 [node name="Mesh" type="MeshInstance3D" parent="."]
-mesh = SubResource("SphereMesh_hltef")
+mesh = SubResource("SphereMesh_g01rw")
 
 [node name="Collision" type="CollisionShape3D" parent="."]
-shape = SubResource("SphereShape3D_4mtw0")
+shape = SubResource("SphereShape3D_dtt3h")
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
-replication_config = SubResource("SceneReplicationConfig_ej7vu")
+replication_config = SubResource("SceneReplicationConfig_sg357")
 
 [node name="Area" type="Area3D" parent="."]
 monitorable = false
 
 [node name="Collision" type="CollisionShape3D" parent="Area"]
-shape = SubResource("SphereShape3D_dp5bp")
+shape = SubResource("SphereShape3D_fg44r")
 
 [node name="Pieces" type="Node3D" parent="."]
 
 [node name="Piece" type="MeshInstance3D" parent="Pieces"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.75, 0, 0)
-mesh = SubResource("SphereMesh_7l2es")
+mesh = SubResource("SphereMesh_xvjqq")
 skeleton = NodePath("../..")
 
 [node name="Piece2" type="MeshInstance3D" parent="Pieces"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.75)
-mesh = SubResource("SphereMesh_7l2es")
+mesh = SubResource("SphereMesh_g003n")
 skeleton = NodePath("../..")
 
 [node name="Piece3" type="MeshInstance3D" parent="Pieces"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.75, 0)
-mesh = SubResource("SphereMesh_7l2es")
+mesh = SubResource("SphereMesh_g003n")
 skeleton = NodePath("../..")
 
 [node name="Piece4" type="MeshInstance3D" parent="Pieces"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.75, 0, 0)
-mesh = SubResource("SphereMesh_7l2es")
+mesh = SubResource("SphereMesh_g003n")
 skeleton = NodePath("../..")
 
 [node name="Piece5" type="MeshInstance3D" parent="Pieces"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.75)
-mesh = SubResource("SphereMesh_7l2es")
+mesh = SubResource("SphereMesh_g003n")
 skeleton = NodePath("../..")
 
 [node name="Piece6" type="MeshInstance3D" parent="Pieces"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.75, 0)
-mesh = SubResource("SphereMesh_7l2es")
+mesh = SubResource("SphereMesh_g003n")
 skeleton = NodePath("../..")
-
-[connection signal="area_entered" from="Area" to="." method="_on_area_area_entered"]
-[connection signal="area_exited" from="Area" to="." method="_on_area_area_exited"]
-[connection signal="body_entered" from="Area" to="." method="_on_area_body_entered"]
-[connection signal="body_exited" from="Area" to="." method="_on_area_body_exited"]

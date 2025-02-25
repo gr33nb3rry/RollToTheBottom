@@ -7,12 +7,36 @@ const MIN_TIME_IN_AIR_TO_BREAK : float = 0.5
 
 var is_on_ground : bool = true
 var time_in_air : float = 0.0
+var direction : Vector3
+const GRAVITY : float = 7.0
+@onready var world = $/root/Main/World
 
-func _process(delta: float) -> void:
-	$/root/Main/Canvas/DebugLabel.text = str(is_on_ground) + "   " + str(time_in_air)
-	if !is_on_ground:
-		time_in_air += delta
-	else: time_in_air = 0.0
+var is_simplified : bool = false
+var simplicity_level : float = 7.0
+var simplicity_current : float = 1.0
+
+func _physics_process(delta: float) -> void:
+	#$/root/Main/Canvas/DebugLabel.text = str(direction.length())
+	#if !is_on_ground:
+	#	time_in_air += delta
+	#else: time_in_air = 0.0
+	
+	linear_velocity = direction + Vector3(0,-1,0) * GRAVITY
+	if direction.length() > 0.01:
+		if is_simplified:
+			var simplicity_direction = (world.get_zone_next_marker() - global_position).normalized()
+			linear_velocity += simplicity_direction * simplicity_level * simplicity_current
+		direction /= 1.0 + delta * 3
+		simplicity_current /= 1.0 + delta * 3
+	else:
+		direction = Vector3.ZERO
+
+func add_impulse(player:CharacterBody3D, push_force:float) -> void:
+	var max_linear_velocity = 20.0 / $Mesh.scale.x
+	var push_normal : Vector3 = global_position - player.global_position
+	direction = Vector3(push_normal.x,push_normal.y,push_normal.z).normalized() * push_force
+	simplicity_current = 1.0
+
 
 func grow(value:float) -> void:
 	$Mesh.scale += Vector3(value, value, value)
