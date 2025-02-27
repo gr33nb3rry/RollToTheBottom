@@ -1,3 +1,6 @@
+RigidBody3D
+CollisionShape3D
+Area3D
 PathFollow3D
 Path3D
 Marker3D
@@ -10,5 +13,3 @@ CSGMesh3D
 CSGMesher
 CurveMesh3D
 Camera3D
-OmniLight3D
-SpotLight3D

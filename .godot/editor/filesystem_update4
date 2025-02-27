@@ -24,3 +24,7 @@ res://scenes/zones/zone2.tscn
 res://scenes/room.tscn
 res://scenes/zones/zone3.tscn
 res://world.tscn
+res://scripts/multiplayer_spawner.gd
+res://scenes/projectile_a_s.tscn
+res://scripts/projectile.gd
+res://scripts/player.gd

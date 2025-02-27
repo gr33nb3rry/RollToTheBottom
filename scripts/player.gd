@@ -102,6 +102,10 @@ func stop() -> void:
 	velocity = Vector3.ZERO
 	animation_tree["parameters/conditions/idle"] = true
 	
+func damage(amount:int) -> void:
+	pass
+	
+	
 func apply_impulse() -> void:
 	for i in get_slide_collision_count():
 		var collision = get_slide_collision(i)

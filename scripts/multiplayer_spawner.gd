@@ -35,3 +35,14 @@ func get_random_player() -> Node:
 	var keys = players.keys()
 	var random_key = keys[randi() % keys.size()]
 	return players[random_key]
+	
+func get_nearest_player(pos: Vector3) -> Node:
+	if players.is_empty(): return null
+	var nearest_player = null
+	var min_distance_squared = INF
+	for player in players.values():
+		var distance_squared = pos.distance_squared_to(player.global_position)
+		if distance_squared < min_distance_squared:
+			min_distance_squared = distance_squared
+			nearest_player = player
+	return nearest_player

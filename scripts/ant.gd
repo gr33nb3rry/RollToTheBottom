@@ -3,19 +3,22 @@ extends RigidBody3D
 @onready var ball = $/root/Main/World/Ball
 @onready var ms = $/root/Main/World/MultiplayerSpawner
 @onready var world = $/root/Main/World
+const PROJECTILE_A_S = preload("res://scenes/projectile_a_s.tscn")
 
-const MOVE_SPEED : float = 20.0
+const MOVE_SPEED : float = 30.0
 const PUSH_FORCE : float = 200.0
 const TIME_TO_DIE : float = 20.0
 const FLYING_DEADZONE : float = 1.0
+const DETECTION_RADIUS : float = 35.0
+const ATTACK_DELAY : float = 2.0
 
 var is_active := true
+var is_idling : bool = false
 var target
 var target_pos : Vector3
 var state : int = 0
 
 func _ready() -> void:
-	target = ms.get_random_player()
 	calculate_target_pos()
 	
 func _physics_process(delta: float) -> void:
@@ -34,28 +37,47 @@ func _physics_process(delta: float) -> void:
 		achieve_target_pos() 
 	
 		
-	
 func calculate_target_pos() -> void:
+	target = ms.get_nearest_player(global_position)
 	var pos = await world.get_near_flying_position(target)
 	target_pos = pos
 	
 func check_for_position_change() -> void:
-	pass
+	var distance_squared = global_position.distance_squared_to(ms.get_random_player().global_position)
+	if distance_squared < DETECTION_RADIUS * DETECTION_RADIUS:
+		attack()
+		await get_tree().create_timer(ATTACK_DELAY).timeout
+		check_for_position_change()
+	else:
+		calculate_target_pos()
+		state = 1
+
+func attack() -> void:
+	var power := 10.0
+	var direction : Vector3 = (target.global_position - global_position).normalized()
+	var p = PROJECTILE_A_S.instantiate()
+	ms.add_child(p)
+	p.global_position = global_position
+	p.linear_velocity = direction * power
 	
 func achieve_target_pos() -> void:
 	state = 3
-	var t = get_tree().create_tween()
-	t.tween_property(self, "global_position:y", target_pos.y, abs(target_pos.y - global_position.y) / MOVE_SPEED).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN_OUT)
-	await t.finished
-	check_for_position_change()
-	idle_moving()
+	if !is_idling:
+		var t = get_tree().create_tween()
+		t.tween_property(self, "global_position:y", target_pos.y, abs(target_pos.y - global_position.y) / MOVE_SPEED).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN_OUT)
+		await t.finished
+		check_for_position_change()
+		is_idling = true
+		idle_moving()
+	else:
+		check_for_position_change()
 	
 func idle_moving() -> void:
 	var t = get_tree().create_tween()
-	t.tween_property(self, "global_position:y", target_pos.y + 1.0, 1.0).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN_OUT)
-	t.tween_property(self, "global_position:y", target_pos.y, 1.0).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN_OUT)
+	t.tween_property(self, "global_position:y", target_pos.y + 1.0, 2.0).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN_OUT)
+	t.tween_property(self, "global_position:y", target_pos.y, 2.0).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN_OUT)
 	await t.finished
-	if state == 3: idle_moving()
+	idle_moving()
 	
 func damage() -> void:
 	is_active = false
