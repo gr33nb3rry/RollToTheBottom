@@ -56,6 +56,11 @@ radius_profile = SubResource("Curve_dymi8")
 radial_resolution = 32
 material = ExtResource("3_b3x1g")
 
+[node name="PathFollow" type="PathFollow3D" parent="Curve"]
+transform = Transform3D(0.999994, 0, 0, 0, 0.999994, 0, 0, 0, 0.999994, 0, 0, 0)
+rotation_mode = 2
+loop = false
+
 [node name="Room" parent="." instance=ExtResource("3_g4kuc")]
 transform = Transform3D(0.97237, 0, 0.233445, 0, 1, 0, -0.233445, 0, 0.97237, -38.2774, -38.5344, -120.554)
 

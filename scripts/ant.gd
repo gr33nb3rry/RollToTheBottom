@@ -1,41 +1,61 @@
 extends RigidBody3D
 
-@onready var agent = $Agent
 @onready var ball = $/root/Main/World/Ball
+@onready var ms = $/root/Main/World/MultiplayerSpawner
+@onready var world = $/root/Main/World
 
-const MOVE_SPEED : float = 700.0
-const PUSH_FORCE := 200.0
+const MOVE_SPEED : float = 20.0
+const PUSH_FORCE : float = 200.0
 const TIME_TO_DIE : float = 20.0
+const FLYING_DEADZONE : float = 1.0
 
 var is_active := true
+var target
+var target_pos : Vector3
+var state : int = 0
 
 func _ready() -> void:
-	update_path()
-
-func _process(delta: float) -> void:
-	if !agent.is_navigation_finished() and is_active:
-		var new_velocity: Vector3 = agent.get_next_path_position() - global_position
-		var velocity = new_velocity.normalized() * MOVE_SPEED * delta
-		linear_velocity = velocity
-	if !ball.is_on_ground and ball.time_in_air > 1.0:
-		death()
-
-func update_path() -> void:
-	if !is_active: return
-	if ball.is_on_ground:
-		agent.target_position = ball.global_position
-	var delay : float
-	if get_tree().get_node_count_in_group("Ant") > 5:
-		delay = clamp(global_position.distance_squared_to(ball.global_position) / 4000.0, 1, 10.0)
-	else:
-		delay = clamp(get_tree().get_node_count_in_group("Ant") * 0.1, 0.1, 10.0)
-	await get_tree().create_timer(delay).timeout
-	update_path()
+	target = ms.get_random_player()
+	calculate_target_pos()
+	
+func _physics_process(delta: float) -> void:
+	if state == 0:
+		get_parent().progress += MOVE_SPEED * delta
+		if get_parent().progress_ratio == 1.0:
+			reparent(world)
+			state = 1
+	elif state == 1:
+		var direction = target_pos - global_position
+		direction.y = 0.0
+		global_position += direction.normalized() * MOVE_SPEED * delta
+		if abs(global_position.x - target_pos.x) < FLYING_DEADZONE and abs(global_position.z - target_pos.z) < FLYING_DEADZONE:
+			state = 2
+	elif state == 2:
+		achieve_target_pos() 
+	
 		
-func touch() -> void:
-	var push_normal : Vector3 = ball.global_position - global_position
-	ball.apply_central_impulse(Vector3(push_normal.x,0.0,push_normal.z) * PUSH_FORCE)
-	death()
+	
+func calculate_target_pos() -> void:
+	var pos = await world.get_near_flying_position(target)
+	target_pos = pos
+	
+func check_for_position_change() -> void:
+	pass
+	
+func achieve_target_pos() -> void:
+	state = 3
+	var t = get_tree().create_tween()
+	t.tween_property(self, "global_position:y", target_pos.y, abs(target_pos.y - global_position.y) / MOVE_SPEED).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN_OUT)
+	await t.finished
+	check_for_position_change()
+	idle_moving()
+	
+func idle_moving() -> void:
+	var t = get_tree().create_tween()
+	t.tween_property(self, "global_position:y", target_pos.y + 1.0, 1.0).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN_OUT)
+	t.tween_property(self, "global_position:y", target_pos.y, 1.0).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN_OUT)
+	await t.finished
+	if state == 3: idle_moving()
 	
 func damage() -> void:
 	is_active = false

@@ -29,3 +29,9 @@ func get_player_by_id(peer_id: int) -> Node:
 	if players.has(peer_id):
 		return players[peer_id]
 	return null
+
+func get_random_player() -> Node:
+	if players.is_empty(): return null
+	var keys = players.keys()
+	var random_key = keys[randi() % keys.size()]
+	return players[random_key]
