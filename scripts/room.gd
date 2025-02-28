@@ -2,25 +2,21 @@ extends Node3D
 
 @onready var ms = $/root/Main/World/MultiplayerSpawner
 @onready var world = $/root/Main/World
-const ANT = preload("res://scenes/e_flying_s.tscn")
+const FLYING_S = preload("res://scenes/e_flying_s.tscn")
+const FLYING_D = preload("res://scenes/e_flying_d.tscn")
 var is_ball_inside : bool = false
 var players_inside_count : int = 0
 
-func add_flying() -> void:
-	var paths : Array[int]
-	for i in 10:
-		if get_node("Paths/FlyPath" + str(i+1) + "/PathFollow").progress == 0.0:
-			paths.append(i + 1)
-	if paths.size() == 0: return
-	var path = get_node("Paths/FlyPath" + str(paths[randi_range(0, paths.size()-1)]) + "/PathFollow")
-	var a = ANT.instantiate()
-	path.add_child(a)
-	a.position = Vector3.ZERO
+func add_flying(type:int) -> void:
+	var a = FLYING_S.instantiate() if type == 0 else FLYING_D.instantiate()
+	world.add_child(a)
 	
 
 func _input(event: InputEvent) -> void:
 	if Input.is_key_pressed(KEY_9):
-		add_flying()
+		add_flying(0)
+	if Input.is_key_pressed(KEY_8):
+		add_flying(1)
 
 
 func _on_area_body_entered(body: Node3D) -> void:

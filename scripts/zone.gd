@@ -16,8 +16,11 @@ func _process(delta: float) -> void:
 	var ball_pos : Vector3 = ball.global_position + ball_dir.normalized() * 25.0
 	var marker_pos : Vector3 = $Marker.global_position
 	var p = path.curve.get_closest_point(path.to_local(ball_pos))
-	var r = get_radius_on_pos(path.to_local(marker_pos))
-	$Marker.global_position = path.to_global(p) + Vector3(0, r + ball_radius, 0)
+	var p2 = path.curve.get_closest_offset(path.to_local(ball_pos))
+	var r = get_radius_on_pos(path.to_local($Curve/PathFollow/Marker2.global_position))
+	$Curve/PathFollow.progress = p2
+	$Curve/PathFollow.v_offset = r + ball_radius
+	#$Marker.global_position = path.to_global(p) + Vector3(0, r + ball_radius, 0)
 	
 func get_next_zone_position() -> Vector3:
 	return $Room/Pos2.global_position
@@ -25,7 +28,7 @@ func get_next_zone_rotation() -> Vector3:
 	return $Room.rotation + rotation
 
 func get_next_marker() -> Vector3:
-	return $Marker.global_position
+	return $Curve/PathFollow/Marker2.global_position
 
 func get_closest_point_of(of:Node3D) -> Vector3:
 	return path.curve.get_closest_point(path.to_local(of.global_position))

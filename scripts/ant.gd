@@ -22,22 +22,21 @@ var state : int = 0
 
 func _ready() -> void:
 	calculate_target_pos()
+	await get_tree().process_frame
+	var pos : Vector3 = target_pos
+	pos.y -= 40.0
+	global_position = pos
+	
 	
 func _physics_process(delta: float) -> void:
 	if state == 0:
-		get_parent().progress += MOVE_SPEED * delta
-		if get_parent().progress_ratio == 1.0:
-			get_parent().progress = 0.0
-			reparent(world)
-			state = 1
+		achieve_target_pos() 
 	elif state == 1:
 		var direction = target_pos - global_position
 		direction.y = 0.0
 		global_position += direction.normalized() * MOVE_SPEED * delta
 		if abs(global_position.x - target_pos.x) < FLYING_DEADZONE and abs(global_position.z - target_pos.z) < FLYING_DEADZONE:
-			state = 2
-	elif state == 2:
-		achieve_target_pos() 
+			state = 0
 	
 		
 func calculate_target_pos() -> void:
@@ -56,17 +55,16 @@ func check_for_position_change() -> void:
 		state = 1
 
 func attack() -> void:
-	var power := 20.0 if type == 0 else 40.0
 	var direction : Vector3 = (target.global_position - global_position).normalized()
 	var p
 	if type == 0: p = PROJECTILE_S.instantiate()
 	elif type == 1: p = PROJECTILE_D.instantiate()
 	ms.add_child(p)
 	p.global_position = global_position
-	p.linear_velocity = direction * power
+	p.direction = direction
 	
 func achieve_target_pos() -> void:
-	state = 3
+	state = 2
 	if !is_idling:
 		var t = get_tree().create_tween()
 		t.tween_property(self, "global_position:y", target_pos.y, abs(target_pos.y - global_position.y) / MOVE_SPEED).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN_OUT)
