@@ -57,6 +57,7 @@ radial_resolution = 32
 material = ExtResource("3_bvcxh")
 
 [node name="PathFollow" type="PathFollow3D" parent="Curve"]
+transform = Transform3D(0.999868, -0.000912861, -0.0162415, 0, 0.998424, -0.0561167, 0.0162672, 0.0561093, 0.998292, 0, 0, 0)
 rotation_mode = 2
 loop = false
 

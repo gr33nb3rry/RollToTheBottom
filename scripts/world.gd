@@ -8,6 +8,9 @@ var current_zone_instance : Node3D
 func start() -> void:
 	current_zone_instance = get_zone()
 	ball.is_simplified = true
+func end() -> void:
+	get_tree().call_group("Ant", "death")
+	
 	
 func get_zone() -> Node3D:
 	return $Map.get_child(zone-1)

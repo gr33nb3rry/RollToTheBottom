@@ -46,3 +46,6 @@ func get_nearest_player(pos: Vector3) -> Node:
 			min_distance_squared = distance_squared
 			nearest_player = player
 	return nearest_player
+
+func get_players_count() -> int:
+	return players.size()

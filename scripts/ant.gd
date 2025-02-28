@@ -3,7 +3,8 @@ extends RigidBody3D
 @onready var ball = $/root/Main/World/Ball
 @onready var ms = $/root/Main/World/MultiplayerSpawner
 @onready var world = $/root/Main/World
-const PROJECTILE_A_S = preload("res://scenes/projectile_a_s.tscn")
+const PROJECTILE_S = preload("res://scenes/projectile_s.tscn")
+const PROJECTILE_D = preload("res://scenes/projectile_d.tscn")
 
 const MOVE_SPEED : float = 30.0
 const PUSH_FORCE : float = 200.0
@@ -12,6 +13,7 @@ const FLYING_DEADZONE : float = 1.0
 const DETECTION_RADIUS : float = 35.0
 const ATTACK_DELAY : float = 2.0
 
+@export var type : int = 0
 var is_active := true
 var is_idling : bool = false
 var target
@@ -25,6 +27,7 @@ func _physics_process(delta: float) -> void:
 	if state == 0:
 		get_parent().progress += MOVE_SPEED * delta
 		if get_parent().progress_ratio == 1.0:
+			get_parent().progress = 0.0
 			reparent(world)
 			state = 1
 	elif state == 1:
@@ -53,9 +56,11 @@ func check_for_position_change() -> void:
 		state = 1
 
 func attack() -> void:
-	var power := 10.0
+	var power := 20.0 if type == 0 else 40.0
 	var direction : Vector3 = (target.global_position - global_position).normalized()
-	var p = PROJECTILE_A_S.instantiate()
+	var p
+	if type == 0: p = PROJECTILE_S.instantiate()
+	elif type == 1: p = PROJECTILE_D.instantiate()
 	ms.add_child(p)
 	p.global_position = global_position
 	p.linear_velocity = direction * power
