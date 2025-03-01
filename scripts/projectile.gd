@@ -26,8 +26,6 @@ func death() -> void:
 	direction = Vector3.ZERO
 	rotation_deg = 0.0
 	is_on_ground = true
-	await get_tree().create_timer(20).timeout
-	queue_free()
 
 func hit(body: Node3D) -> void:
 	if type == 0:

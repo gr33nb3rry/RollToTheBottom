@@ -30,7 +30,7 @@ uniform float size = 0.4;
 uniform float intensity = 0.7;
 
 void vertex() {
-	float frame_time = 0.17;
+	float frame_time = 0.1;
 	float rounded_time = round(TIME / frame_time) * frame_time;
 	
 	float heightX = pow(abs(cos(VERTEX.y * size + rounded_time * 10.0)), 0.5) * intensity 

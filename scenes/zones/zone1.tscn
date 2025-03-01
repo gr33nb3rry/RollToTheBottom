@@ -68,16 +68,15 @@ transform = Transform3D(0.872586, 0, 0.488454, 0, 0.999998, 0, -0.488454, 0, 0.8
 rotation_mode = 1
 loop = false
 
-[node name="Marker2" type="MeshInstance3D" parent="Curve/PathFollow"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+[node name="Marker" type="MeshInstance3D" parent="Curve/PathFollow"]
 mesh = SubResource("SphereMesh_kpajd")
 skeleton = NodePath("")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Curve/PathFollow/Marker2"]
+[node name="R" type="MeshInstance3D" parent="Curve/PathFollow/Marker"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, 0)
 mesh = SubResource("BoxMesh_8qa26")
 
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="Curve/PathFollow/Marker2"]
+[node name="L" type="MeshInstance3D" parent="Curve/PathFollow/Marker"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0, 0)
 mesh = SubResource("BoxMesh_8qa26")
 
@@ -268,12 +267,6 @@ gizmo_extents = 3.0
 [node name="Marker3D39" type="Marker3D" parent="Markers"]
 transform = Transform3D(-0.103232, 0.470556, -0.876309, 0.5277, 0.772714, 0.352764, 0.843133, -0.426012, -0.328082, 47.8684, -90.3903, -209.87)
 gizmo_extents = 3.0
-
-[node name="Marker" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.783433, -0.155815, -0.601627, -0.00710563, 0.965751, -0.259372, 0.621436, 0.207475, 0.755494, 55.2249, -13.9237, -122.792)
-visible = false
-mesh = SubResource("SphereMesh_kpajd")
-skeleton = NodePath("")
 
 [node name="Path3D" type="Path3D" parent="."]
 curve = SubResource("Curve3D_r7bhb")

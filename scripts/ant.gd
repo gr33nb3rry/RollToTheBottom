@@ -41,11 +41,11 @@ func _physics_process(delta: float) -> void:
 		
 func calculate_target_pos() -> void:
 	target = ms.get_nearest_player(global_position)
-	var pos = await world.get_near_flying_position(target)
+	var pos = world.get_near_flying_position()
 	target_pos = pos
 	
 func check_for_position_change() -> void:
-	var distance_squared = global_position.distance_squared_to(ms.get_random_player().global_position)
+	var distance_squared = global_position.distance_squared_to(world.get_zone_next_marker())
 	if distance_squared < DETECTION_RADIUS * DETECTION_RADIUS:
 		attack()
 		await get_tree().create_timer(ATTACK_DELAY).timeout
