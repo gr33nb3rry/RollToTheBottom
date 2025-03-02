@@ -16,7 +16,7 @@ func _process(delta: float) -> void:
 	rotation_degrees.y += rotation_deg * delta
 	
 func _on_area_body_entered(body: Node3D) -> void:
-	if body.is_in_group("Ant") or is_on_ground: return
+	if body.is_in_group("Soot") or is_on_ground: return
 	if body.is_in_group("Player"):
 		hit(body)
 		queue_free()

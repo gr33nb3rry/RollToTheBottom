@@ -1,11 +1,11 @@
 [gd_scene load_steps=12 format=3 uid="uid://dajif8e22m34y"]
 
-[ext_resource type="Script" path="res://scripts/ant.gd" id="1_fm6r3"]
-[ext_resource type="Shader" path="res://materials/r_shader.gdshader" id="2_37cpr"]
-[ext_resource type="Material" uid="uid://srd1pmhdt7n0" path="res://materials/ant_m_s.tres" id="2_tnhj1"]
+[ext_resource type="Script" path="res://scripts/ant.gd" id="1_mnclv"]
+[ext_resource type="Material" uid="uid://srd1pmhdt7n0" path="res://materials/ant_m_s.tres" id="2_iboq8"]
+[ext_resource type="Shader" path="res://materials/r_shader.gdshader" id="3_1x2um"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_sbcn5"]
-material = ExtResource("2_tnhj1")
+material = ExtResource("2_iboq8")
 radial_segments = 16
 rings = 8
 
@@ -28,7 +28,7 @@ noise = SubResource("FastNoiseLite_iyjo2")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_qto7k"]
 render_priority = 0
-shader = ExtResource("2_37cpr")
+shader = ExtResource("3_1x2um")
 shader_parameter/albedo = Color(0.848035, 0.94902, 1, 1)
 shader_parameter/point_size = 1.0
 shader_parameter/roughness = 0.69
@@ -54,9 +54,9 @@ height = 0.7
 _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.0526316, 1), 0.0, 0.0, 0, 0, Vector2(0.507177, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 4
 
-[node name="Ant" type="RigidBody3D" groups=["Ant"]]
+[node name="Soot" type="RigidBody3D" groups=["Soot"]]
 gravity_scale = 0.0
-script = ExtResource("1_fm6r3")
+script = ExtResource("1_mnclv")
 
 [node name="Mesh" type="MeshInstance3D" parent="."]
 mesh = SubResource("SphereMesh_sbcn5")

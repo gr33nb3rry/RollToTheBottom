@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://cf7s84du3fhw6"]
+[gd_scene load_steps=10 format=3 uid="uid://b3k61fjl585g4"]
 
 [ext_resource type="Script" path="res://scripts/projectile.gd" id="1_26wef"]
 [ext_resource type="Shader" path="res://materials/r_shader.gdshader" id="2_6lplb"]

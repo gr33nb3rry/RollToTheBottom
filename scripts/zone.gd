@@ -8,6 +8,7 @@ extends Node3D
 @onready var marker_l: MeshInstance3D = $Curve/PathFollow/Marker/L
 
 var ball_radius : float = 2.0
+var max_h_offset : float = 10.0
 
 func _ready() -> void:
 	$Curve.get_child(1).create_trimesh_collision()
@@ -41,10 +42,20 @@ func get_radius_on_pos(pos:Vector3) -> float:
 	return $Curve.radius_profile.sample(path.curve.get_closest_offset(pos) / path.curve.get_baked_length()) * $Curve.radius
 
 func get_near_flying_position() -> Vector3:
-	var h_off = randi_range(0,10) * (1 if randi() % 2 else -1)
-	var v_off = randf_range(2,6)
+	var h_off = randi_range(0, max_h_offset) * (1 if randi() % 2 else -1)
+	var v_off = randf_range(2, 6)
 	var side : Vector3 = marker_l.global_position if h_off < 0 else marker_r.global_position
 	side.x += h_off
 	side.y += v_off
 	print("h: ",h_off," v: ",v_off)
 	return side
+
+func get_next_near_flying_position() -> Vector3:
+	var r : float = get_radius_on_pos(path.to_local(marker.global_position))
+	var h_off = randi_range(0, max_h_offset + r) * (1 if randi() % 2 else -1)
+	var v_off = randf_range(2, 6) + r
+	var pos : Vector3 = marker.global_position
+	pos.x += h_off
+	pos.y += v_off
+	print("h: ",h_off," v: ",v_off)
+	return pos

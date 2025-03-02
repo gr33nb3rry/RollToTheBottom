@@ -2,13 +2,12 @@ extends Node3D
 
 @onready var ms = $/root/Main/World/MultiplayerSpawner
 @onready var world = $/root/Main/World
-const FLYING_S = preload("res://scenes/e_flying_s.tscn")
-const FLYING_D = preload("res://scenes/e_flying_d.tscn")
+const SOOT_FLYING = preload("res://scenes/soot_flying.tscn")
 var is_ball_inside : bool = false
 var players_inside_count : int = 0
 
 func add_flying(type:int) -> void:
-	var a = FLYING_S.instantiate() if type == 0 else FLYING_D.instantiate()
+	var a = SOOT_FLYING.instantiate()
 	world.add_child(a)
 	
 

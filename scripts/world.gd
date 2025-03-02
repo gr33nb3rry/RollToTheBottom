@@ -9,7 +9,7 @@ func start() -> void:
 	current_zone_instance = get_zone()
 	ball.is_simplified = true
 func end() -> void:
-	get_tree().call_group("Ant", "death")
+	get_tree().call_group("Soot", "death")
 	
 	
 func get_zone() -> Node3D:
@@ -26,6 +26,9 @@ func get_radius_on_pos(pos:Vector3) -> float:
 
 func get_near_flying_position() -> Vector3:
 	return current_zone_instance.get_near_flying_position()
+	
+func get_next_near_flying_position() -> Vector3:
+	return current_zone_instance.get_next_near_flying_position()
 	
 func _input(event: InputEvent) -> void:
 	if Input.is_key_pressed(KEY_0): start()
