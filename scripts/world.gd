@@ -14,6 +14,8 @@ func end() -> void:
 	
 func get_zone() -> Node3D:
 	return $Map.get_child(zone-1)
+func get_room() -> Node3D:
+	return current_zone_instance.get_node("Room")
 	
 func get_zone_next_marker() -> Vector3:
 	return current_zone_instance.get_next_marker()
@@ -29,6 +31,9 @@ func get_near_flying_position() -> Vector3:
 	
 func get_next_near_flying_position() -> Vector3:
 	return current_zone_instance.get_next_near_flying_position()
+	
+func get_next_jumping_position(pos:Vector3) -> Vector3:
+	return current_zone_instance.get_next_jumping_position(pos)
 	
 func _input(event: InputEvent) -> void:
 	if Input.is_key_pressed(KEY_0): start()

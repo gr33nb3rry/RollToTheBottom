@@ -62,6 +62,8 @@ func _on_area_area_entered(area: Area3D) -> void:
 		var scale_increase : float = get_radius(v1+v2)/r1-1.0
 		grow(scale_increase * DUNG_PICKUP_VALUE_MULTIPLIER)
 		item.queue_free()
+	elif item.is_in_group("Soot"):
+		item.death()
 func _on_area_area_exited(area: Area3D) -> void:
 	pass
 	

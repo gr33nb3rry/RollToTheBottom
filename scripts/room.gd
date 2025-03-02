@@ -3,19 +3,24 @@ extends Node3D
 @onready var ms = $/root/Main/World/MultiplayerSpawner
 @onready var world = $/root/Main/World
 const SOOT_FLYING = preload("res://scenes/soot_flying.tscn")
+const SOOT_JUMPING = preload("res://scenes/soot_jumping.tscn")
 var is_ball_inside : bool = false
 var players_inside_count : int = 0
 
 func add_flying(type:int) -> void:
 	var a = SOOT_FLYING.instantiate()
 	world.add_child(a)
+func add_jumping() -> void:
+	var a = SOOT_JUMPING.instantiate()
+	world.add_child(a)
+	a.global_position = to_global($Pos1.position + Vector3(0, 0, 5))
 	
 
 func _input(event: InputEvent) -> void:
 	if Input.is_key_pressed(KEY_9):
 		add_flying(0)
 	if Input.is_key_pressed(KEY_8):
-		add_flying(1)
+		add_jumping()
 
 
 func _on_area_body_entered(body: Node3D) -> void:
