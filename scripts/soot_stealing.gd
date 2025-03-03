@@ -1,0 +1,88 @@
+extends RigidBody3D
+
+@onready var ball = $/root/Main/World/Ball
+@onready var ms = $/root/Main/World/MultiplayerSpawner
+@onready var world = $/root/Main/World
+const PROJECTILE_S = preload("res://scenes/projectile_s.tscn")
+
+const MOVE_SPEED : float = 10.0
+const PUSH_FORCE : float = 200.0
+const TIME_TO_DIE : float = 20.0
+const FLYING_DETECT_RADIUS : float = 5.0
+const FLYING_DEADZONE : float = 0.5
+const DETECTION_RADIUS : float = 35.0
+const ATTACK_DELAY : float = 2.0
+const RADIUS : float = 0.5
+const BALL_RADIUS : float = 2.0
+
+@export var type : int = 0
+var is_active := true
+var is_achieved : bool = false
+var target_pos : Vector3
+var state : int = 0
+
+func _ready() -> void:
+	calculate_target_pos()
+	await get_tree().process_frame
+	var pos : Vector3 = target_pos
+	pos.y -= 40.0
+	global_position = pos
+	
+func _process(delta: float) -> void:
+	if state == 0:
+		achieve_target_pos() 
+	elif state == 1:
+		var pos : Vector3 = ball.global_position + Vector3(0, BALL_RADIUS + RADIUS, 0)
+		var direction = pos - global_position
+		if abs(global_position.x - pos.x) > FLYING_DETECT_RADIUS or abs(global_position.z - pos.z) > FLYING_DETECT_RADIUS:
+			direction.y = 0.0
+		if global_position.distance_squared_to(pos) < FLYING_DEADZONE * FLYING_DEADZONE:
+			if !is_achieved: achieve_final_pos()
+			return
+		global_position += direction.normalized() * MOVE_SPEED * delta
+	elif state == 2:
+		ball.global_position = global_position - Vector3(0, BALL_RADIUS + RADIUS, 0)
+		
+		
+func calculate_target_pos() -> void:
+	var pos = world.get_near_flying_position()
+	target_pos = pos
+	
+	
+func achieve_target_pos() -> void:
+	state = -1
+	var t = get_tree().create_tween()
+	t.tween_property(self, "global_position:y", target_pos.y, abs(target_pos.y - global_position.y) / MOVE_SPEED).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN_OUT)
+	await t.finished
+	state = 1
+	
+func achieve_final_pos() -> void:
+	is_achieved = true
+	await get_tree().create_timer(ATTACK_DELAY).timeout
+	steal()
+	
+func steal() -> void:
+	ball.is_simplified = false
+	ball.stop()
+	state = 2
+	var pos : float = global_position.y + 4.0
+	var t = get_tree().create_tween()
+	t.tween_property(self, "global_position:y", pos, abs(pos - global_position.y) / MOVE_SPEED).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN_OUT)
+	t.tween_property(self, "global_position:x", target_pos.x, abs(target_pos.x - global_position.x) / MOVE_SPEED)
+	t.parallel().tween_property(self, "global_position:z", target_pos.z, abs(target_pos.z - global_position.z) / MOVE_SPEED)
+	
+func damage() -> void:
+	is_active = false
+	linear_velocity = Vector3.ZERO
+	gravity_scale = 1.0
+	var direction : Vector3 = (Vector3(randf_range(-1.0, 1.0), randf_range(1.0, 3.0), randf_range(-1.0, 1.0))).normalized()
+	apply_central_impulse(direction * 10.0)
+	await get_tree().create_timer(TIME_TO_DIE).timeout
+	death()
+	
+func death() -> void:
+	is_active = false
+	$Explosion.emitting = true
+	$Mesh.visible = false
+	await get_tree().create_timer(5.0).timeout
+	queue_free()

@@ -5,7 +5,7 @@ extends RigidBody3D
 @onready var world = $/root/Main/World
 const PROJECTILE_S = preload("res://scenes/projectile_s.tscn")
 
-const MOVE_SPEED : float = 30.0
+const MOVE_SPEED : float = 20.0
 const PUSH_FORCE : float = 200.0
 const TIME_TO_DIE : float = 20.0
 const FLYING_DEADZONE : float = 1.0

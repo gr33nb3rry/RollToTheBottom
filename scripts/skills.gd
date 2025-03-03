@@ -27,15 +27,3 @@ func freeze_ball() -> void:
 func refresh_ball() -> void:
 	$/root/Main/World/Ball.refresh_size()
 	
-
-func _input(_event: InputEvent) -> void:
-	if Input.is_key_pressed(KEY_1):
-		kill_all_ants()
-	if Input.is_key_pressed(KEY_2):
-		freeze_ball()
-	if Input.is_key_pressed(KEY_3):
-		refresh_ball()
-	if Input.is_key_pressed(KEY_4):
-		kick_ball(1, 15.0)
-	if Input.is_key_pressed(KEY_5):
-		pull_ball(1, 150.0)

@@ -107,3 +107,6 @@ func refresh_size() -> void:
 	$Area/Collision.scale = Vector3.ONE
 	mass = INITIAL_MASS
 	update_pieces()
+
+func stop() -> void:
+	linear_velocity = Vector3.ZERO

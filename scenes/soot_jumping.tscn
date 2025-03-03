@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://boyhvuv0mwsvb"]
+[gd_scene load_steps=11 format=3 uid="uid://boyhvuv0mwsvb"]
 
 [ext_resource type="Script" path="res://scripts/soot_jumping.gd" id="1_nlrt6"]
 [ext_resource type="Material" uid="uid://srd1pmhdt7n0" path="res://materials/ant_m_s.tres" id="2_xvtnq"]
@@ -8,9 +8,6 @@
 material = ExtResource("2_xvtnq")
 radial_segments = 16
 rings = 8
-
-[sub_resource type="SphereShape3D" id="SphereShape3D_q5sjf"]
-radius = 0.3
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_5ed7r"]
 properties/0/path = NodePath(".:position")
@@ -54,15 +51,11 @@ height = 0.7
 _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.0526316, 1), 0.0, 0.0, 0, 0, Vector2(0.507177, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 4
 
-[node name="Soot" type="RigidBody3D" groups=["Soot"]]
-gravity_scale = 0.0
+[node name="Soot" type="Node3D" groups=["Soot"]]
 script = ExtResource("1_nlrt6")
 
 [node name="Mesh" type="MeshInstance3D" parent="."]
 mesh = SubResource("SphereMesh_sbcn5")
-
-[node name="Collision" type="CollisionShape3D" parent="."]
-shape = SubResource("SphereShape3D_q5sjf")
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_5ed7r")

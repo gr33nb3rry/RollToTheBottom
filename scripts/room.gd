@@ -4,11 +4,15 @@ extends Node3D
 @onready var world = $/root/Main/World
 const SOOT_FLYING = preload("res://scenes/soot_flying.tscn")
 const SOOT_JUMPING = preload("res://scenes/soot_jumping.tscn")
+const SOOT_STEALING = preload("res://scenes/soot_stealing.tscn")
 var is_ball_inside : bool = false
 var players_inside_count : int = 0
 
 func add_flying(type:int) -> void:
 	var a = SOOT_FLYING.instantiate()
+	world.add_child(a)
+func add_stealing(type:int) -> void:
+	var a = SOOT_STEALING.instantiate()
 	world.add_child(a)
 func add_jumping() -> void:
 	var a = SOOT_JUMPING.instantiate()
@@ -21,6 +25,8 @@ func _input(event: InputEvent) -> void:
 		add_flying(0)
 	if Input.is_key_pressed(KEY_8):
 		add_jumping()
+	if Input.is_key_pressed(KEY_7):
+		add_stealing(0)
 
 
 func _on_area_body_entered(body: Node3D) -> void:
