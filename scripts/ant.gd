@@ -80,7 +80,7 @@ func idle_moving() -> void:
 	await t.finished
 	idle_moving()
 	
-func damage() -> void:
+func damage(v:int) -> void:
 	is_active = false
 	linear_velocity = Vector3.ZERO
 	gravity_scale = 1.0

@@ -10,7 +10,6 @@ radial_segments = 16
 rings = 8
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_q5sjf"]
-radius = 0.3
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_5ed7r"]
 properties/0/path = NodePath(".:position")

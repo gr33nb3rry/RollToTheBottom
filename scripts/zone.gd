@@ -41,6 +41,9 @@ func get_closest_point_of(of:Node3D) -> Vector3:
 func get_radius_on_pos(pos:Vector3) -> float:
 	return $Curve.radius_profile.sample(path.curve.get_closest_offset(pos) / path.curve.get_baked_length()) * $Curve.radius
 
+func is_marker_completed() -> bool:
+	return path.curve.get_closest_offset(path.to_local(marker.global_position)) == path.curve.get_baked_length()
+
 func get_near_flying_position() -> Vector3:
 	var h_off = randi_range(0, max_h_offset) * (1 if randi() % 2 else -1)
 	var v_off = randf_range(2, 6)

@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://dqfpscc5q0iux"]
+[gd_scene load_steps=9 format=3 uid="uid://dqfpscc5q0iux"]
 
 [ext_resource type="Script" path="res://scripts/projectile.gd" id="1_wg7a5"]
 [ext_resource type="Shader" path="res://materials/r_shader.gdshader" id="2_dsjqd"]
@@ -36,9 +36,6 @@ material = SubResource("ShaderMaterial_e8tx2")
 radius = 0.3
 height = 0.6
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_jk3o6"]
-radius = 0.3
-
 [sub_resource type="SphereShape3D" id="SphereShape3D_fhyo1"]
 radius = 0.3
 
@@ -47,15 +44,11 @@ properties/0/path = NodePath(".:position")
 properties/0/spawn = true
 properties/0/replication_mode = 1
 
-[node name="Projectile" type="RigidBody3D"]
-gravity_scale = 0.0
+[node name="Projectile" type="Node3D"]
 script = ExtResource("1_wg7a5")
 
-[node name="Mesh" type="MeshInstance3D" parent="."]
+[node name="Model" type="MeshInstance3D" parent="."]
 mesh = SubResource("SphereMesh_7ph41")
-
-[node name="Collision" type="CollisionShape3D" parent="."]
-shape = SubResource("SphereShape3D_jk3o6")
 
 [node name="Area" type="Area3D" parent="."]
 

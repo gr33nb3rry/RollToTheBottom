@@ -6,6 +6,7 @@ extends RigidBody3D
 const PROJECTILE_S = preload("res://scenes/projectile_s.tscn")
 
 const MOVE_SPEED : float = 10.0
+const MOVE_WITH_BALL_SPEED : float = 5.0
 const PUSH_FORCE : float = 200.0
 const TIME_TO_DIE : float = 20.0
 const FLYING_DETECT_RADIUS : float = 5.0
@@ -14,6 +15,7 @@ const DETECTION_RADIUS : float = 35.0
 const ATTACK_DELAY : float = 2.0
 const RADIUS : float = 0.5
 const BALL_RADIUS : float = 2.0
+const INITIAL_HEIGHT : float = 40.0
 
 @export var type : int = 0
 var is_active := true
@@ -25,7 +27,7 @@ func _ready() -> void:
 	calculate_target_pos()
 	await get_tree().process_frame
 	var pos : Vector3 = target_pos
-	pos.y -= 40.0
+	pos.y -= INITIAL_HEIGHT
 	global_position = pos
 	
 func _process(delta: float) -> void:
@@ -67,22 +69,14 @@ func steal() -> void:
 	state = 2
 	var pos : float = global_position.y + 4.0
 	var t = get_tree().create_tween()
-	t.tween_property(self, "global_position:y", pos, abs(pos - global_position.y) / MOVE_SPEED).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN_OUT)
-	t.tween_property(self, "global_position:x", target_pos.x, abs(target_pos.x - global_position.x) / MOVE_SPEED)
-	t.parallel().tween_property(self, "global_position:z", target_pos.z, abs(target_pos.z - global_position.z) / MOVE_SPEED)
-	
-func damage() -> void:
-	is_active = false
-	linear_velocity = Vector3.ZERO
-	gravity_scale = 1.0
-	var direction : Vector3 = (Vector3(randf_range(-1.0, 1.0), randf_range(1.0, 3.0), randf_range(-1.0, 1.0))).normalized()
-	apply_central_impulse(direction * 10.0)
-	await get_tree().create_timer(TIME_TO_DIE).timeout
+	t.tween_property(self, "global_position:y", pos, abs(pos - global_position.y) / MOVE_WITH_BALL_SPEED).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN_OUT)
+	t.tween_property(self, "global_position:x", target_pos.x, abs(target_pos.x - global_position.x) / MOVE_WITH_BALL_SPEED)
+	t.parallel().tween_property(self, "global_position:z", target_pos.z, abs(target_pos.z - global_position.z) / MOVE_WITH_BALL_SPEED)
+	t.tween_property(self, "global_position:y", target_pos.y-INITIAL_HEIGHT, abs(target_pos.y-INITIAL_HEIGHT - global_position.y) / MOVE_WITH_BALL_SPEED).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN_OUT)
+
+func damage(v:int) -> void:
 	death()
-	
+
 func death() -> void:
-	is_active = false
-	$Explosion.emitting = true
-	$Mesh.visible = false
-	await get_tree().create_timer(5.0).timeout
+	ball.is_simplified = true
 	queue_free()

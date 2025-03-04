@@ -1,6 +1,6 @@
 extends CharacterBody3D
 
-@onready var projectile = preload("res://scenes/projectile.tscn")
+const PROJECTILE = preload("res://scenes/projectile.tscn")
 @onready var model : Node3D = $Model
 @onready var animation_tree : AnimationTree = $Model/Sophia/AnimationTree
 @onready var animation_player: AnimationPlayer = $Model/Sophia/AnimationPlayer
@@ -144,16 +144,16 @@ func aim(is_aim:bool) -> void:
 	$/root/Main/Canvas/Crosshair.visible = is_aim
 	
 func instantiate_projectile() -> void:
-	var power := 20.0
 	var direction : Vector3
+	var pos : Vector3 = global_position + Vector3(0, 1.7, 0)
 	if ray_crosshair.is_colliding():
-		direction = (ray_crosshair.get_collision_point() - global_position).normalized()
+		direction = (ray_crosshair.get_collision_point() - pos).normalized()
 	else:
 		direction = (-camera.global_transform.basis.z).normalized()
-	var p = projectile.instantiate()
+	var p = PROJECTILE.instantiate()
 	ms.add_child(p)
-	p.global_position = $Model/Sophia/ProjectileInitialPosition.global_position
-	p.apply_central_impulse(direction * power)
+	p.global_position = pos
+	p.direction = direction
 
 func _input(event) -> void:
 	if Input.is_action_just_pressed("ui_cancel"):

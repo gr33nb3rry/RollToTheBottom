@@ -13,22 +13,13 @@ func _ready() -> void:
 	
 func _process(delta: float) -> void:
 	global_position += direction * power * delta
-	rotation_degrees.y += rotation_deg * delta
 	
 func _on_area_body_entered(body: Node3D) -> void:
-	if body.is_in_group("Soot") or is_on_ground: return
-	if body.is_in_group("Player"):
-		hit(body)
+	if body.is_in_group("Player"): return
+	if body.is_in_group("Soot"):
+		body.damage(1)
 		queue_free()
 	death()
 	
 func death() -> void:
-	direction = Vector3.ZERO
-	rotation_deg = 0.0
-	is_on_ground = true
-
-func hit(body: Node3D) -> void:
-	if type == 0:
-		body.damage(1)
-	elif type == 1:
-		body.damage(1)
+	queue_free()

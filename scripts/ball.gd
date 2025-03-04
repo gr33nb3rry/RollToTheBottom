@@ -25,7 +25,8 @@ func _physics_process(delta: float) -> void:
 	if direction.length() > 0.01:
 		if is_simplified:
 			var simplicity_direction = (world.get_zone_next_marker() - global_position).normalized()
-			linear_velocity += simplicity_direction * simplicity_level * simplicity_current
+			if !world.is_marker_completed(): 
+				linear_velocity += simplicity_direction * simplicity_level * simplicity_current
 		direction /= 1.0 + delta * 3
 		simplicity_current /= 1.0 + delta * 3
 	else:
@@ -62,8 +63,6 @@ func _on_area_area_entered(area: Area3D) -> void:
 		var scale_increase : float = get_radius(v1+v2)/r1-1.0
 		grow(scale_increase * DUNG_PICKUP_VALUE_MULTIPLIER)
 		item.queue_free()
-	elif item.is_in_group("Soot"):
-		item.death()
 func _on_area_area_exited(area: Area3D) -> void:
 	pass
 	
@@ -85,12 +84,12 @@ func _on_area_body_entered(body: Node3D) -> void:
 		is_on_ground = true
 		if time_in_air > MIN_TIME_IN_AIR_TO_BREAK:
 			var break_value = time_in_air / STRENGTH
-			print("Ball break: ",break_value)
+			print("Ball break: ", break_value)
 			if break_value < $Mesh.scale.x:
 				shrink(break_value)
 			else: queue_free()
-	elif body.is_in_group("Ant"):
-		body.touch()
+	elif body.is_in_group("Soot"):
+		body.death()
 func _on_area_body_exited(body: Node3D) -> void:
 	for b in $Area.get_overlapping_bodies(): if b.is_in_group("Ground"): return
 	if body.is_in_group("Ground"): is_on_ground = false

@@ -1,6 +1,6 @@
 [gd_scene load_steps=8 format=4 uid="uid://65nld7yjaxbk"]
 
-[ext_resource type="Script" path="res://scripts/projectile.gd" id="1_3ncbm"]
+[ext_resource type="Script" path="res://scripts/projectile_enemy.gd" id="1_3ncbm"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5qkn7"]
 resource_name = "Body Side"

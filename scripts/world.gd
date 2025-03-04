@@ -26,6 +26,9 @@ func get_closest_point_of(of:Node3D) -> Vector3:
 func get_radius_on_pos(pos:Vector3) -> float:
 	return current_zone_instance.get_radius_on_pos(pos)
 
+func is_marker_completed() -> bool:
+	return current_zone_instance.is_marker_completed()
+	
 func get_near_flying_position() -> Vector3:
 	return current_zone_instance.get_near_flying_position()
 	
