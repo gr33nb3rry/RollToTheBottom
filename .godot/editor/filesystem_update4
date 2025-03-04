@@ -34,3 +34,6 @@ res://scripts/projectile.gd
 res://scripts/ant.gd
 res://scripts/soot_jumping.gd
 res://scripts/player.gd
+res://scenes/vfx/electric_arc/electric_arc.tscn
+res://scenes/vfx/electric_arc/electric_arc.gd
+res://scenes/vfx/floating_dust/floating_dust.tscn

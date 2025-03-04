@@ -27,7 +27,7 @@ size = Vector2(0.1, 0.1)
 
 [node name="FloatingDust" type="GPUParticles3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.05255, 0)
-amount = 128
+amount = 256
 lifetime = 10.0
 preprocess = 10.0
 transform_align = 1
