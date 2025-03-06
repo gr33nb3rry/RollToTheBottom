@@ -32,9 +32,9 @@ func _physics_process(delta: float) -> void:
 	else:
 		direction = Vector3.ZERO
 
-func add_impulse(player:CharacterBody3D, push_force:float) -> void:
+func add_impulse(from:Node3D, push_force:float) -> void:
 	var max_linear_velocity = 20.0 / $Mesh.scale.x
-	var push_normal : Vector3 = global_position - player.global_position
+	var push_normal : Vector3 = global_position - from.global_position
 	direction = Vector3(push_normal.x,push_normal.y,push_normal.z).normalized() * push_force
 	simplicity_current = 1.0
 

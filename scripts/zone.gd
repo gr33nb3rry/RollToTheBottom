@@ -1,6 +1,8 @@
 extends Node3D
 
+const SOOT_WAITING = preload("res://scenes/soot_waiting.tscn")
 @onready var ball = $/root/Main/World/Ball
+@onready var world = $/root/Main/World
 @onready var path: Path3D = $Path3D
 @onready var path_follow: PathFollow3D = $Curve/PathFollow
 @onready var marker: MeshInstance3D = $Curve/PathFollow/Marker
@@ -15,6 +17,8 @@ func _ready() -> void:
 	if has_node("CurveB"): 
 		for i in $CurveB.get_children():
 			i.get_child(0).create_trimesh_collision()
+	await get_tree().create_timer(0.1).timeout
+	add_waiting_soots()
 
 func _process(delta: float) -> void:
 	var ball_dir : Vector3 = ball.get_linear_velocity()
@@ -70,3 +74,16 @@ func get_next_jumping_position(pos:Vector3) -> Vector3:
 	result_pos.y += r
 	print("r: ",r," pos: ",pos," result_pos: ",result_pos)
 	return result_pos
+
+func add_waiting_soots() -> void:
+	var soot_count := 5  # Количество точек, в которых появятся SOOT_WAITING
+	var path_length := path.curve.get_baked_length()
+
+	for i in range(soot_count):
+		var offset := path_length * (float(i) / float(soot_count))  # Равномерное распределение по длине пути
+		var point := path.curve.sample_baked(offset)
+		var global_point := path.to_global(point)
+		print("Spawning SOOT_WAITING at:", global_point)
+		var soot := SOOT_WAITING.instantiate()
+		world.add_child(soot)
+		soot.global_position = global_point
