@@ -4,12 +4,22 @@ extends Node3D
 
 var zone : int = 1
 var current_zone_instance : Node3D
+var is_able_to_zone_up : bool = false
 
 func start() -> void:
+	if current_zone_instance: get_room().process_mode = Node.PROCESS_MODE_DISABLED
 	current_zone_instance = get_zone()
 	ball.is_simplified = true
+	is_able_to_zone_up = true
+	add_waiting_soots()
+	get_room().process_mode = Node.PROCESS_MODE_INHERIT
+	
 func end() -> void:
-	get_tree().call_group("Soot", "death")
+	if is_able_to_zone_up:
+		get_tree().call_group("Soot", "death")
+		zone += 1
+		ball.is_simplified = false
+		is_able_to_zone_up = false
 	
 	
 func get_zone() -> Node3D:
@@ -37,6 +47,9 @@ func get_next_near_flying_position() -> Vector3:
 	
 func get_next_jumping_position(pos:Vector3) -> Vector3:
 	return current_zone_instance.get_next_jumping_position(pos)
+	
+func add_waiting_soots() -> void:
+	current_zone_instance.add_waiting_soots()
 	
 func _input(event: InputEvent) -> void:
 	if Input.is_key_pressed(KEY_0): start()

@@ -1,7 +1,7 @@
-[gd_scene load_steps=13 format=3 uid="uid://dencfr3mxmdh0"]
+[gd_scene load_steps=14 format=3 uid="uid://dencfr3mxmdh0"]
 
 [ext_resource type="Script" path="res://scripts/soot_waiting.gd" id="1_ppi37"]
-[ext_resource type="Material" uid="uid://srd1pmhdt7n0" path="res://materials/ant_m_s.tres" id="2_5hvlg"]
+[ext_resource type="Material" uid="uid://srd1pmhdt7n0" path="res://materials/soot_m_s.tres" id="2_5hvlg"]
 [ext_resource type="Shader" path="res://materials/r_shader.gdshader" id="3_4isf7"]
 [ext_resource type="Material" uid="uid://0vvd01gdikdl" path="res://materials/steb_m_s.tres" id="3_uslql"]
 
@@ -59,7 +59,13 @@ height = 0.7
 _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.0526316, 1), 0.0, 0.0, 0, 0, Vector2(0.507177, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 4
 
-[node name="Soot" type="Node3D" groups=["Soot"]]
+[sub_resource type="SphereShape3D" id="SphereShape3D_g360g"]
+radius = 2.0
+
+[node name="Soot" type="RigidBody3D" groups=["Soot"]]
+collision_layer = 2
+collision_mask = 2
+gravity_scale = 0.0
 script = ExtResource("1_ppi37")
 
 [node name="Mesh" type="MeshInstance3D" parent="."]
@@ -88,3 +94,6 @@ gravity = Vector3(0, 0.1, 0)
 initial_velocity_max = 0.3
 scale_amount_min = 0.75
 scale_amount_curve = SubResource("Curve_ulymp")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_g360g")

@@ -1,7 +1,7 @@
 [gd_scene load_steps=12 format=3 uid="uid://bs73dhiwmwdlc"]
 
 [ext_resource type="Script" path="res://scripts/soot_stealing.gd" id="1_k2qoa"]
-[ext_resource type="Material" uid="uid://srd1pmhdt7n0" path="res://materials/ant_m_s.tres" id="2_1cll8"]
+[ext_resource type="Material" uid="uid://srd1pmhdt7n0" path="res://materials/soot_m_s.tres" id="2_1cll8"]
 [ext_resource type="Shader" path="res://materials/r_shader.gdshader" id="3_7c3y6"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_sbcn5"]
@@ -54,6 +54,8 @@ _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.0526316, 1), 0.0, 0.0, 0, 0, V
 point_count = 4
 
 [node name="Soot" type="RigidBody3D" groups=["Soot"]]
+collision_layer = 2
+collision_mask = 2
 gravity_scale = 0.0
 script = ExtResource("1_k2qoa")
 

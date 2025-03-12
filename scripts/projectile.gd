@@ -2,7 +2,7 @@ extends Node3D
 
 @export var type : int = 0
 var direction : Vector3
-var power : float = 20.0
+var power : float = 40.0
 var rotation_deg : float = 360.0
 var is_on_ground : bool = false
 

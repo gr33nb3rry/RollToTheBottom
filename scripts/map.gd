@@ -9,7 +9,7 @@ const ZONES : Array[PackedScene] = [
 var zones : Array
 
 func _ready() -> void:
-	for i in 1:
+	for i in 5:
 		generate()
 	
 func _input(_event) -> void:

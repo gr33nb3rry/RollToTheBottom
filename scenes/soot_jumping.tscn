@@ -1,7 +1,7 @@
-[gd_scene load_steps=11 format=3 uid="uid://boyhvuv0mwsvb"]
+[gd_scene load_steps=12 format=3 uid="uid://boyhvuv0mwsvb"]
 
 [ext_resource type="Script" path="res://scripts/soot_jumping.gd" id="1_nlrt6"]
-[ext_resource type="Material" uid="uid://srd1pmhdt7n0" path="res://materials/ant_m_s.tres" id="2_xvtnq"]
+[ext_resource type="Material" uid="uid://srd1pmhdt7n0" path="res://materials/soot_m_s.tres" id="2_xvtnq"]
 [ext_resource type="Shader" path="res://materials/r_shader.gdshader" id="3_311eu"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_sbcn5"]
@@ -51,7 +51,12 @@ height = 0.7
 _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.0526316, 1), 0.0, 0.0, 0, 0, Vector2(0.507177, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 4
 
-[node name="Soot" type="Node3D" groups=["Soot"]]
+[sub_resource type="SphereShape3D" id="SphereShape3D_wx4ky"]
+
+[node name="Soot" type="RigidBody3D" groups=["Soot"]]
+collision_layer = 2
+collision_mask = 2
+gravity_scale = 0.0
 script = ExtResource("1_nlrt6")
 
 [node name="Mesh" type="MeshInstance3D" parent="."]
@@ -81,3 +86,6 @@ scale_amount_curve = SubResource("Curve_ulymp")
 [node name="Ray" type="RayCast3D" parent="."]
 top_level = true
 target_position = Vector3(0, -20, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_wx4ky")
