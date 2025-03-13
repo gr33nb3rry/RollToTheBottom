@@ -11,6 +11,7 @@ const PROJECTILE = preload("res://scenes/projectile.tscn")
 @onready var ray_crosshair: RayCast3D = $CamRoot/CamYaw/CamPitch/SpringArm3D/RayCrosshair
 
 @onready var ms = $/root/Main/World/MultiplayerSpawner
+@onready var projectile_spawner = $/root/Main/World/ProjectileSpawner
 @onready var path = $/root/Main/World/Steb/Path3D/PathFollow3D
 #@onready var path_camera = $/root/Main/World/Steb/Path3D/PathFollow3D/Camera3D
 @onready var ball = $/root/Main/World/Ball
@@ -151,7 +152,7 @@ func instantiate_projectile() -> void:
 	else:
 		direction = (-camera.global_transform.basis.z).normalized()
 	var p = PROJECTILE.instantiate()
-	ms.add_child(p)
+	projectile_spawner.add_child(p)
 	p.global_position = pos
 	p.direction = direction
 
@@ -176,5 +177,5 @@ func _input(event) -> void:
 		aim(true)
 	elif Input.is_action_just_released("aim"):
 		aim(false)
-	elif Input.is_action_pressed("aim") and Input.is_action_just_pressed("hit"):
+	elif Input.is_action_pressed("aim") and Input.is_action_just_pressed("hit") and is_multiplayer_authority():
 		instantiate_projectile()

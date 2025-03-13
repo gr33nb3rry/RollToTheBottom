@@ -50,6 +50,9 @@ func get_next_jumping_position(pos:Vector3) -> Vector3:
 	
 func add_waiting_soots() -> void:
 	current_zone_instance.add_waiting_soots()
+
+func get_jumping_start_position() -> Vector3:
+	return get_room().get_jumping_start_position()
 	
 func _input(event: InputEvent) -> void:
 	if Input.is_key_pressed(KEY_0): start()

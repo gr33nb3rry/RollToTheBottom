@@ -113,6 +113,7 @@ jolt_3d/collisions/areas_detect_static_bodies=true
 
 [rendering]
 
+lights_and_shadows/directional_shadow/size=16000
 environment/screen_space_reflection/roughness_quality=3
 environment/volumetric_fog/volume_depth=256
 environment/volumetric_fog/use_filter=0

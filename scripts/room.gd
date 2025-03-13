@@ -13,26 +13,10 @@ func _ready() -> void:
 	process_mode = PROCESS_MODE_DISABLED
 
 
-func add_flying(type:int) -> void:
-	var a = SOOT_FLYING.instantiate()
-	world.add_child(a)
-func add_stealing(type:int) -> void:
-	var a = SOOT_STEALING.instantiate()
-	world.add_child(a)
-func add_jumping() -> void:
-	var a = SOOT_JUMPING.instantiate()
-	world.add_child(a)
-	a.global_position = to_global($Pos1.position + Vector3(0, 0, 5))
+func get_jumping_start_position() -> Vector3:
+	return to_global($Pos1.position + Vector3(0, 0, 5))
 	
-
-func _input(event: InputEvent) -> void:
-	if Input.is_key_pressed(KEY_9):
-		add_flying(0)
-	if Input.is_key_pressed(KEY_8):
-		add_jumping()
-	if Input.is_key_pressed(KEY_7):
-		add_stealing(0)
-
+	
 func _on_area_1_body_entered(body: Node3D) -> void:
 	if body.is_in_group("Player"):
 		players_inside_count += 1

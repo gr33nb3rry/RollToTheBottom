@@ -17,10 +17,13 @@ var direction : Vector3
 var is_attacking : bool = false
 
 func _ready() -> void:
+	if !is_multiplayer_authority(): return
 	await get_tree().create_timer(1.0).timeout
+	global_position = world.get_jumping_start_position()
 	move()
 
 func _physics_process(delta: float) -> void:
+	if !is_multiplayer_authority(): return
 	if !is_attacking: return
 	var dir : Vector3 = (target.global_position - global_position).normalized()
 	global_position += dir * MOVE_SPEED * 2.0 * delta

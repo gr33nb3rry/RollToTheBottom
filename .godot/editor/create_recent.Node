@@ -1,3 +1,4 @@
+MultiplayerSpawner
 OmniLight3D
 CollisionShape3D
 RigidBody3D
@@ -12,4 +13,3 @@ Path3D
 Marker3D
 DeformableMeshInstance3D
 CSGBox3D
-CSGCombiner3D

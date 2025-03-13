@@ -53,6 +53,8 @@ shape = SubResource("SphereShape3D_dtt3h")
 replication_config = SubResource("SceneReplicationConfig_sg357")
 
 [node name="Area" type="Area3D" parent="."]
+collision_layer = 3
+collision_mask = 3
 monitorable = false
 
 [node name="Collision" type="CollisionShape3D" parent="Area"]

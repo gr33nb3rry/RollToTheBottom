@@ -3,6 +3,7 @@ extends Node3D
 const SOOT_WAITING = preload("res://scenes/soot_waiting.tscn")
 @onready var ball = $/root/Main/World/Ball
 @onready var world = $/root/Main/World
+@onready var enemy_spawner = $/root/Main/World/EnemySpawner
 @onready var path: Path3D = $Path3D
 @onready var path_follow: PathFollow3D = $Curve/PathFollow
 @onready var marker: MeshInstance3D = $Curve/PathFollow/Marker
@@ -74,17 +75,16 @@ func get_next_jumping_position(pos:Vector3) -> Vector3:
 	return result_pos
 
 func add_waiting_soots() -> void:
-	var soot_count := 5  # Количество точек, в которых появятся SOOT_WAITING
+	var soot_count := 10
 	var path_length := path.curve.get_baked_length()
-	var min_offset := 10.0  # Минимальное смещение от начала пути
-	var max_offset := path_length - 10.0  # Максимальное смещение от конца пути
+	var min_offset := 10.0
+	var max_offset := path_length - 10.0
 
 	for i in range(soot_count):
 		var offset := min_offset + (max_offset - min_offset) * (float(i) / float(soot_count - 1))  
 		var point := path.curve.sample_baked(offset)
-		var global_point := path.to_global(point) + Vector3(0, get_radius_on_pos(point), 0)
-		
+		var global_point := path.to_global(point) + Vector3(0, get_radius_on_pos(point) - 1.0, 0)
 		print("Spawning SOOT_WAITING at:", global_point)
 		var soot := SOOT_WAITING.instantiate()
-		world.add_child(soot)
+		enemy_spawner.add_child(soot)
 		soot.global_position = global_point

@@ -2,6 +2,7 @@ extends RigidBody3D
 
 @onready var ball = $/root/Main/World/Ball
 @onready var ms = $/root/Main/World/MultiplayerSpawner
+@onready var projectile_spawner = $/root/Main/World/ProjectileSpawner
 @onready var world = $/root/Main/World
 const PROJECTILE_S = preload("res://scenes/projectile_s.tscn")
 
@@ -20,6 +21,7 @@ var target_pos : Vector3
 var state : int = 0
 
 func _ready() -> void:
+	if !is_multiplayer_authority(): return
 	calculate_target_pos()
 	await get_tree().process_frame
 	var pos : Vector3 = target_pos
@@ -28,6 +30,7 @@ func _ready() -> void:
 	
 	
 func _physics_process(delta: float) -> void:
+	if !is_multiplayer_authority(): return
 	if state == 0:
 		achieve_target_pos() 
 	elif state == 1:
@@ -57,7 +60,7 @@ func attack() -> void:
 	var direction : Vector3 = (target.global_position - global_position).normalized()
 	var p
 	if type == 0: p = PROJECTILE_S.instantiate()
-	ms.add_child(p)
+	projectile_spawner.add_child(p)
 	p.global_position = global_position
 	p.direction = direction
 	
@@ -81,17 +84,7 @@ func idle_moving() -> void:
 	idle_moving()
 	
 func damage(v:int) -> void:
-	is_active = false
-	linear_velocity = Vector3.ZERO
-	gravity_scale = 1.0
-	var direction : Vector3 = (Vector3(randf_range(-1.0, 1.0), randf_range(1.0, 3.0), randf_range(-1.0, 1.0))).normalized()
-	apply_central_impulse(direction * 10.0)
-	await get_tree().create_timer(TIME_TO_DIE).timeout
 	death()
 	
 func death() -> void:
-	is_active = false
-	$Explosion.emitting = true
-	$Mesh.visible = false
-	await get_tree().create_timer(5.0).timeout
 	queue_free()

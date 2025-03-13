@@ -9,7 +9,6 @@ func _ready() -> void:
 	spawn_function = spawnPlayer
 	if is_multiplayer_authority():
 		spawn(1)
-		#add_player_location(1, Steam.getLocalPingLocation()["location"])
 		multiplayer.peer_connected.connect(spawn)
 		multiplayer.peer_disconnected.connect(removePlayer)
 

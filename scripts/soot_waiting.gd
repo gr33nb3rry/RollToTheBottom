@@ -20,6 +20,7 @@ var is_attacking : bool = false
 
 
 func _process(delta: float) -> void:
+	if !is_multiplayer_authority(): return
 	if !is_opened and is_near_enough():
 		body_entered(ball)
 	elif is_opened and !is_near_enough():
