@@ -1,0 +1,139 @@
+[gd_scene load_steps=8 format=3 uid="uid://20mvmfcdx6l4"]
+
+[ext_resource type="Script" path="res://scripts/skills_panel.gd" id="1_qj0m3"]
+[ext_resource type="PackedScene" uid="uid://cukenu20nexbb" path="res://scenes/skill.tscn" id="2_s5fh8"]
+
+[sub_resource type="Shader" id="Shader_js3ps"]
+code = "// Hey this is Hei! This shader \"fakes\" a 3D-camera perspective on CanvasItems.
+// License: MIT
+
+shader_type canvas_item;
+
+// Camera FOV
+uniform float fov : hint_range(1, 179) = 90;
+uniform bool cull_back = true;
+uniform float y_rot : hint_range(-180, 180) = 0.0;
+uniform float x_rot : hint_range(-180, 180) = 0.0;
+// At 0, the image retains its size when unrotated.
+// At 1, the image is resized so that it can do a full
+// rotation without clipping inside its rect.
+uniform float inset : hint_range(0, 1) = 0.0;
+// Consider changing this to a uniform and changing it from code
+
+varying flat vec2 o;
+varying vec3 p;
+
+
+// Creates rotation matrix
+void vertex(){
+	float sin_b = sin(y_rot / 180.0 * PI);
+	float cos_b = cos(y_rot / 180.0 * PI);
+	float sin_c = sin(x_rot / 180.0 * PI);
+	float cos_c = cos(x_rot / 180.0 * PI);
+
+	mat3 inv_rot_mat;
+	inv_rot_mat[0][0] = cos_b;
+	inv_rot_mat[0][1] = 0.0;
+	inv_rot_mat[0][2] = -sin_b;
+
+	inv_rot_mat[1][0] = sin_b * sin_c;
+	inv_rot_mat[1][1] = cos_c;
+	inv_rot_mat[1][2] = cos_b * sin_c;
+
+	inv_rot_mat[2][0] = sin_b * cos_c;
+	inv_rot_mat[2][1] = -sin_c;
+	inv_rot_mat[2][2] = cos_b * cos_c;
+
+
+	float t = tan(fov / 360.0 * PI);
+	p = inv_rot_mat * vec3((UV - 0.5), 0.5 / t);
+	float v = (0.5 / t) + 0.5;
+	p.xy *= v * inv_rot_mat[2].z;
+	o = v * inv_rot_mat[2].xy;
+
+	VERTEX += (UV - 0.5) / TEXTURE_PIXEL_SIZE * t * (1.0 - inset);
+}
+
+void fragment(){
+	if (cull_back && p.z <= 0.0) discard;
+	vec2 uv = (p.xy / p.z).xy - o;
+    COLOR = texture(TEXTURE, uv + 0.5);
+	COLOR.a *= step(max(abs(uv.x), abs(uv.y)), 0.5);
+}"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_cuh7c"]
+shader = SubResource("Shader_js3ps")
+shader_parameter/fov = 10.0
+shader_parameter/cull_back = false
+shader_parameter/y_rot = 0.0
+shader_parameter/x_rot = 0.0
+shader_parameter/inset = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_c6tbo"]
+shader = SubResource("Shader_js3ps")
+shader_parameter/fov = 10.0
+shader_parameter/cull_back = false
+shader_parameter/y_rot = 0.0
+shader_parameter/x_rot = 0.0
+shader_parameter/inset = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rehjf"]
+shader = SubResource("Shader_js3ps")
+shader_parameter/fov = 10.0
+shader_parameter/cull_back = false
+shader_parameter/y_rot = 180.0
+shader_parameter/x_rot = 0.0
+shader_parameter/inset = 0.0
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ewds8"]
+
+[node name="Skills" type="HBoxContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 15
+alignment = 1
+script = ExtResource("1_qj0m3")
+
+[node name="VBox" type="VBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="Container" type="HBoxContainer" parent="VBox"]
+layout_mode = 2
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="Skill" parent="VBox/Container" instance=ExtResource("2_s5fh8")]
+layout_mode = 2
+
+[node name="Main" parent="VBox/Container/Skill" index="0"]
+material = SubResource("ShaderMaterial_cuh7c")
+
+[node name="Skill2" parent="VBox/Container" instance=ExtResource("2_s5fh8")]
+layout_mode = 2
+
+[node name="Main" parent="VBox/Container/Skill2" index="0"]
+material = SubResource("ShaderMaterial_c6tbo")
+
+[node name="Skill3" parent="VBox/Container" instance=ExtResource("2_s5fh8")]
+layout_mode = 2
+
+[node name="Main" parent="VBox/Container/Skill3" index="0"]
+material = SubResource("ShaderMaterial_rehjf")
+
+[node name="Close" type="Button" parent="VBox"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 24
+theme_override_styles/focus = SubResource("StyleBoxEmpty_ewds8")
+text = "CLOSE"
+
+[connection signal="pressed" from="VBox/Close" to="." method="close"]
+
+[editable path="VBox/Container/Skill"]
+[editable path="VBox/Container/Skill2"]
+[editable path="VBox/Container/Skill3"]

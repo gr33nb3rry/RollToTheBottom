@@ -1,3 +1,11 @@
+SubViewport
+SubViewportContainer
+CanvasLayer
+ColorRect
+AnimationPlayer
+Button
+HBoxContainer
+VBoxContainer
 MultiplayerSpawner
 OmniLight3D
 CollisionShape3D
@@ -5,11 +13,3 @@ RigidBody3D
 MeshInstance3D
 Area3D
 Node3D
-RayCast3D
-NavigationRegion3D
-Camera3D
-PathFollow3D
-Path3D
-Marker3D
-DeformableMeshInstance3D
-CSGBox3D

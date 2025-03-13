@@ -1,47 +1,62 @@
 extends HBoxContainer
 
+@onready var container: HBoxContainer = $VBox/Container
 
-const DESCRIPTIONS : Dictionary = {
-	"BALL KICKER": "Ability to kick the ball with N force",
-	"PULL THE BALL": "Ability to pull the ball with N force",
-	"FREEZE IT UP": "Ability to freeze the ball for N seconds",
-	"ANT KILLER": "Kill all ants",
-	"BALL REFRESHER": "Refresh ball size"
+const SKILLS = {
+	"FIREPROOF SPIRIT": "Fire damage is reduced by N%.",
+	"SERPENT'S BANE": "Poison effect duration is reduced by N%.",
+	"FROZEN RESOLVE": "Ice effect duration is reduced by N%.",
+	"SHINIGAMI’S SIGHT": "See invisible enemies from N% farther.",
+	"MOUNTAIN’S STRENGTH": "Ball pushing force increased by N%.",
+	"WAY OF THE BLADE": "Your damage increases by N%.",
+	"TENGU’S LEAP": "Gain a double jump.",
+	"IRON WILL": "You take N% less damage.",
+	"FORTUNE BECKONS": "Earn N% more cash.",
+	"BLOOD PACT": "Heal for N% of the damage you deal.",
+	"KILLER INSTINCT": "After each kill, your damage increases by N%, stacking up to 5 times.",
+	"SKYWARD STRIKE": "Deal N% more damage while in the air.",
+	"SHADOW FLOW": "Weapon cooldowns are reduced by N%.",
+	"CURSED BLOOD": "Enemies have N% less health."
 }
-const POSSIBLE_VALUES : Dictionary = {
-	"BALL KICKER": [10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
-	"PULL THE BALL": [10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
-	"FREEZE IT UP": [1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5],
-	"ANT KILLER": [],
-	"BALL REFRESHER": []
-}
+
 var player : CharacterBody3D
+var current_skills : Dictionary = {}
 
 func open(player:CharacterBody3D) -> void:
 	self.player = player
 	player.is_active = false
 	player.stop()
 	visible = true
-	update_skills({0:get_skill(),1:get_skill(),2:get_skill()})
+	update_skills()
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-	
-func choose_skill(id:int) -> void:
+
+func close() -> void:
 	visible = false
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	player.is_active = true
 	
-func get_skill() -> Dictionary:
-	var title : String = DESCRIPTIONS.keys()[randi() % DESCRIPTIONS.size()]
-	var description : String = DESCRIPTIONS[title]
-	var possible_values : Array = POSSIBLE_VALUES[title]
-	var value = str(possible_values[randi() % possible_values.size()]) if !possible_values.is_empty() else ""
-	return {"title":title,"value":value}
+func choose_skill(id:int) -> void:
+	var selected_skill = current_skills[id]
+	Saving.skills.append(selected_skill["title"])
+	Saving.save_data()
+	for card in container.get_children():
+		card.turn_over()
+	await get_tree().create_timer(0.2).timeout
+	update_skills()
 	
-func update_skills(skills:Dictionary) -> void:
-	for skill in skills:
-		var title = skills[skill]["title"]
-		var description = DESCRIPTIONS[title]
-		var value = skills[skill]["value"]
-		get_child(skill).get_node("Container/Margin/HBox/TitleLabel").text = "[center]"+title+"[/center]"
-		get_child(skill).get_node("Container/Margin/HBox/DescriptionLabel").text = description
-		get_child(skill).get_node("Container/Margin/HBox/ValueLabel").text = "[center][b]"+value+"[/b][/center]"
+func get_skill() -> Dictionary:
+	var title : String = SKILLS.keys()[randi() % SKILLS.size()]
+	var description : String = SKILLS[title]
+	return {"title":title, "description":description}
+	
+func update_skills() -> void:
+	current_skills = {0:get_skill(),1:get_skill(),2:get_skill()}
+	for skill in current_skills:
+		var title = current_skills[skill]["title"]
+		var description = current_skills[skill]["description"]
+		#container.get_child(skill).get_node("Container/Margin/HBox/TitleLabel").text = "[center]"+title+"[/center]"
+		#container.get_child(skill).get_node("Container/Margin/HBox/DescriptionLabel").text = description
+		container.get_child(skill).update_info(current_skills[skill])
+	await get_tree().create_timer(1.0).timeout
+	for card in container.get_children():
+		card.turn_over()

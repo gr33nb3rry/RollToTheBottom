@@ -1,7 +1,73 @@
-[gd_scene load_steps=5 format=3 uid="uid://cukenu20nexbb"]
+[gd_scene load_steps=10 format=3 uid="uid://cukenu20nexbb"]
 
 [ext_resource type="Script" path="res://scripts/skill_panel.gd" id="1_xx5d6"]
 [ext_resource type="Texture2D" uid="uid://w6s5wuaopiun" path="res://icon.svg" id="2_il2lb"]
+
+[sub_resource type="Shader" id="Shader_js3ps"]
+code = "// Hey this is Hei! This shader \"fakes\" a 3D-camera perspective on CanvasItems.
+// License: MIT
+
+shader_type canvas_item;
+
+// Camera FOV
+uniform float fov : hint_range(1, 179) = 90;
+uniform bool cull_back = true;
+uniform float y_rot : hint_range(-180, 180) = 0.0;
+uniform float x_rot : hint_range(-180, 180) = 0.0;
+// At 0, the image retains its size when unrotated.
+// At 1, the image is resized so that it can do a full
+// rotation without clipping inside its rect.
+uniform float inset : hint_range(0, 1) = 0.0;
+// Consider changing this to a uniform and changing it from code
+
+varying flat vec2 o;
+varying vec3 p;
+
+
+// Creates rotation matrix
+void vertex(){
+	float sin_b = sin(y_rot / 180.0 * PI);
+	float cos_b = cos(y_rot / 180.0 * PI);
+	float sin_c = sin(x_rot / 180.0 * PI);
+	float cos_c = cos(x_rot / 180.0 * PI);
+
+	mat3 inv_rot_mat;
+	inv_rot_mat[0][0] = cos_b;
+	inv_rot_mat[0][1] = 0.0;
+	inv_rot_mat[0][2] = -sin_b;
+
+	inv_rot_mat[1][0] = sin_b * sin_c;
+	inv_rot_mat[1][1] = cos_c;
+	inv_rot_mat[1][2] = cos_b * sin_c;
+
+	inv_rot_mat[2][0] = sin_b * cos_c;
+	inv_rot_mat[2][1] = -sin_c;
+	inv_rot_mat[2][2] = cos_b * cos_c;
+
+
+	float t = tan(fov / 360.0 * PI);
+	p = inv_rot_mat * vec3((UV - 0.5), 0.5 / t);
+	float v = (0.5 / t) + 0.5;
+	p.xy *= v * inv_rot_mat[2].z;
+	o = v * inv_rot_mat[2].xy;
+
+	VERTEX += (UV - 0.5) / TEXTURE_PIXEL_SIZE * t * (1.0 - inset);
+}
+
+void fragment(){
+	if (cull_back && p.z <= 0.0) discard;
+	vec2 uv = (p.xy / p.z).xy - o;
+    COLOR = texture(TEXTURE, uv + 0.5);
+	COLOR.a *= step(max(abs(uv.x), abs(uv.y)), 0.5);
+}"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_y0q2a"]
+shader = SubResource("Shader_js3ps")
+shader_parameter/fov = 10.0
+shader_parameter/cull_back = false
+shader_parameter/y_rot = 180.0
+shader_parameter/x_rot = 0.0
+shader_parameter/inset = 0.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_trmhc"]
 bg_color = Color(0, 0, 0, 0.501961)
@@ -12,6 +78,92 @@ corner_radius_bottom_left = 15
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_2t3yq"]
 
+[sub_resource type="Animation" id="Animation_3o3tm"]
+resource_name = "show_back"
+length = 0.5
+step = 0.05
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Main:material:shader_parameter/y_rot")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0, 180, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 0.5)
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Main/SubViewport/Front:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.25),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Main/SubViewport/Back:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.25),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+
+[sub_resource type="Animation" id="Animation_vkcjd"]
+resource_name = "show_front"
+length = 0.5
+step = 0.05
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Main:material:shader_parameter/y_rot")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(-180, -0.25, 0, 0.25, 0, 0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 0.5)
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Main/SubViewport/Front:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.25),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Main/SubViewport/Back:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.25),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_1hjl6"]
+_data = {
+"show_back": SubResource("Animation_3o3tm"),
+"show_front": SubResource("Animation_vkcjd")
+}
+
 [node name="Skill" type="Control"]
 custom_minimum_size = Vector2(250, 350)
 layout_mode = 3
@@ -20,19 +172,33 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 script = ExtResource("1_xx5d6")
 
-[node name="Container" type="Panel" parent="."]
+[node name="Main" type="SubViewportContainer" parent="."]
+material = SubResource("ShaderMaterial_y0q2a")
 custom_minimum_size = Vector2(250, 350)
-layout_mode = 1
+layout_mode = 0
+offset_right = 250.0
+offset_bottom = 350.0
+
+[node name="SubViewport" type="SubViewport" parent="Main"]
+transparent_bg = true
+handle_input_locally = false
+size = Vector2i(250, 350)
+render_target_update_mode = 4
+
+[node name="Front" type="Panel" parent="Main/SubViewport"]
+visible = false
+custom_minimum_size = Vector2(250, 350)
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+pivot_offset = Vector2(125, 175)
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_override_styles/panel = SubResource("StyleBoxFlat_trmhc")
 
-[node name="Margin" type="MarginContainer" parent="Container"]
+[node name="Margin" type="MarginContainer" parent="Main/SubViewport/Front"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -44,14 +210,14 @@ theme_override_constants/margin_top = 15
 theme_override_constants/margin_right = 15
 theme_override_constants/margin_bottom = 15
 
-[node name="HBox" type="VBoxContainer" parent="Container/Margin"]
+[node name="HBox" type="VBoxContainer" parent="Main/SubViewport/Front/Margin"]
 layout_mode = 2
 
-[node name="Image" type="TextureRect" parent="Container/Margin/HBox"]
+[node name="Image" type="TextureRect" parent="Main/SubViewport/Front/Margin/HBox"]
 layout_mode = 2
 texture = ExtResource("2_il2lb")
 
-[node name="TitleLabel" type="RichTextLabel" parent="Container/Margin/HBox"]
+[node name="TitleLabel" type="RichTextLabel" parent="Main/SubViewport/Front/Margin/HBox"]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 bbcode_enabled = true
@@ -59,7 +225,7 @@ text = "[center]TITLE[/center]"
 scroll_active = false
 shortcut_keys_enabled = false
 
-[node name="DescriptionLabel" type="RichTextLabel" parent="Container/Margin/HBox"]
+[node name="DescriptionLabel" type="RichTextLabel" parent="Main/SubViewport/Front/Margin/HBox"]
 custom_minimum_size = Vector2(0, 80)
 layout_mode = 2
 bbcode_enabled = true
@@ -67,11 +233,11 @@ text = "Description of possible skill. "
 scroll_active = false
 shortcut_keys_enabled = false
 
-[node name="FILLER" type="Control" parent="Container/Margin/HBox"]
+[node name="FILLER" type="Control" parent="Main/SubViewport/Front/Margin/HBox"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="ValueLabel" type="RichTextLabel" parent="Container/Margin/HBox"]
+[node name="ValueLabel" type="RichTextLabel" parent="Main/SubViewport/Front/Margin/HBox"]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 theme_override_font_sizes/bold_font_size = 24
@@ -80,8 +246,19 @@ text = "[center][b]00[/b][/center]"
 scroll_active = false
 shortcut_keys_enabled = false
 
-[node name="Button" type="Button" parent="Container"]
-layout_mode = 1
+[node name="Back" type="Panel" parent="Main/SubViewport"]
+custom_minimum_size = Vector2(250, 350)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(125, 175)
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_trmhc")
+
+[node name="Button" type="Button" parent="Main/SubViewport"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -90,6 +267,12 @@ grow_vertical = 2
 theme_override_styles/focus = SubResource("StyleBoxEmpty_2t3yq")
 flat = true
 
-[connection signal="mouse_entered" from="Container/Button" to="." method="_on_button_mouse_entered"]
-[connection signal="mouse_exited" from="Container/Button" to="." method="_on_button_mouse_exited"]
-[connection signal="pressed" from="Container/Button" to="." method="choose"]
+[node name="Animation" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_1hjl6")
+}
+
+[connection signal="gui_input" from="Main" to="." method="_on_main_gui_input"]
+[connection signal="mouse_entered" from="Main/SubViewport/Button" to="." method="_on_button_mouse_entered"]
+[connection signal="mouse_exited" from="Main/SubViewport/Button" to="." method="_on_button_mouse_exited"]
+[connection signal="pressed" from="Main/SubViewport/Button" to="." method="choose"]

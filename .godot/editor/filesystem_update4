@@ -38,3 +38,9 @@ res://scripts/ant.gd
 res://scenes/ball.tscn
 res://scenes/skill.tscn
 res://main.tscn
+res://scripts/skills.gd
+res://scripts/skills_panel.gd
+res://scripts/skill_panel.gd
+res://skills.tscn
+res://scripts/Saving.gd
+res://shaders/card_perspective.gdshader

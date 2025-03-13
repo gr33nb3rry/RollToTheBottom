@@ -1,9 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://w4nuv4h3gluq"]
+[gd_scene load_steps=4 format=3 uid="uid://w4nuv4h3gluq"]
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_7hsgq"]
 [ext_resource type="Texture2D" uid="uid://daw00knq6lhld" path="res://crosshair.png" id="2_sr0mf"]
-[ext_resource type="Script" path="res://scripts/skills_panel.gd" id="3_67y33"]
-[ext_resource type="PackedScene" uid="uid://cukenu20nexbb" path="res://scenes/skill.tscn" id="4_gilju"]
+[ext_resource type="PackedScene" uid="uid://20mvmfcdx6l4" path="res://skills.tscn" id="3_pgtjw"]
 
 [node name="Main" type="Node3D"]
 script = ExtResource("1_7hsgq")
@@ -63,25 +62,8 @@ mouse_filter = 2
 texture = ExtResource("2_sr0mf")
 stretch_mode = 3
 
-[node name="Skills" type="HBoxContainer" parent="Canvas"]
+[node name="Skills" parent="Canvas" instance=ExtResource("3_pgtjw")]
 visible = false
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/separation = 15
-alignment = 1
-script = ExtResource("3_67y33")
-
-[node name="Skill" parent="Canvas/Skills" instance=ExtResource("4_gilju")]
-layout_mode = 2
-
-[node name="Skill2" parent="Canvas/Skills" instance=ExtResource("4_gilju")]
-layout_mode = 2
-
-[node name="Skill3" parent="Canvas/Skills" instance=ExtResource("4_gilju")]
-layout_mode = 2
 
 [connection signal="pressed" from="Canvas/HostButton" to="." method="create_lobby"]
 [connection signal="pressed" from="Canvas/RefreshButton" to="." method="refresh_lobby_list"]
