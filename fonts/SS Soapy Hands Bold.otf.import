@@ -1,0 +1,34 @@
+[remap]
+
+importer="font_data_dynamic"
+type="FontFile"
+uid="uid://dckkdwajdn21f"
+path="res://.godot/imported/SS Soapy Hands Bold.otf-e7563b6bfcb597f5924f320077fbc387.fontdata"
+
+[deps]
+
+source_file="res://fonts/SS Soapy Hands Bold.otf"
+dest_files=["res://.godot/imported/SS Soapy Hands Bold.otf-e7563b6bfcb597f5924f320077fbc387.fontdata"]
+
+[params]
+
+Rendering=null
+antialiasing=1
+generate_mipmaps=false
+disable_embedded_bitmaps=true
+multichannel_signed_distance_field=false
+msdf_pixel_range=8
+msdf_size=48
+allow_system_fallback=true
+force_autohinter=false
+hinting=1
+subpixel_positioning=1
+oversampling=0.0
+Fallbacks=null
+fallbacks=[]
+Compress=null
+compress=true
+preload=[]
+language_support={}
+script_support={}
+opentype_features={}

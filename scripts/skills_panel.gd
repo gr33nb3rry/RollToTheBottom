@@ -3,21 +3,22 @@ extends HBoxContainer
 @onready var container: HBoxContainer = $VBox/Container
 
 const SKILLS = {
-	"FIREPROOF SPIRIT": "Fire damage is reduced by N%.",
-	"SERPENT'S BANE": "Poison effect duration is reduced by N%.",
-	"FROZEN RESOLVE": "Ice effect duration is reduced by N%.",
-	"SHINIGAMI’S SIGHT": "See invisible enemies from N% farther.",
-	"MOUNTAIN’S STRENGTH": "Ball pushing force increased by N%.",
-	"WAY OF THE BLADE": "Your damage increases by N%.",
-	"TENGU’S LEAP": "Gain a double jump.",
-	"IRON WILL": "You take N% less damage.",
-	"FORTUNE BECKONS": "Earn N% more cash.",
-	"BLOOD PACT": "Heal for N% of the damage you deal.",
-	"KILLER INSTINCT": "After each kill, your damage increases by N%, stacking up to 5 times.",
-	"SKYWARD STRIKE": "Deal N% more damage while in the air.",
-	"SHADOW FLOW": "Weapon cooldowns are reduced by N%.",
-	"CURSED BLOOD": "Enemies have N% less health."
-}
+	"Fireproof Spirit": "Fire damage is reduced by XX%.",
+	"Serpent's Bane": "Poison effect duration is reduced by XX%.",
+	"Frozen Resolve": "Ice effect duration is reduced by XX%.",
+	"Shinigami’s Sight": "See invisible enemies from XX% farther.",
+	"Mountain’s Strength": "Ball pushing force increased by XX%.",
+	"Way of the Blade": "Your damage increases by XX%.",
+	"Tengu’s Leap": "Gain a double jump.",
+	"Iron Will": "You take XX% less damage.",
+	"Fortune Beckons": "Earn XX% more cash.",
+	"Blood Pact": "Heal for XX% of the damage you deal.",
+	"Killer Instinct": "After each kill, your damage increases by XX%, stacking up to XX times.",
+	"Skyward Strike": "Deal XX% more damage while in the air.",
+	"Shadow Flow": "Weapon cooldowns are reduced by XX%.",
+	"Cursed Blood": "Enemies have XX% less health."
+};
+
 
 var player : CharacterBody3D
 var current_skills : Dictionary = {}

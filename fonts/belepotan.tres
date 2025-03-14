@@ -1,0 +1,6 @@
+[gd_resource type="FontVariation" load_steps=2 format=3 uid="uid://b54brlwwhiqfm"]
+
+[ext_resource type="FontFile" uid="uid://cqqkyfpgrji5s" path="res://fonts/Belepotan.otf" id="1_g8ljr"]
+
+[resource]
+base_font = ExtResource("1_g8ljr")
