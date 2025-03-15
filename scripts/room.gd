@@ -31,5 +31,5 @@ func _on_area_1_body_exited(body: Node3D) -> void:
 		is_ball_inside = false
 
 # START 
-func _on_area_2_body_exited(body: Node3D) -> void:
+func _on_area_2_body_exited(_body: Node3D) -> void:
 	pass # Replace with function body.

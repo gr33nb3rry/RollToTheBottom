@@ -1,6 +1,5 @@
 extends Node3D
 
-signal set_cam_rotation(_cam_rotation : float)
 @export var player : CharacterBody3D
 @onready var yaw_node = $CamYaw
 @onready var pitch_node = $CamYaw/CamPitch
@@ -32,7 +31,7 @@ func _input(event):
 	if event is InputEventMouseMotion:
 		yaw += -event.relative.x * yaw_sensitivity
 		pitch += -event.relative.y * pitch_sensitivity
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if !player.is_active: return
 	var view = Input.get_vector("view_left", "view_right", "view_down", "view_up")
 	yaw += -view.x * yaw_sensitivity * 5.0

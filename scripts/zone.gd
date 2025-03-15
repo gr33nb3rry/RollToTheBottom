@@ -19,7 +19,8 @@ func _ready() -> void:
 		for i in $CurveB.get_children():
 			i.get_child(0).create_trimesh_collision()
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
+	if !multiplayer.is_server(): return
 	var ball_dir : Vector3 = ball.get_linear_velocity()
 	ball_dir.y = 0.0
 	var ball_pos : Vector3 = ball.global_position + ball_dir.normalized() * 25.0
@@ -48,7 +49,7 @@ func is_marker_completed() -> bool:
 	return path.curve.get_closest_offset(path.to_local(marker.global_position)) == path.curve.get_baked_length()
 
 func get_near_flying_position() -> Vector3:
-	var h_off = randi_range(0, max_h_offset) * (1 if randi() % 2 else -1)
+	var h_off = randf_range(0, max_h_offset) * (1 if randi() % 2 else -1)
 	var v_off = randf_range(2, 6)
 	var side : Vector3 = marker_l.global_position if h_off < 0 else marker_r.global_position
 	side.x += h_off
@@ -58,7 +59,7 @@ func get_near_flying_position() -> Vector3:
 
 func get_next_near_flying_position() -> Vector3:
 	var r : float = get_radius_on_pos(path.to_local(marker.global_position))
-	var h_off = randi_range(0, max_h_offset + r) * (1 if randi() % 2 else -1)
+	var h_off = randf_range(0, max_h_offset + r) * (1 if randi() % 2 else -1)
 	var v_off = randf_range(2, 6) + r
 	var pos : Vector3 = marker.global_position
 	pos.x += h_off

@@ -18,7 +18,6 @@ const PROJECTILE = preload("res://scenes/projectile.tscn")
 
 var gravity_force = Vector3(0,-1,0)
 var gravity_acceleration := 0.0
-var is_changed_gravity_to_steb := false
 @export var is_rolling := false
 var is_jumping := false
 
@@ -70,8 +69,8 @@ func apply_gravity(delta:float) -> void:
 	velocity = gravity_force * (GRAVITY + GRAVITY * gravity_acceleration) + global_transform.basis.y * jump_buffer
 
 func rotate_to_gravity(delta:float) -> void :
-	var up_direction = -gravity_force.normalized()
-	var orientation_direction = Quaternion(global_transform.basis.y, up_direction) * global_transform.basis.get_rotation_quaternion()
+	var up_dir = -gravity_force.normalized()
+	var orientation_direction = Quaternion(global_transform.basis.y, up_dir) * global_transform.basis.get_rotation_quaternion()
 	var rot = global_transform.basis.get_rotation_quaternion().slerp(orientation_direction.normalized(), 5.0 * delta)
 	global_rotation = rot.get_euler()
 	
@@ -86,7 +85,7 @@ func move(delta:float) -> Vector3:
 	var movement := Vector3.ZERO
 	var forward : Vector3 = -$CamRoot/CamYaw.global_transform.basis.z
 	var right : Vector3 = $CamRoot/CamYaw.global_transform.basis.x
-	var up : Vector3 = global_transform.basis.y
+	#var up : Vector3 = global_transform.basis.y
 	var direction = Input.get_vector("move_left", "move_right", "move_back", "move_forward")
 	forward *= direction.y
 	right *= direction.x
@@ -103,7 +102,7 @@ func stop() -> void:
 	velocity = Vector3.ZERO
 	animation_tree["parameters/conditions/idle"] = true
 	
-func damage(amount:int) -> void:
+func damage(_amount:int) -> void:
 	pass
 	
 	
@@ -112,34 +111,11 @@ func apply_impulse() -> void:
 		var collision = get_slide_collision(i)
 		if collision.get_collider().name == "Ball":
 			if get_multiplayer().get_unique_id() != 1:
-				rpc_id(1, "apply_impulse_to_ball", get_multiplayer().get_unique_id())
+				Globals.processor.rpc_id(1, "apply_impulse_to_ball", multiplayer.get_unique_id())
 			else:
-				apply_impulse_to_ball(1)
-				#collision.get_collider().apply_central_impulse(-collision.get_normal() * PUSH_FORCE)
+				Globals.processor.apply_impulse_to_ball(1)
 			break
-@rpc("any_peer")
-func apply_impulse_to_ball(requesting_peer_id: int) -> void:
-	var player = ms.get_player_by_id(requesting_peer_id)
-	ball.add_impulse(player, PUSH_FORCE)
 
-func change_gravity() -> void:
-	return
-	is_changed_gravity_to_steb = !is_changed_gravity_to_steb
-	if is_changed_gravity_to_steb:
-		reparent(ms)
-	else:
-		is_active = false
-		#reparent(path)
-		#position = Vector3.ZERO
-		camera.current = false
-		#path_camera.current = true
-		path.progress_ratio = 0.0
-		var t = get_tree().create_tween()
-		t.tween_property(path, "progress_ratio", 1.0, 10.0)
-		await get_tree().create_timer(10.0).timeout
-		camera.current = true
-		#path_camera.current = false
-		is_active = true
 
 func aim(is_aim:bool) -> void:
 	$/root/Main/Canvas/Crosshair.visible = is_aim
@@ -156,7 +132,7 @@ func instantiate_projectile() -> void:
 	p.global_position = pos
 	p.direction = direction
 
-func _input(event) -> void:
+func _input(_event) -> void:
 	if Input.is_action_just_pressed("ui_cancel"):
 		get_tree().quit()
 	elif !Input.is_action_pressed("aim") and Input.is_action_just_pressed("hit"):
@@ -166,9 +142,7 @@ func _input(event) -> void:
 		elif get_multiplayer().get_unique_id() != 1:
 			#rpc_id(1, "hit_request", get_multiplayer().get_unique_id())
 			pass
-	elif Input.is_action_just_pressed("change_gravity"):
-		change_gravity()
-	elif Input.is_action_just_pressed("jump") and !is_changed_gravity_to_steb and animation_tree["parameters/playback"].get_fading_from_node() == "": 
+	elif Input.is_action_just_pressed("jump") and animation_tree["parameters/playback"].get_fading_from_node() == "": 
 		jump_buffer = JUMP_VELOCITY
 		is_jumping = true
 		gravity_acceleration = 0.0

@@ -29,5 +29,5 @@ func initialize_steam() -> void:
 		get_tree().quit()
 
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	Steam.run_callbacks()

@@ -19,8 +19,8 @@ var is_opened : bool = false
 var is_attacking : bool = false
 
 
-func _process(delta: float) -> void:
-	if !is_multiplayer_authority(): return
+func _process(_delta: float) -> void:
+	if !multiplayer.is_server(): return
 	if !is_opened and is_near_enough():
 		body_entered(ball)
 	elif is_opened and !is_near_enough():

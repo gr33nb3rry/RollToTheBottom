@@ -1,15 +1,17 @@
 extends Node3D
 
-@onready var ball = $/root/Main/World/Ball
 
 var zone : int = 1
 var current_zone_instance : Node3D
 var is_able_to_zone_up : bool = false
 
+func _ready() -> void:
+	Globals.define()
+	
 func start() -> void:
 	if current_zone_instance: get_room().process_mode = Node.PROCESS_MODE_DISABLED
 	current_zone_instance = get_zone()
-	ball.is_simplified = true
+	Globals.ball.is_simplified = true
 	is_able_to_zone_up = true
 	add_waiting_soots()
 	get_room().process_mode = Node.PROCESS_MODE_INHERIT
@@ -18,7 +20,7 @@ func end() -> void:
 	if is_able_to_zone_up:
 		get_tree().call_group("Soot", "death")
 		zone += 1
-		ball.is_simplified = false
+		Globals.ball.is_simplified = false
 		is_able_to_zone_up = false
 	
 	
@@ -54,6 +56,6 @@ func add_waiting_soots() -> void:
 func get_jumping_start_position() -> Vector3:
 	return get_room().get_jumping_start_position()
 	
-func _input(event: InputEvent) -> void:
+func _input(_event: InputEvent) -> void:
 	if Input.is_key_pressed(KEY_0): start()
 	

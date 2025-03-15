@@ -1,7 +1,7 @@
 @tool
 extends MeshInstance3D
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if (randf() > 0.8):
 		self.visible = true
 		self.rotate(Vector3.RIGHT, randf_range(0, 360))

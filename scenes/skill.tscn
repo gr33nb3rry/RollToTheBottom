@@ -1,8 +1,7 @@
-[gd_scene load_steps=14 format=3 uid="uid://cukenu20nexbb"]
+[gd_scene load_steps=13 format=3 uid="uid://cukenu20nexbb"]
 
 [ext_resource type="Script" path="res://scripts/skill_panel.gd" id="1_xx5d6"]
 [ext_resource type="Texture2D" uid="uid://c51yud8iytdon" path="res://images/skill_front.png" id="2_871ts"]
-[ext_resource type="Texture2D" uid="uid://w6s5wuaopiun" path="res://icon.svg" id="2_il2lb"]
 [ext_resource type="Texture2D" uid="uid://dhu3xx8e6cona" path="res://images/skill1.png" id="3_mh6fq"]
 [ext_resource type="FontFile" uid="uid://dckkdwajdn21f" path="res://fonts/SS Soapy Hands Bold.otf" id="5_5irha"]
 [ext_resource type="Texture2D" uid="uid://cguscm0ch6qk2" path="res://images/skill_back.png" id="5_q0yoy"]
@@ -197,7 +196,7 @@ size_flags_vertical = 4
 texture = ExtResource("2_871ts")
 expand_mode = 3
 
-[node name="TextureRect" type="TextureRect" parent="Main/SubViewport/Front"]
+[node name="Image" type="TextureRect" parent="Main/SubViewport/Front"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -221,11 +220,6 @@ theme_override_constants/margin_bottom = 20
 
 [node name="HBox" type="VBoxContainer" parent="Main/SubViewport/Front/Margin"]
 layout_mode = 2
-
-[node name="Image" type="TextureRect" parent="Main/SubViewport/Front/Margin/HBox"]
-visible = false
-layout_mode = 2
-texture = ExtResource("2_il2lb")
 
 [node name="TitleLabel" type="RichTextLabel" parent="Main/SubViewport/Front/Margin/HBox"]
 custom_minimum_size = Vector2(0, 40)

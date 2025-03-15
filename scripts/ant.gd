@@ -21,7 +21,7 @@ var target_pos : Vector3
 var state : int = 0
 
 func _ready() -> void:
-	if !is_multiplayer_authority(): return
+	if !multiplayer.is_server(): return
 	calculate_target_pos()
 	await get_tree().process_frame
 	var pos : Vector3 = target_pos
@@ -30,7 +30,7 @@ func _ready() -> void:
 	
 	
 func _physics_process(delta: float) -> void:
-	if !is_multiplayer_authority(): return
+	if !multiplayer.is_server(): return
 	if state == 0:
 		achieve_target_pos() 
 	elif state == 1:

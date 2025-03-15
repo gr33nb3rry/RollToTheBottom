@@ -1,6 +1,5 @@
 extends Node
 
-@onready var ball = $/root/Main/World/Ball
 @onready var ms = $/root/Main/World/MultiplayerSpawner
 
 # ACTIVE INDIVIDUAL SKILLS
@@ -8,17 +7,17 @@ extends Node
 func kick_ball(peer_id, force:float) -> void:
 	var player = ms.get_player_by_id(peer_id)
 	if player.ray_hit.is_colliding() and player.ray_hit.get_collider().name == "Ball":
-		ball.add_impulse(player, force)
+		Globals.ball.add_impulse(player, force)
 		
 func pull_ball(peer_id, force:float) -> void:
 	var player = ms.get_player_by_id(peer_id)
-	var direction : Vector3 = ball.global_position - player.global_position
-	ball.apply_central_impulse(-direction * force)
+	var direction : Vector3 = Globals.ball.global_position - player.global_position
+	Globals.ball.apply_central_impulse(-direction * force)
 	
 # ACTIVE GLOBAL SKILLS
 
 func kill_all_ants() -> void:
-	get_tree().call_group("Ant", "damage")
+	get_tree().call_group("Soot", "damage")
 
 func freeze_ball() -> void:
 	$/root/Main/World/Ball.freeze_on_time(3.0)

@@ -27,9 +27,8 @@ func join_lobby(this_lobby_id: int) -> void:
 	$Canvas/RefreshButton.hide()
 	$Canvas/LobbiesContainer/Lobbies.hide()
 	
-func _on_lobby_joined(this_lobby_id: int, _permissions: int, _locked: bool, response: int) -> void:
+func _on_lobby_joined(_this_lobby_id: int, _permissions: int, _locked: bool, _response: int) -> void:
 	pass
-
 
 func create_lobby() -> void:
 	if lobby_id == 0:
@@ -40,8 +39,8 @@ func create_lobby() -> void:
 		$Canvas/RefreshButton.hide()
 		$Canvas/LobbiesContainer/Lobbies.hide()
 
-func _on_lobby_created(connect, this_lobby_id) -> void:
-	if connect:
+func _on_lobby_created(is_connect, this_lobby_id) -> void:
+	if is_connect:
 		lobby_id = this_lobby_id
 		var lobby_name : String = str(Steam.getPersonaName())+"'s lobby"
 		Steam.setLobbyData(lobby_id, "name", lobby_name)
@@ -98,5 +97,5 @@ func refresh_lobby_list() -> void:
 			n.queue_free()
 		open_lobby_list()
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	$Canvas/FPSLabel.text = str(Engine.get_frames_per_second())

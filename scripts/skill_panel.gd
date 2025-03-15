@@ -11,6 +11,11 @@ var is_rotated : bool = false
 func choose() -> void:
 	$/root/Main/Canvas/Skills.choose_skill(get_index())
 
+func reset() -> void:
+	is_hovering = false
+	is_able_to_hover = false
+	is_rotated = false
+
 func turn_over() -> void:
 	if is_rotated:
 		is_rotated = false
@@ -38,10 +43,10 @@ func _on_button_mouse_exited() -> void:
 	t.tween_property($Main, "position:y", 0, 0.2)
 	reset_rot()
 
-func _on_main_gui_input(event: InputEvent) -> void:
+func _on_main_gui_input(_event: InputEvent) -> void:
 	if !is_hovering or !is_rotated: return
 	var mouse_pos: Vector2 = get_local_mouse_position()
-	var diff: Vector2 = (position + size) - mouse_pos
+	#var diff: Vector2 = (position + size) - mouse_pos
 	var lerp_val_x: float = remap(mouse_pos.x, 0.0, size.x, 0, 1)
 	var lerp_val_y: float = remap(mouse_pos.y, 0.0, size.y, 0, 1)
 	var rot_x: float = rad_to_deg(lerp_angle(-max_angle, max_angle, lerp_val_x))

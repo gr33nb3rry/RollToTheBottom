@@ -23,8 +23,9 @@ const SKILLS = {
 var player : CharacterBody3D
 var current_skills : Dictionary = {}
 
-func open(player:CharacterBody3D) -> void:
-	self.player = player
+func open(initiator:CharacterBody3D) -> void:
+	print("skills opened")
+	player = initiator
 	player.is_active = false
 	player.stop()
 	visible = true
@@ -35,6 +36,8 @@ func close() -> void:
 	visible = false
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	player.is_active = true
+	for card in container.get_children():
+		card.reset()
 	
 func choose_skill(id:int) -> void:
 	var selected_skill = current_skills[id]

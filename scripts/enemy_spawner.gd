@@ -16,7 +16,7 @@ func add_jumping() -> void:
 	add_child(a)
 	
 
-func _input(event: InputEvent) -> void:
+func _input(_event: InputEvent) -> void:
 	if Input.is_key_pressed(KEY_9):
 		add_flying()
 	if Input.is_key_pressed(KEY_8):

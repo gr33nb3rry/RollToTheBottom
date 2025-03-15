@@ -33,7 +33,7 @@ func _physics_process(delta: float) -> void:
 		direction = Vector3.ZERO
 
 func add_impulse(from:Node3D, push_force:float) -> void:
-	var max_linear_velocity = 20.0 / $Mesh.scale.x
+	#var max_linear_velocity = 20.0 / $Mesh.scale.x
 	var push_normal : Vector3 = global_position - from.global_position
 	direction = Vector3(push_normal.x,push_normal.y,push_normal.z).normalized() * push_force
 	simplicity_current = 1.0
@@ -63,13 +63,13 @@ func _on_area_area_entered(area: Area3D) -> void:
 		var scale_increase : float = get_radius(v1+v2)/r1-1.0
 		grow(scale_increase * DUNG_PICKUP_VALUE_MULTIPLIER)
 		item.queue_free()
-func _on_area_area_exited(area: Area3D) -> void:
+func _on_area_area_exited(_area: Area3D) -> void:
 	pass
 	
 func update_pieces() -> void:
 	for p in $Pieces.get_children():
-		var direction = (p.position - Vector3.ZERO).normalized()
-		p.position = direction * $Mesh.mesh.radius * $Mesh.scale.x - direction * 0.25
+		var dir = (p.position - Vector3.ZERO).normalized()
+		p.position = dir * $Mesh.mesh.radius * $Mesh.scale.x - dir * 0.25
 	$Pieces.visible = $Mesh.scale.x > 0.7
 		
 
