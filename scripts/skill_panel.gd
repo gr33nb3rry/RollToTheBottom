@@ -15,6 +15,7 @@ func reset() -> void:
 	is_hovering = false
 	is_able_to_hover = false
 	is_rotated = false
+	$Animation.play("show_back")
 
 func turn_over() -> void:
 	if is_rotated:

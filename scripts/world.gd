@@ -4,17 +4,23 @@ extends Node3D
 var zone : int = 1
 var current_zone_instance : Node3D
 var is_able_to_zone_up : bool = false
+var current_room : Node3D
 
 func _ready() -> void:
 	Globals.define()
+	#start()
 	
 func start() -> void:
-	if current_zone_instance: get_room().process_mode = Node.PROCESS_MODE_DISABLED
 	current_zone_instance = get_zone()
 	Globals.ball.is_simplified = true
 	is_able_to_zone_up = true
-	add_waiting_soots()
-	get_room().process_mode = Node.PROCESS_MODE_INHERIT
+	#add_waiting_soots()
+	$Map.get_child(zone).get_node("Room").process_mode = Node.PROCESS_MODE_INHERIT
+	if zone >= 2:
+		$Map.get_node("Room").disable()
+		if zone >= 3:
+			$Map.get_child(zone-2).get_node("Room").disable()
+			#$Map.get_child(zone-2).call_deferred("set_process_mode", Node.PROCESS_MODE_DISABLED)
 	
 func end() -> void:
 	if is_able_to_zone_up:
@@ -22,10 +28,11 @@ func end() -> void:
 		zone += 1
 		Globals.ball.is_simplified = false
 		is_able_to_zone_up = false
-	
+		start()
 	
 func get_zone() -> Node3D:
-	return $Map.get_child(zone-1)
+	return $Map.get_child(zone)
+	
 func get_room() -> Node3D:
 	return current_zone_instance.get_node("Room")
 	
@@ -55,7 +62,4 @@ func add_waiting_soots() -> void:
 
 func get_jumping_start_position() -> Vector3:
 	return get_room().get_jumping_start_position()
-	
-func _input(_event: InputEvent) -> void:
-	if Input.is_key_pressed(KEY_0): start()
 	

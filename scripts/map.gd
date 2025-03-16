@@ -19,7 +19,7 @@ func _input(_event) -> void:
 func generate() -> void:
 	var zone = ZONES[0].instantiate()
 	add_child(zone)
-	var pos = global_position if zones.size() == 0 else zones[-1].get_next_zone_position() 
+	var pos = $Room/Pos2.global_position if zones.size() == 0 else zones[-1].get_next_zone_position() 
 	var rot = Vector3.ZERO if zones.size() == 0 else zones[-1].get_next_zone_rotation()
 	zone.global_position = pos
 	zone.rotation = rot

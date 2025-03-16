@@ -56,6 +56,7 @@ point_count = 8
 script = ExtResource("1_7maf6")
 
 [node name="Curve" type="Path3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.4245, 0, 0)
 curve = SubResource("Curve3D_r7bhb")
 script = ExtResource("2_keamj")
 radius = 17.0
@@ -81,9 +82,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0, 0)
 mesh = SubResource("BoxMesh_8qa26")
 
 [node name="Room" parent="." instance=ExtResource("3_4veeh")]
-transform = Transform3D(-0.809017, 0, -0.587785, 0, 1, 0, 0.587785, 0, -0.809017, 59.8356, -80.9182, -191.874)
+transform = Transform3D(-0.809017, 0, -0.587785, 0, 1, 0, 0.587785, 0, -0.809017, 54.4111, -80.9182, -191.874)
 
 [node name="CurveB" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.4245, 0, 0)
 
 [node name="CurveB1" type="Path3D" parent="CurveB"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.43754, 5.89278, -11.4101)
@@ -111,6 +113,7 @@ radius_profile = SubResource("Curve_il8gj")
 material = ExtResource("6_tq0b3")
 
 [node name="Markers" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.4245, 0, 0)
 
 [node name="Marker3D" type="Marker3D" parent="Markers"]
 transform = Transform3D(0.474996, -0.0797997, 0.876362, -0.0378448, 0.993105, 0.110942, -0.879173, -0.085863, 0.468701, 0.0225432, -0.820387, -8.57832)
@@ -269,4 +272,5 @@ transform = Transform3D(-0.103232, 0.470556, -0.876309, 0.5277, 0.772714, 0.3527
 gizmo_extents = 3.0
 
 [node name="Path3D" type="Path3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.424, 0, 0)
 curve = SubResource("Curve3D_r7bhb")

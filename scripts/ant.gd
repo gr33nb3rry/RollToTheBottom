@@ -60,7 +60,7 @@ func attack() -> void:
 	var direction : Vector3 = (target.global_position - global_position).normalized()
 	var p
 	if type == 0: p = PROJECTILE_S.instantiate()
-	projectile_spawner.add_child(p)
+	projectile_spawner.add_child(p, true)
 	p.global_position = global_position
 	p.direction = direction
 	

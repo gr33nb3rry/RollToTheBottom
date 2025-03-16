@@ -1,3 +1,8 @@
+StaticBody3D
+MeshInstance3D
+Path3D
+MultiplayerSynchronizer
+Node3D
 TextureRect
 SubViewport
 SubViewportContainer
@@ -8,7 +13,3 @@ Button
 HBoxContainer
 VBoxContainer
 MultiplayerSpawner
-OmniLight3D
-CollisionShape3D
-RigidBody3D
-MeshInstance3D

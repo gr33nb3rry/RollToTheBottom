@@ -1,9 +1,6 @@
 extends Node3D
 
 const SOOT_WAITING = preload("res://scenes/soot_waiting.tscn")
-@onready var ball = $/root/Main/World/Ball
-@onready var world = $/root/Main/World
-@onready var enemy_spawner = $/root/Main/World/EnemySpawner
 @onready var path: Path3D = $Path3D
 @onready var path_follow: PathFollow3D = $Curve/PathFollow
 @onready var marker: MeshInstance3D = $Curve/PathFollow/Marker
@@ -18,12 +15,13 @@ func _ready() -> void:
 	if has_node("CurveB"): 
 		for i in $CurveB.get_children():
 			i.get_child(0).create_trimesh_collision()
+	#process_mode = Node.PROCESS_MODE_DISABLED
 
 func _process(_delta: float) -> void:
 	if !multiplayer.is_server(): return
-	var ball_dir : Vector3 = ball.get_linear_velocity()
+	var ball_dir : Vector3 = Globals.ball.get_linear_velocity()
 	ball_dir.y = 0.0
-	var ball_pos : Vector3 = ball.global_position + ball_dir.normalized() * 25.0
+	var ball_pos : Vector3 = Globals.ball.global_position + ball_dir.normalized() * 25.0
 	var p = path.curve.get_closest_offset(path.to_local(ball_pos))
 	var r = get_radius_on_pos(path.to_local(marker.global_position))
 	path_follow.progress = p
@@ -87,5 +85,5 @@ func add_waiting_soots() -> void:
 		var global_point := path.to_global(point) + Vector3(0, get_radius_on_pos(point) - 1.0, 0)
 		print("Spawning SOOT_WAITING at:", global_point)
 		var soot := SOOT_WAITING.instantiate()
-		enemy_spawner.add_child(soot)
+		Globals.enemy_spawner.add_child(soot, true)
 		soot.global_position = global_point

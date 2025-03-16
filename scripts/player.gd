@@ -1,6 +1,5 @@
 extends CharacterBody3D
 
-const PROJECTILE = preload("res://scenes/projectile.tscn")
 @onready var model : Node3D = $Model
 @onready var animation_tree : AnimationTree = $Model/Sophia/AnimationTree
 @onready var animation_player: AnimationPlayer = $Model/Sophia/AnimationPlayer
@@ -10,8 +9,6 @@ const PROJECTILE = preload("res://scenes/projectile.tscn")
 @onready var ray_ground: RayCast3D = $RayGround
 @onready var ray_crosshair: RayCast3D = $CamRoot/CamYaw/CamPitch/SpringArm3D/RayCrosshair
 
-@onready var ms = $/root/Main/World/MultiplayerSpawner
-@onready var projectile_spawner = $/root/Main/World/ProjectileSpawner
 @onready var path = $/root/Main/World/Steb/Path3D/PathFollow3D
 #@onready var path_camera = $/root/Main/World/Steb/Path3D/PathFollow3D/Camera3D
 @onready var ball = $/root/Main/World/Ball
@@ -102,6 +99,12 @@ func stop() -> void:
 	velocity = Vector3.ZERO
 	animation_tree["parameters/conditions/idle"] = true
 	
+func jump() -> void:
+	jump_buffer = JUMP_VELOCITY
+	is_jumping = true
+	gravity_acceleration = 0.0
+	animation_tree["parameters/conditions/jump"] = true
+	
 func damage(_amount:int) -> void:
 	pass
 	
@@ -110,46 +113,29 @@ func apply_impulse() -> void:
 	for i in get_slide_collision_count():
 		var collision = get_slide_collision(i)
 		if collision.get_collider().name == "Ball":
-			if get_multiplayer().get_unique_id() != 1:
+			if multiplayer.get_unique_id() != 1:
 				Globals.processor.rpc_id(1, "apply_impulse_to_ball", multiplayer.get_unique_id())
 			else:
 				Globals.processor.apply_impulse_to_ball(1)
 			break
 
-
 func aim(is_aim:bool) -> void:
 	$/root/Main/Canvas/Crosshair.visible = is_aim
-	
-func instantiate_projectile() -> void:
-	var direction : Vector3
-	var pos : Vector3 = global_position + Vector3(0, 1.7, 0)
-	if ray_crosshair.is_colliding():
-		direction = (ray_crosshair.get_collision_point() - pos).normalized()
+
+func shoot() -> void:
+	if multiplayer.get_unique_id() != 1:
+		Globals.processor.rpc_id(1, "shoot", multiplayer.get_unique_id())
 	else:
-		direction = (-camera.global_transform.basis.z).normalized()
-	var p = PROJECTILE.instantiate()
-	projectile_spawner.add_child(p)
-	p.global_position = pos
-	p.direction = direction
+		Globals.processor.shoot(1)
 
 func _input(_event) -> void:
 	if Input.is_action_just_pressed("ui_cancel"):
 		get_tree().quit()
-	elif !Input.is_action_pressed("aim") and Input.is_action_just_pressed("hit"):
-		if is_multiplayer_authority():
-			#hit()
-			pass
-		elif get_multiplayer().get_unique_id() != 1:
-			#rpc_id(1, "hit_request", get_multiplayer().get_unique_id())
-			pass
-	elif Input.is_action_just_pressed("jump") and animation_tree["parameters/playback"].get_fading_from_node() == "": 
-		jump_buffer = JUMP_VELOCITY
-		is_jumping = true
-		gravity_acceleration = 0.0
-		animation_tree["parameters/conditions/jump"] = true
+	elif Input.is_action_just_pressed("jump"): 
+		jump()
 	elif Input.is_action_just_pressed("aim"):
 		aim(true)
 	elif Input.is_action_just_released("aim"):
 		aim(false)
-	elif Input.is_action_pressed("aim") and Input.is_action_just_pressed("hit") and is_multiplayer_authority():
-		instantiate_projectile()
+	elif Input.is_action_pressed("aim") and Input.is_action_just_pressed("hit"):
+		shoot()

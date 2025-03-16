@@ -4,7 +4,7 @@ extends MultiplayerSpawner
 @onready var ball_scene = preload("res://scenes/ball.tscn")
 var players = {}
 
-# Called when the node enters the scene tree for the first time.
+
 func _ready() -> void:
 	spawn_function = spawnPlayer
 	if is_multiplayer_authority():

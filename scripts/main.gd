@@ -22,6 +22,7 @@ func join_lobby(this_lobby_id: int) -> void:
 	print("Attempting to join lobby.    ID: ", this_lobby_id)
 	peer.connect_lobby(this_lobby_id)
 	multiplayer.multiplayer_peer = peer
+	multiplayer.multiplayer_peer.as_relay = true
 	lobby_id = this_lobby_id
 	$Canvas/HostButton.hide()
 	$Canvas/RefreshButton.hide()
@@ -99,3 +100,4 @@ func refresh_lobby_list() -> void:
 
 func _process(_delta: float) -> void:
 	$Canvas/FPSLabel.text = str(Engine.get_frames_per_second())
+	
