@@ -105,9 +105,11 @@ func jump() -> void:
 	gravity_acceleration = 0.0
 	animation_tree["parameters/conditions/jump"] = true
 	
-func damage(_amount:int) -> void:
+func damage(amount:int) -> void:
+	Globals.processor.change_health(multiplayer.get_unique_id(), -amount)
+
+func death() -> void:
 	pass
-	
 	
 func apply_impulse() -> void:
 	for i in get_slide_collision_count():

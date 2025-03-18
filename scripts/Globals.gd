@@ -7,12 +7,16 @@ var world
 var processor
 var projectile_spawner
 var enemy_spawner
+var health
+var stats
 
 func define() -> void:
-	skills = $/root/Main/Canvas/Skills
+	skills = $/root/Main/World/Canvas/Skills
 	ball = $/root/Main/World/Ball
 	ms = $/root/Main/World/MultiplayerSpawner
 	world = $/root/Main/World
 	processor = $/root/Main/World/Processor
 	projectile_spawner = $/root/Main/World/ProjectileSpawner
 	enemy_spawner = $/root/Main/World/EnemySpawner
+	health = $/root/Main/World/Canvas/Health
+	stats = $/root/Main/World/Stats

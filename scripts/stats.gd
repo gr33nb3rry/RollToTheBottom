@@ -2,8 +2,6 @@ extends Node
 
 var last_ping_time: float  
 
-func _process(delta: float) -> void:
-	ping(multiplayer.get_unique_id())
 
 @rpc("any_peer")
 func ping(target_id: int, iam_asking: bool = true) -> void:  
@@ -12,7 +10,7 @@ func ping(target_id: int, iam_asking: bool = true) -> void:
 		ping.rpc(target_id, false)  
 	else:  
 		var sender_id: int = multiplayer.get_remote_sender_id()
-		print_ping.rpc(sender_id)
+		print_ping.rpc_id(sender_id)
 
 @rpc("any_peer")      
 func print_ping():
