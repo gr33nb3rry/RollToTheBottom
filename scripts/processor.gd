@@ -7,15 +7,17 @@ var health : Array = [max_health[0], max_health[1]]
 
 func _ready() -> void:
 	await get_tree().process_frame
-	Globals.health.update()
+	Globals.health.update(max_health, health)
 	
 @rpc("any_peer")
 func change_health(peer_id:int, v:int) -> void:
+	print("Damage in processor")
 	var index : int = 0 if peer_id == 1 else 1
 	health[index] = clamp(health[index] + v, 0, max_health[index])
 	if health[index] == 0:
 		Globals.ms.get_player_by_id(peer_id).death()
-	Globals.health.update()
+	Globals.health.update(max_health, health)
+	Globals.health.update.rpc_id(peer_id, max_health, health)
 	
 
 @rpc("any_peer")

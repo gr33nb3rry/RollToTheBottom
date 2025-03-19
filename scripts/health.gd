@@ -1,5 +1,9 @@
 extends Control
 
-func update() -> void:
-	$Progress.max_value = Globals.processor.max_health[0]
-	$Progress.value = Globals.processor.health[0]
+@rpc("any_peer")
+func update(max_health:Array, health:Array) -> void:
+	print("Damage in health")
+	$Progress1.max_value = max_health[0]
+	$Progress1.value = health[0]
+	$Progress2.max_value = max_health[1]
+	$Progress2.value = health[1]

@@ -106,7 +106,11 @@ func jump() -> void:
 	animation_tree["parameters/conditions/jump"] = true
 	
 func damage(amount:int) -> void:
-	Globals.processor.change_health(multiplayer.get_unique_id(), -amount)
+	print("Damage in player")
+	if multiplayer.get_unique_id() != 1:
+		Globals.processor.change_health.rpc_id(1, multiplayer.get_unique_id(), -amount)
+	else:
+		Globals.processor.change_health(multiplayer.get_unique_id(), -amount)
 
 func death() -> void:
 	pass
@@ -141,3 +145,5 @@ func _input(_event) -> void:
 		aim(false)
 	elif Input.is_action_pressed("aim") and Input.is_action_just_pressed("hit"):
 		shoot()
+	if Input.is_key_pressed(KEY_M):
+		damage(1)
