@@ -17,6 +17,7 @@ var gravity_force = Vector3(0,-1,0)
 var gravity_acceleration := 0.0
 @export var is_rolling := false
 var is_jumping := false
+var jump_count := 0
 
 const GRAVITY := 9.8
 const GRAVITY_ACCELERATION := 1.0
@@ -27,7 +28,7 @@ var jump_buffer := 0.0
 const ROTATION_SPEED := 10.0
 const WALK_SPEED := 10.0
 const RUN_SPEED := 20.0
-const JUMP_VELOCITY := 20.0
+const JUMP_VELOCITY := 25.0
 const PUSH_FORCE := 7.0
 const HIT_FORCE := 14.0
 
@@ -39,17 +40,17 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	if !is_multiplayer_authority(): return
-	if !is_active: return
 	apply_impulse()
 	apply_gravity(delta)
 	rotate_to_gravity(delta)
 	
 	var movement = move(delta)
 		
-	if !ray_ground.is_colliding() and velocity.y < 0 and animation_tree["parameters/playback"].get_fading_from_node() == "":
+	if !ray_ground.is_colliding() and velocity.y < 0:
 		animation_tree["parameters/conditions/fall"] = true
-	elif ray_ground.is_colliding(): 
+	elif ray_ground.is_colliding() and velocity.y <= 0: 
 		is_jumping = false
+		jump_count = 0
 		gravity_acceleration = 0.0
 		animation_tree["parameters/conditions/" + ("run" if movement != Vector3.ZERO else "idle")] = true
 		animation_tree["parameters/Run/TimeScale/scale"] = 1.3 if Input.is_action_pressed("run") else 0.8
@@ -100,10 +101,13 @@ func stop() -> void:
 	animation_tree["parameters/conditions/idle"] = true
 	
 func jump() -> void:
-	jump_buffer = JUMP_VELOCITY
-	is_jumping = true
-	gravity_acceleration = 0.0
-	animation_tree["parameters/conditions/jump"] = true
+	var max_jump_count = Globals.processor.get_skill(multiplayer.get_unique_id(), "Tengu’s Leap")
+	if jump_count <= max_jump_count:
+		jump_count += 1
+		jump_buffer = JUMP_VELOCITY
+		is_jumping = true
+		gravity_acceleration = 0.0
+		animation_tree["parameters/conditions/jump"] = true
 	
 func damage(amount:int) -> void:
 	print("Damage in player")
@@ -112,9 +116,15 @@ func damage(amount:int) -> void:
 	else:
 		Globals.processor.change_health(multiplayer.get_unique_id(), -amount)
 
+@rpc("any_peer")
 func death() -> void:
-	pass
-	
+	$Model.visible = false
+	await get_tree().create_timer(5.0).timeout
+	resurrect()
+
+func resurrect() -> void:
+	$Model.visible = true
+
 func apply_impulse() -> void:
 	for i in get_slide_collision_count():
 		var collision = get_slide_collision(i)

@@ -9,7 +9,7 @@ var is_able_to_hover : bool = false
 var is_rotated : bool = false
 
 func choose() -> void:
-	$/root/Main/Canvas/Skills.choose_skill(get_index())
+	Globals.skills.choose_skill(get_index())
 
 func reset() -> void:
 	is_hovering = false

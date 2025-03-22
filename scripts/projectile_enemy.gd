@@ -31,6 +31,7 @@ func death() -> void:
 	is_on_ground = true
 
 func hit(body: Node3D) -> void:
+	print(hit," ",body)
 	if type == 0:
 		body.damage(1)
 	elif type == 1:
