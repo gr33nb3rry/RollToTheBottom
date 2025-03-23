@@ -3,6 +3,7 @@ extends Node3D
 @export var type : int = 0
 @export var direction : Vector3
 var power : float = 70.0
+var damage : float
 var rotation_deg : float = 360.0
 var is_on_ground : bool = false
 
@@ -20,7 +21,7 @@ func _on_area_body_entered(body: Node3D) -> void:
 	if !multiplayer.is_server(): return
 	if body.is_in_group("Player"): return
 	if body.is_in_group("Soot"):
-		body.damage(1)
+		body.damage(damage)
 		queue_free()
 	death()
 	

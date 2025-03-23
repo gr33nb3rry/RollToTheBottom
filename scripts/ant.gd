@@ -83,7 +83,7 @@ func idle_moving() -> void:
 	await t.finished
 	idle_moving()
 	
-func damage(v:int) -> void:
+func damage(v:float) -> void:
 	death()
 	
 func death() -> void:

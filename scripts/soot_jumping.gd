@@ -60,7 +60,7 @@ func is_near_enough_to_attack() -> bool:
 	var distance_squared = global_position.distance_squared_to(ms.get_nearest_player(global_position).global_position)
 	return distance_squared < ATTACK_RADIUS * ATTACK_RADIUS
 
-func damage(v:int) -> void:
+func damage(v:float) -> void:
 	death()
 
 func death() -> void:

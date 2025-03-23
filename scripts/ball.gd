@@ -27,6 +27,10 @@ func _physics_process(delta: float) -> void:
 			var simplicity_direction = (world.get_zone_next_marker() - global_position).normalized()
 			if !world.is_marker_completed(): 
 				linear_velocity += simplicity_direction * simplicity_level * simplicity_current
+			
+		if linear_velocity.length() > direction.length():
+			linear_velocity = linear_velocity.normalized() * direction.length()
+			
 		direction /= 1.0 + delta * 3
 		simplicity_current /= 1.0 + delta * 3
 	else:

@@ -60,7 +60,7 @@ func attack(body: Node3D) -> void:
 		body.damage(ATTACK_DAMAGE)
 		death()
 	
-func damage(v:int) -> void:
+func damage(v:float) -> void:
 	if !is_opened: return
 	death()
 
