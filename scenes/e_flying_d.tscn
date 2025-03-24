@@ -1,6 +1,6 @@
 [gd_scene load_steps=12 format=3 uid="uid://bgo8f72vr7uaf"]
 
-[ext_resource type="Script" path="res://scripts/ant.gd" id="1_gbsxt"]
+[ext_resource type="Script" path="res://scripts/soot_flying.gd" id="1_gbsxt"]
 [ext_resource type="Shader" path="res://materials/r_shader.gdshader" id="2_a7ow2"]
 [ext_resource type="Material" uid="uid://srd1pmhdt7n0" path="res://materials/soot_m_s.tres" id="2_xgom7"]
 

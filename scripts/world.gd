@@ -41,6 +41,10 @@ func get_zone_next_marker() -> Vector3:
 
 func get_closest_point_of(of:Node3D) -> Vector3:
 	return current_zone_instance.get_closest_point_of(of)
+
+func get_coin_position(pos:Vector3) -> Vector3:
+	return current_zone_instance.get_coin_position(pos)
+	
 	
 func get_radius_on_pos(pos:Vector3) -> float:
 	return current_zone_instance.get_radius_on_pos(pos)

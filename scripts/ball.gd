@@ -6,6 +6,7 @@ const DUNG_PICKUP_VALUE_MULTIPLIER : float = 5.0
 const MIN_TIME_IN_AIR_TO_BREAK : float = 0.5
 
 var is_on_ground : bool = true
+var is_hitted : bool = false
 var time_in_air : float = 0.0
 var direction : Vector3
 const GRAVITY : float = 7.0
@@ -20,7 +21,8 @@ func _physics_process(delta: float) -> void:
 	#if !is_on_ground:
 	#	time_in_air += delta
 	#else: time_in_air = 0.0
-	
+	if is_hitted and direction.length() < Globals.processor.BALL_PUSH_FORCE:
+		is_hitted = false
 	linear_velocity = direction + Vector3(0,-1,0) * GRAVITY
 	if direction.length() > 0.01:
 		if is_simplified:
@@ -36,10 +38,15 @@ func _physics_process(delta: float) -> void:
 	else:
 		direction = Vector3.ZERO
 
-func add_impulse(from:Node3D, push_force:float) -> void:
-	#var max_linear_velocity = 20.0 / $Mesh.scale.x
+func add_impulse(from:Node3D, push_force:float, is_hit:bool = false) -> void:
 	var push_normal : Vector3 = global_position - from.global_position
-	direction = Vector3(push_normal.x,push_normal.y,push_normal.z).normalized() * push_force
+	#direction = Vector3(push_normal.x,push_normal.y,push_normal.z).normalized() * push_force
+	if !is_hitted:
+		direction = push_normal.normalized() * push_force
+	else:
+		direction = direction.normalized() * direction.length()
+	if !is_hitted:
+		is_hitted = is_hit
 	simplicity_current = 1.0
 
 

@@ -1,9 +1,13 @@
 extends Node
 
 const PROJECTILE = preload("res://scenes/projectile.tscn")
+const COIN = preload("res://scenes/coin.tscn")
+const BALL_PUSH_FORCE : float = 7.0
+const BALL_HIT_FORCE : float = 20.0
 
 var max_health : Array = [20.0, 20.0]
 var health : Array = [max_health[0], max_health[1]]
+var coins : Array = [0, 0]
 
 # NAME: [P1, P2, Step, Max]
 var skills = {
@@ -77,14 +81,30 @@ func change_health(peer_id:int, v:float) -> void:
 	Globals.health.update(max_health, health)
 	Globals.health.update.rpc_id(Globals.ms.get_second_player_peer_id(), max_health, health)
 	
-
 @rpc("any_peer")
-func apply_impulse_to_ball(requesting_peer_id: int) -> void:
-	var player = Globals.ms.get_player_by_id(requesting_peer_id)
-	Globals.ball.add_impulse(player, player.PUSH_FORCE)
-
+func change_coins(v:int) -> void:
+	print("Change coins: ", v)
+	if v > 0:
+		coins[0] += v + v * float(get_skill(1, "Fortune Beckons")) / 100.0
+		coins[1] += v + v * float(get_skill(1, "Fortune Beckons")) / 100.0
 @rpc("any_peer")
-func shoot(peer_id: int) -> void:
+func add_coin(pos:Vector3) -> void:
+	var c = COIN.instantiate()
+	Globals.projectile_spawner.add_child(c, true)
+	c.global_position = pos
+	c.move()
+	
+@rpc("any_peer")
+func push_ball(peer_id: int) -> void:
+	var player = Globals.ms.get_player_by_id(peer_id)
+	Globals.ball.add_impulse(player, BALL_PUSH_FORCE + BALL_PUSH_FORCE * float(get_skill(peer_id, "Mountain’s Strength")) / 100.0, false)
+@rpc("any_peer")
+func hit_ball(peer_id: int) -> void:
+	var player = Globals.ms.get_player_by_id(peer_id)
+	Globals.ball.add_impulse(player, BALL_HIT_FORCE + BALL_HIT_FORCE * float(get_skill(peer_id, "Mountain’s Strength")) / 100.0, true)
+	
+@rpc("any_peer")
+func shoot(peer_id: int, is_in_the_air:bool) -> void:
 	var player = Globals.ms.get_player_by_id(peer_id)
 	var direction : Vector3
 	var pos : Vector3 = player.global_position + Vector3(0, 1.7, 0)
@@ -96,8 +116,10 @@ func shoot(peer_id: int) -> void:
 	Globals.projectile_spawner.add_child(p, true)
 	p.global_position = pos
 	p.direction = direction
-	p.damage = 1.0 + 1.0 * float(get_skill(peer_id, "Way of the Blade")) / 100.0
+	var damage : float = 1.0
+	p.damage = damage + damage * float(get_skill(peer_id, "Way of the Blade")) / 100.0
+	if is_in_the_air: p.damage += damage * float(get_skill(peer_id, "Skyward Strike")) / 100.0
 
 func _input(event: InputEvent) -> void:
 	if Input.is_key_pressed(KEY_N):
-		sync_skills.rpc_id(Globals.ms.get_second_player_peer_id(), skills)
+		add_coin(Globals.ms.get_random_player().global_position + Vector3(1, 1, 0) * 5)

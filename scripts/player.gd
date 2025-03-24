@@ -29,7 +29,6 @@ const ROTATION_SPEED := 10.0
 const WALK_SPEED := 10.0
 const RUN_SPEED := 20.0
 const JUMP_VELOCITY := 25.0
-const PUSH_FORCE := 7.0
 const HIT_FORCE := 14.0
 
 func _ready() -> void:
@@ -130,19 +129,27 @@ func apply_impulse() -> void:
 		var collision = get_slide_collision(i)
 		if collision.get_collider().name == "Ball":
 			if multiplayer.get_unique_id() != 1:
-				Globals.processor.rpc_id(1, "apply_impulse_to_ball", multiplayer.get_unique_id())
+				Globals.processor.rpc_id(1, "push_ball", multiplayer.get_unique_id())
 			else:
-				Globals.processor.apply_impulse_to_ball(1)
+				Globals.processor.push_ball(1)
 			break
+
+func hit() -> void:
+	if ray_hit.is_colliding() and ray_hit.get_collider().name == "Ball":
+		if multiplayer.get_unique_id() != 1:
+			Globals.processor.rpc_id(1, "hit_ball", multiplayer.get_unique_id())
+		else:
+			Globals.processor.hit_ball(1)
+	
 
 func aim(is_aim:bool) -> void:
 	$/root/Main/Canvas/Crosshair.visible = is_aim
 
 func shoot() -> void:
 	if multiplayer.get_unique_id() != 1:
-		Globals.processor.rpc_id(1, "shoot", multiplayer.get_unique_id())
+		Globals.processor.rpc_id(1, "shoot", multiplayer.get_unique_id(), !ray_ground.is_colliding())
 	else:
-		Globals.processor.shoot(1)
+		Globals.processor.shoot(1, !ray_ground.is_colliding())
 
 func _input(_event) -> void:
 	if Input.is_action_just_pressed("ui_cancel"):
@@ -153,6 +160,8 @@ func _input(_event) -> void:
 		aim(true)
 	elif Input.is_action_just_released("aim"):
 		aim(false)
+	elif !Input.is_action_pressed("aim") and Input.is_action_just_pressed("hit"):
+		hit()
 	elif Input.is_action_pressed("aim") and Input.is_action_just_pressed("hit"):
 		shoot()
 	if Input.is_key_pressed(KEY_M):

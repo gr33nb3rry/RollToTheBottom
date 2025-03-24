@@ -18,6 +18,7 @@ const BALL_RADIUS : float = 2.0
 const INITIAL_HEIGHT : float = 40.0
 
 @export var type : int = 0
+var health : float = 1.0
 var is_active := true
 var is_achieved : bool = false
 var target_pos : Vector3
@@ -77,7 +78,9 @@ func steal() -> void:
 	t.tween_property(self, "global_position:y", target_pos.y-INITIAL_HEIGHT, abs(target_pos.y-INITIAL_HEIGHT - global_position.y) / MOVE_WITH_BALL_SPEED).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN_OUT)
 
 func damage(v:float) -> void:
-	death()
+	health -= v
+	if health <= 0.0:
+		death()
 
 func death() -> void:
 	ball.is_simplified = true

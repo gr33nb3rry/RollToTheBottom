@@ -32,3 +32,11 @@ res://scripts/soot_jumping.gd
 res://scripts/soot_stealing.gd
 res://scripts/soot_waiting.gd
 res://scripts/ball.gd
+res://scripts/player.gd
+res://scripts/soot_flying.gd
+res://scripts/enemy_spawner.gd
+res://scenes/coin.tscn
+res://scripts/coin.gd
+res://scripts/zone.gd
+res://scenes/soot_jumping.tscn
+res://scripts/world.gd

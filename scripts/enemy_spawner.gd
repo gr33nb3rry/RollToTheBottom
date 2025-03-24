@@ -8,12 +8,18 @@ const SOOT_WAITING = preload("res://scenes/soot_waiting.tscn")
 func add_flying() -> void:
 	var a = SOOT_FLYING.instantiate()
 	add_child(a, true)
+	var health : float = 1.0
+	a.health = health - health * float(Globals.processor.get_skill(1, "Cursed Blood")) / 100.0
 func add_stealing() -> void:
 	var a = SOOT_STEALING.instantiate()
 	add_child(a, true)
+	var health : float = 1.0
+	a.health = health - health * float(Globals.processor.get_skill(1, "Cursed Blood")) / 100.0
 func add_jumping() -> void:
 	var a = SOOT_JUMPING.instantiate()
 	add_child(a, true)
+	var health : float = 1.0
+	a.health = health - health * float(Globals.processor.get_skill(1, "Cursed Blood")) / 100.0
 	
 
 # LEVEL STARTS

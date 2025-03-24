@@ -7,16 +7,16 @@ const SKILLS = {
 	"Serpent's Bane": "Poison effect duration is reduced by XX%.",
 	"Frozen Resolve": "Ice effect duration is reduced by XX%.",
 	"Shinigami’s Sight": "See invisible enemies from XX% farther.",
-	"Mountain’s Strength": "Ball pushing force increased by XX%.",
-	"Way of the Blade": "Your damage increases by XX%.",
-	"Tengu’s Leap": "Gain a double jump.",
-	"Iron Will": "You take XX% less damage.",
+	"Mountain’s Strength": "Ball pushing force increased by XX%.", # DONE
+	"Way of the Blade": "Your damage increases by XX%.", # DONE
+	"Tengu’s Leap": "Gain a double jump.", # DONE
+	"Iron Will": "You take XX% less damage.", # DONE
 	"Fortune Beckons": "Earn XX% more cash.",
 	"Blood Pact": "Heal for XX% after killing.",
 	"Killer Instinct": "After each kill, your damage increases by XX% by 5 seconds.",
-	"Skyward Strike": "Deal XX% more damage while in the air.",
+	"Skyward Strike": "Deal XX% more damage while in the air.", # DONE
 	"Shadow Flow": "Weapon cooldowns are reduced by XX%.",
-	"Cursed Blood": "Enemies have XX% less health."
+	"Cursed Blood": "Enemies have XX% less health." # DONE
 };
 
 
@@ -74,10 +74,6 @@ func update_skills() -> void:
 	current_skills.append(get_skill())
 	var count : int = 0
 	for skill in current_skills:
-		var title = skill["title"]
-		var description = skill["description"]
-		#container.get_child(skill).get_node("Container/Margin/HBox/TitleLabel").text = "[center]"+title+"[/center]"
-		#container.get_child(skill).get_node("Container/Margin/HBox/DescriptionLabel").text = description
 		container.get_child(count).update_info(skill)
 		count += 1
 	await get_tree().create_timer(1.0).timeout

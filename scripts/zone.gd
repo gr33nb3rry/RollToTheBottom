@@ -38,8 +38,12 @@ func get_next_marker() -> Vector3:
 	return marker.global_position
 
 func get_closest_point_of(of:Node3D) -> Vector3:
-	return path.curve.get_closest_point(path.to_local(of.global_position))
+	return path.to_global(path.curve.get_closest_point(path.to_local(of.global_position)))
 	
+func get_coin_position(pos:Vector3) -> Vector3:
+	var local_pos : Vector3 = path.to_local(pos)
+	return path.to_global(path.curve.get_closest_point(local_pos)) + Vector3.UP * get_radius_on_pos(local_pos)
+
 func get_radius_on_pos(pos:Vector3) -> float:
 	return $Curve.radius_profile.sample(path.curve.get_closest_offset(pos) / path.curve.get_baked_length()) * $Curve.radius
 

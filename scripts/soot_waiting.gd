@@ -13,6 +13,7 @@ const DETECTION_RADIUS : float = 20.0
 const ATTACK_FORCE : float = 50.0
 const ATTACK_DAMAGE : float = 1
 
+var health : float = 1.0
 var target
 var direction : Vector3
 var is_opened : bool = false
@@ -62,7 +63,9 @@ func attack(body: Node3D) -> void:
 	
 func damage(v:float) -> void:
 	if !is_opened: return
-	death()
+	health -= v
+	if health <= 0.0:
+		death()
 
 func death() -> void:
 	queue_free()
