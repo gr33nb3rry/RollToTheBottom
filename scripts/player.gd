@@ -1,17 +1,13 @@
 extends CharacterBody3D
 
 @onready var model : Node3D = $Model
-@onready var animation_tree : AnimationTree = $Model/Sophia/AnimationTree
-@onready var animation_player: AnimationPlayer = $Model/Sophia/AnimationPlayer
 @onready var camera: Camera3D = $CamRoot/CamYaw/CamPitch/SpringArm3D/Camera3D
-@onready var ray_hit: RayCast3D = $Model/Sophia/RayHit
-@onready var ray_push: RayCast3D = $Model/Sophia/RayPush
+@onready var ray_hit: RayCast3D = $Model/Body/RayHit
+@onready var ray_push: RayCast3D = $Model/Body/RayPush
 @onready var ray_ground: RayCast3D = $RayGround
 @onready var ray_crosshair: RayCast3D = $CamRoot/CamYaw/CamPitch/SpringArm3D/RayCrosshair
+@onready var animation_tree: AnimationTree = $Model/AnimationTree
 
-@onready var path = $/root/Main/World/Steb/Path3D/PathFollow3D
-#@onready var path_camera = $/root/Main/World/Steb/Path3D/PathFollow3D/Camera3D
-@onready var ball = $/root/Main/World/Ball
 
 var gravity_force = Vector3(0,-1,0)
 var gravity_acceleration := 0.0
@@ -22,7 +18,8 @@ var jump_count := 0
 const GRAVITY := 9.8
 const GRAVITY_ACCELERATION := 1.0
 
-var is_active := true
+var is_active : bool = true
+var is_pushing : bool = false
 
 var jump_buffer := 0.0
 const ROTATION_SPEED := 10.0
@@ -46,19 +43,28 @@ func _physics_process(delta: float) -> void:
 	var movement = move(delta)
 		
 	if !ray_ground.is_colliding() and velocity.y < 0:
-		animation_tree["parameters/conditions/fall"] = true
+		animation_tree["parameters/Movement/conditions/fall"] = true
 	elif ray_ground.is_colliding() and velocity.y <= 0: 
 		is_jumping = false
 		jump_count = 0
 		gravity_acceleration = 0.0
-		animation_tree["parameters/conditions/" + ("run" if movement != Vector3.ZERO else "idle")] = true
-		animation_tree["parameters/Run/TimeScale/scale"] = 1.3 if Input.is_action_pressed("run") else 0.8
+		animation_tree["parameters/Movement/conditions/" + ("walk" if movement != Vector3.ZERO else "idle")] = true
+		if !is_rolling:
+			animation_tree["parameters/Movement/walk/TimeScale/scale"] = 4.4 if Input.is_action_pressed("run") else 2.2
+		else:
+			animation_tree["parameters/Movement/walk/TimeScale/scale"] = 1.5
 	
 	move_and_slide()
 	if ray_push.is_colliding() and ray_push.get_collider().name == "Ball" and !is_rolling:
 		is_rolling = true
+		var t = get_tree().create_tween()
+		t.tween_property(animation_tree, "parameters/Blend2/blend_amount", 1.0, 0.1)
+		print("Hands blend ON")
 	elif !ray_push.is_colliding() and is_rolling:
 		is_rolling = false
+		var t = get_tree().create_tween()
+		t.tween_property(animation_tree, "parameters/Blend2/blend_amount", 0.0, 0.1)
+		print("Hands blend OFF")
 
 func apply_gravity(delta:float) -> void:
 	gravity_acceleration += GRAVITY_ACCELERATION * delta
@@ -76,7 +82,7 @@ func rotate_model_to_direction(delta:float, direction:Vector2) -> void:
 	var model_transform = model.transform.interpolate_with(model.transform.looking_at($Look/Point.position), ROTATION_SPEED * delta)
 	model.transform = model_transform
 func rotate_model_to_camera(delta:float) -> void:
-	$Model/Sophia.rotation.y = lerp_angle($Model/Sophia.rotation.y, $CamRoot/CamYaw.rotation.y + deg_to_rad(180), ROTATION_SPEED * delta)
+	$Model/Body.rotation.y = lerp_angle($Model/Body.rotation.y, $CamRoot/CamYaw.rotation.y, ROTATION_SPEED * delta)
 	
 func move(delta:float) -> Vector3:
 	var movement := Vector3.ZERO
@@ -97,7 +103,7 @@ func move(delta:float) -> Vector3:
 
 func stop() -> void:
 	velocity = Vector3.ZERO
-	animation_tree["parameters/conditions/idle"] = true
+	animation_tree["parameters/Movement/conditions/idle"] = true
 	
 func jump() -> void:
 	var max_jump_count = Globals.processor.get_skill(multiplayer.get_unique_id(), "Tengu’s Leap")
@@ -106,7 +112,7 @@ func jump() -> void:
 		jump_buffer = JUMP_VELOCITY
 		is_jumping = true
 		gravity_acceleration = 0.0
-		animation_tree["parameters/conditions/jump"] = true
+		animation_tree["parameters/Movement/conditions/jump"] = true
 	
 func damage(amount:int) -> void:
 	print("Damage in player")
@@ -117,12 +123,12 @@ func damage(amount:int) -> void:
 
 @rpc("any_peer")
 func death() -> void:
-	$Model.visible = false
+	model.visible = false
 	await get_tree().create_timer(5.0).timeout
 	resurrect()
 
 func resurrect() -> void:
-	$Model.visible = true
+	model.visible = true
 
 func apply_impulse() -> void:
 	for i in get_slide_collision_count():

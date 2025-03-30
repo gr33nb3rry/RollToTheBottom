@@ -40,7 +40,7 @@ func _on_area_1_body_exited(body: Node3D) -> void:
 		is_ball_inside = false
 	if !is_ball_inside and players_inside_count == 0 and $Door1.visible:
 		close_door($Door2)
-		#Globals.enemy_spawner.start()
+		Globals.enemy_spawner.start()
 
 func open_door(door) -> void:
 	print("open ", door)

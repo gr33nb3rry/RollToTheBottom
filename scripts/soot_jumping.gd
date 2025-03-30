@@ -58,10 +58,9 @@ func is_near_enough_to_attack() -> bool:
 	var distance_squared = global_position.distance_squared_to(Globals.ms.get_nearest_player(global_position).global_position)
 	return distance_squared < ATTACK_RADIUS * ATTACK_RADIUS + 1.0
 
-func damage(v:float) -> void:
-	health -= v
-	if health <= 0.0:
-		death()
+func damage(peer_id:int, damage:float) -> void:
+	if multiplayer.is_server():
+		Globals.processor.damage_soot(self, peer_id, damage)
 
 func death() -> void:
 	queue_free()

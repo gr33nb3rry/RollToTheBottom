@@ -1,14 +1,14 @@
+Node3D
+AnimationTree
 MeshInstance3D
+AnimationPlayer
 TextureProgressBar
 ProgressBar
 Control
 StaticBody3D
 Path3D
 MultiplayerSynchronizer
-Node3D
 TextureRect
 SubViewport
 SubViewportContainer
 CanvasLayer
-ColorRect
-AnimationPlayer

@@ -6,7 +6,7 @@ const HEIGHT : float = 0.5
 var target_pos : Vector3
 
 func _process(delta: float) -> void:
-	rotation_degrees.y += 60 * delta
+	rotation_degrees.y += 90 * delta
 	if is_near_enough():
 		collect()
 	
@@ -18,11 +18,11 @@ func move() -> void:
 	target_pos = pos
 	
 	var t = get_tree().create_tween()
-	t.tween_property(self, "global_position:x", target_pos.x, 2.0)
-	t.parallel().tween_property(self, "global_position:z", target_pos.z, 2.0)
+	t.tween_property(self, "global_position:x", target_pos.x, 1.5)
+	t.parallel().tween_property(self, "global_position:z", target_pos.z, 1.5)
 	var t2 = get_tree().create_tween()
-	t2.tween_property(self, "global_position:y", global_position.y + JUMP_HEIGHT, 1.0).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
-	t2.tween_property(self, "global_position:y", target_pos.y, 1.0).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN_OUT)
+	t2.tween_property(self, "global_position:y", global_position.y + JUMP_HEIGHT, 0.75).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	t2.tween_property(self, "global_position:y", target_pos.y, 0.75).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN_OUT)
 	t2.tween_property(self, "global_position:y", target_pos.y + HEIGHT, 0.5).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN_OUT)
 	
 

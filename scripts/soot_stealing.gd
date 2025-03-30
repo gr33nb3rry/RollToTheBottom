@@ -1,8 +1,5 @@
 extends RigidBody3D
 
-@onready var ball = $/root/Main/World/Ball
-@onready var ms = $/root/Main/World/MultiplayerSpawner
-@onready var world = $/root/Main/World
 const PROJECTILE_S = preload("res://scenes/projectile_s.tscn")
 
 const MOVE_SPEED : float = 10.0
@@ -37,7 +34,7 @@ func _process(delta: float) -> void:
 	if state == 0:
 		achieve_target_pos() 
 	elif state == 1:
-		var pos : Vector3 = ball.global_position + Vector3(0, BALL_RADIUS + RADIUS, 0)
+		var pos : Vector3 = Globals.ball.global_position + Vector3(0, BALL_RADIUS + RADIUS, 0)
 		var direction = pos - global_position
 		if abs(global_position.x - pos.x) > FLYING_DETECT_RADIUS or abs(global_position.z - pos.z) > FLYING_DETECT_RADIUS:
 			direction.y = 0.0
@@ -46,11 +43,11 @@ func _process(delta: float) -> void:
 			return
 		global_position += direction.normalized() * MOVE_SPEED * delta
 	elif state == 2:
-		ball.global_position = global_position - Vector3(0, BALL_RADIUS + RADIUS, 0)
+		Globals.ball.global_position = global_position - Vector3(0, BALL_RADIUS + RADIUS, 0)
 		
 		
 func calculate_target_pos() -> void:
-	var pos = world.get_near_flying_position()
+	var pos = Globals.world.get_near_flying_position()
 	target_pos = pos
 	
 	
@@ -67,8 +64,8 @@ func achieve_final_pos() -> void:
 	steal()
 	
 func steal() -> void:
-	ball.is_simplified = false
-	ball.stop()
+	Globals.ball.is_simplified = false
+	Globals.ball.stop()
 	state = 2
 	var pos : float = global_position.y + 4.0
 	var t = get_tree().create_tween()
@@ -76,12 +73,10 @@ func steal() -> void:
 	t.tween_property(self, "global_position:x", target_pos.x, abs(target_pos.x - global_position.x) / MOVE_WITH_BALL_SPEED)
 	t.parallel().tween_property(self, "global_position:z", target_pos.z, abs(target_pos.z - global_position.z) / MOVE_WITH_BALL_SPEED)
 	t.tween_property(self, "global_position:y", target_pos.y-INITIAL_HEIGHT, abs(target_pos.y-INITIAL_HEIGHT - global_position.y) / MOVE_WITH_BALL_SPEED).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN_OUT)
-
-func damage(v:float) -> void:
-	health -= v
-	if health <= 0.0:
-		death()
+func damage(peer_id:int, damage:float) -> void:
+	if multiplayer.is_server():
+		Globals.processor.damage_soot(self, peer_id, damage)
 
 func death() -> void:
-	ball.is_simplified = true
+	Globals.ball.is_simplified = true
 	queue_free()

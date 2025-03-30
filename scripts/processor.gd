@@ -116,10 +116,18 @@ func shoot(peer_id: int, is_in_the_air:bool) -> void:
 	Globals.projectile_spawner.add_child(p, true)
 	p.global_position = pos
 	p.direction = direction
+	p.owner_peer_id = peer_id
 	var damage : float = 1.0
 	p.damage = damage + damage * float(get_skill(peer_id, "Way of the Blade")) / 100.0
 	if is_in_the_air: p.damage += damage * float(get_skill(peer_id, "Skyward Strike")) / 100.0
 
-func _input(event: InputEvent) -> void:
-	if Input.is_key_pressed(KEY_N):
-		add_coin(Globals.ms.get_random_player().global_position + Vector3(1, 1, 0) * 5)
+@rpc("any_peer")
+func damage_soot(soot:Node3D, peer_id:int, damage:float) -> void:
+	print("Damage soot ", soot, " : ", peer_id)
+	soot.health -= damage
+	if soot.health <= 0.0:
+		print("Kill soot ", soot)
+		change_health(peer_id, damage * float(get_skill(peer_id, "Blood Pact")) / 100.0)
+		print("Heal player on kill: ", damage * float(get_skill(peer_id, "Blood Pact")) / 100.0)
+		add_coin(soot.global_position)
+		soot.death()

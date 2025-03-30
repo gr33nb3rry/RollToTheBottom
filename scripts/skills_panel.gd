@@ -11,8 +11,8 @@ const SKILLS = {
 	"Way of the Blade": "Your damage increases by XX%.", # DONE
 	"Tengu’s Leap": "Gain a double jump.", # DONE
 	"Iron Will": "You take XX% less damage.", # DONE
-	"Fortune Beckons": "Earn XX% more cash.",
-	"Blood Pact": "Heal for XX% after killing.",
+	"Fortune Beckons": "Earn XX% more cash.", # DONE
+	"Blood Pact": "Heal for XX% of damage after killing.", # DONE
 	"Killer Instinct": "After each kill, your damage increases by XX% by 5 seconds.",
 	"Skyward Strike": "Deal XX% more damage while in the air.", # DONE
 	"Shadow Flow": "Weapon cooldowns are reduced by XX%.",

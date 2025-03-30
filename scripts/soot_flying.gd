@@ -1,9 +1,5 @@
 extends RigidBody3D
 
-@onready var ball = $/root/Main/World/Ball
-@onready var ms = $/root/Main/World/MultiplayerSpawner
-@onready var projectile_spawner = $/root/Main/World/ProjectileSpawner
-@onready var world = $/root/Main/World
 const PROJECTILE_S = preload("res://scenes/projectile_s.tscn")
 
 const MOVE_SPEED : float = 20.0
@@ -43,12 +39,12 @@ func _physics_process(delta: float) -> void:
 	
 		
 func calculate_target_pos() -> void:
-	target = ms.get_nearest_player(global_position)
-	var pos = world.get_near_flying_position() if !is_idling else world.get_next_near_flying_position()
+	target = Globals.ms.get_nearest_player(global_position)
+	var pos = Globals.world.get_near_flying_position() if !is_idling else Globals.world.get_next_near_flying_position()
 	target_pos = pos
 	
 func check_for_position_change() -> void:
-	var distance_squared = global_position.distance_squared_to(world.get_zone_next_marker())
+	var distance_squared = global_position.distance_squared_to(Globals.world.get_zone_next_marker())
 	if distance_squared < DETECTION_RADIUS * DETECTION_RADIUS:
 		attack()
 		await get_tree().create_timer(ATTACK_DELAY).timeout
@@ -61,7 +57,7 @@ func attack() -> void:
 	var direction : Vector3 = (target.global_position - global_position).normalized()
 	var p
 	if type == 0: p = PROJECTILE_S.instantiate()
-	projectile_spawner.add_child(p, true)
+	Globals.projectile_spawner.add_child(p, true)
 	p.global_position = global_position
 	p.direction = direction
 	
@@ -84,10 +80,9 @@ func idle_moving() -> void:
 	await t.finished
 	idle_moving()
 	
-func damage(v:float) -> void:
-	health -= v
-	if health <= 0.0:
-		death()
+func damage(peer_id:int, damage:float) -> void:
+	if multiplayer.is_server():
+		Globals.processor.damage_soot(self, peer_id, damage)
 	
 func death() -> void:
 	queue_free()
