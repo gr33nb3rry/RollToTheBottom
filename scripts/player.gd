@@ -10,16 +10,17 @@ extends CharacterBody3D
 
 
 var gravity_force = Vector3(0,-1,0)
-var gravity_acceleration := 0.0
-@export var is_rolling := false
-var is_jumping := false
-var jump_count := 0
+var gravity_acceleration : float = 0.0
+@export var is_rolling : bool = false
+@export var is_attacking : bool = false
+var is_jumping : bool = false
+var jump_count : int = 0
+var attack_count : int = 0
 
-const GRAVITY := 9.8
-const GRAVITY_ACCELERATION := 1.0
+const GRAVITY : float = 9.8
+const GRAVITY_ACCELERATION : float = 1.0
 
 var is_active : bool = true
-var is_pushing : bool = false
 
 var jump_buffer := 0.0
 const ROTATION_SPEED := 10.0
@@ -57,14 +58,19 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 	if ray_push.is_colliding() and ray_push.get_collider().name == "Ball" and !is_rolling:
 		is_rolling = true
-		var t = get_tree().create_tween()
-		t.tween_property(animation_tree, "parameters/Blend2/blend_amount", 1.0, 0.1)
-		print("Hands blend ON")
+		hands_blend_on()
 	elif !ray_push.is_colliding() and is_rolling:
 		is_rolling = false
-		var t = get_tree().create_tween()
-		t.tween_property(animation_tree, "parameters/Blend2/blend_amount", 0.0, 0.1)
-		print("Hands blend OFF")
+		hands_blend_off()
+
+func hands_blend_on() -> void:
+	var t = get_tree().create_tween()
+	t.tween_property(animation_tree, "parameters/HandsBlend/blend_amount", 1.0, 0.1)
+	print("Hands blend ON")
+func hands_blend_off() -> void:
+	var t = get_tree().create_tween()
+	t.tween_property(animation_tree, "parameters/HandsBlend/blend_amount", 0.0, 0.1)
+	print("Hands blend OFF")
 
 func apply_gravity(delta:float) -> void:
 	gravity_acceleration += GRAVITY_ACCELERATION * delta
@@ -131,6 +137,7 @@ func resurrect() -> void:
 	model.visible = true
 
 func apply_impulse() -> void:
+	if is_attacking: return
 	for i in get_slide_collision_count():
 		var collision = get_slide_collision(i)
 		if collision.get_collider().name == "Ball":
@@ -141,12 +148,18 @@ func apply_impulse() -> void:
 			break
 
 func hit() -> void:
+	animation_tree.set("parameters/hit_melee/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
+func hit_check() -> void:
 	if ray_hit.is_colliding() and ray_hit.get_collider().name == "Ball":
 		if multiplayer.get_unique_id() != 1:
 			Globals.processor.rpc_id(1, "hit_ball", multiplayer.get_unique_id())
 		else:
 			Globals.processor.hit_ball(1)
-	
+
+func attack() -> void:
+	animation_tree.tree_root.get_node("hit_knife").animation = "hit" if randi_range(0, 1) == 0 else "hit_2"
+	animation_tree.set("parameters/hit/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
+	attack_count += 1
 
 func aim(is_aim:bool) -> void:
 	$/root/Main/Canvas/Crosshair.visible = is_aim
@@ -167,7 +180,8 @@ func _input(_event) -> void:
 	elif Input.is_action_just_released("aim"):
 		aim(false)
 	elif !Input.is_action_pressed("aim") and Input.is_action_just_pressed("hit"):
-		hit()
+		#hit()
+		attack()
 	elif Input.is_action_pressed("aim") and Input.is_action_just_pressed("hit"):
 		shoot()
 	if Input.is_key_pressed(KEY_M):
