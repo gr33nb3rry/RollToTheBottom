@@ -100,7 +100,13 @@ func _on_area_body_entered(body: Node3D) -> void:
 				shrink(break_value)
 			else: queue_free()
 	elif body.is_in_group("Soot"):
-		body.death()
+		var r1 = $Mesh.mesh.radius * $Mesh.scale.x
+		var r2 = body.get_node("Mesh").mesh.radius * body.scale.x
+		var v1 = get_volume(r1)
+		var v2 = get_volume(r2)
+		var scale_increase : float = get_radius(v1+v2)/r1-1.0
+		grow(scale_increase * DUNG_PICKUP_VALUE_MULTIPLIER)
+		body.queue_free()
 func _on_area_body_exited(body: Node3D) -> void:
 	for b in $Area.get_overlapping_bodies(): if b.is_in_group("Ground"): return
 	if body.is_in_group("Ground"): is_on_ground = false

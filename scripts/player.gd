@@ -22,6 +22,7 @@ const GRAVITY : float = 9.8
 const GRAVITY_ACCELERATION : float = 1.0
 
 var is_active : bool = true
+var is_running : bool = false
 
 var jump_buffer := 0.0
 const ROTATION_SPEED := 10.0
@@ -47,12 +48,14 @@ func _physics_process(delta: float) -> void:
 	var movement = move(delta)
 		
 	if !ray_ground.is_colliding() and velocity.y < 0:
-		animation_tree["parameters/Movement/conditions/fall"] = true
+		#animation_tree["parameters/Movement/conditions/fall"] = true
+		pass
 	elif ray_ground.is_colliding() and velocity.y <= 0: 
 		is_jumping = false
 		jump_count = 0
 		gravity_acceleration = 0.0
-		animation_tree["parameters/Movement/conditions/" + ("walk" if movement != Vector3.ZERO else "idle")] = true
+		is_running = movement != Vector3.ZERO
+		#animation_tree["parameters/Movement/conditions/" + ("walk" if movement != Vector3.ZERO else "idle")] = true
 		if !is_rolling:
 			animation_tree["parameters/Movement/walk/TimeScale/scale"] = 4.4 if Input.is_action_pressed("run") else 2.2
 		else:
@@ -116,7 +119,7 @@ func move(delta:float) -> Vector3:
 
 func stop() -> void:
 	velocity = Vector3.ZERO
-	animation_tree["parameters/Movement/conditions/idle"] = true
+	#animation_tree["parameters/Movement/conditions/idle"] = true
 	
 func jump() -> void:
 	var max_jump_count = Globals.processor.get_skill(multiplayer.get_unique_id(), "Tengu’s Leap")
@@ -125,7 +128,7 @@ func jump() -> void:
 		jump_buffer = JUMP_VELOCITY
 		is_jumping = true
 		gravity_acceleration = 0.0
-		animation_tree["parameters/Movement/conditions/jump"] = true
+		#animation_tree["parameters/Movement/conditions/jump"] = true
 	
 func damage(amount:int) -> void:
 	print("Damage in player")
