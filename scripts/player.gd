@@ -61,27 +61,23 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 	if ray_push.is_colliding() and ray_push.get_collider().name == "Ball" and !is_rolling:
 		is_rolling = true
-		hands_blend_on()
+		blend_on("HandsBlend", 0.1)
 	elif !ray_push.is_colliding() and is_rolling:
 		is_rolling = false
-		hands_blend_off()
+		blend_off("HandsBlend", 0.1)
 		
 func _process(delta: float) -> void:
 	if type == 0 and Input.is_action_pressed("aim") and sucked_soot == null:
 		suck_soot()
-	elif type == 0 and Input.is_action_just_released("aim") and sucked_soot != null:
-		blow_soot()
 	if sucked_soot != null:
 		sucked_soot.global_position = sucked_soot.global_position.lerp(sucked_soot_pos.global_position, 10.0 * delta)
 
-func hands_blend_on() -> void:
+func blend_on(blend_name:String, time:float) -> void:
 	var t = get_tree().create_tween()
-	t.tween_property(animation_tree, "parameters/HandsBlend/blend_amount", 1.0, 0.1)
-	print("Hands blend ON")
-func hands_blend_off() -> void:
+	t.tween_property(animation_tree, "parameters/"+blend_name+"/blend_amount", 1.0, time)
+func blend_off(blend_name:String, time:float) -> void:
 	var t = get_tree().create_tween()
-	t.tween_property(animation_tree, "parameters/HandsBlend/blend_amount", 0.0, 0.1)
-	print("Hands blend OFF")
+	t.tween_property(animation_tree, "parameters/"+blend_name+"/blend_amount", 0.0, time)
 
 func apply_gravity(delta:float) -> void:
 	gravity_acceleration += GRAVITY_ACCELERATION * delta
@@ -174,9 +170,10 @@ func suck_soot() -> void:
 			sucked_soot = collider
 
 func blow_soot() -> void:
-	var t = get_tree().create_tween()
-	t.tween_property(sucked_soot, "global_position", global_position + (-camera.global_transform.basis.z).normalized() * 30.0, 3.0).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
-	sucked_soot = null
+	if sucked_soot != null:
+		var t = get_tree().create_tween()
+		t.tween_property(sucked_soot, "global_position", global_position + (-camera.global_transform.basis.z).normalized() * 30.0, 3.0).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
+		sucked_soot = null
 
 func attack() -> void:
 	animation_tree.tree_root.get_node("hit_knife").animation = "hit_" + str(attack_count)
@@ -202,8 +199,13 @@ func _input(_event) -> void:
 		jump()
 	elif Input.is_action_just_pressed("aim"):
 		aim(true)
+		if type == 0: blend_on("SuckBlend", 0.2)
 	elif Input.is_action_just_released("aim"):
 		aim(false)
+		if type == 0: 
+			blend_off("SuckBlend", 0.2)
+			animation_tree.set("parameters/blow/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
+			#blow_soot()
 	elif !Input.is_action_pressed("aim") and Input.is_action_just_pressed("hit"):
 		hit() if type == 0 else attack()
 	elif Input.is_action_pressed("aim") and Input.is_action_just_pressed("hit"):

@@ -1,4 +1,4 @@
-[gd_scene load_steps=53 format=3 uid="uid://cxlkxr1ykhym6"]
+[gd_scene load_steps=57 format=3 uid="uid://cxlkxr1ykhym6"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_x72jo"]
 [ext_resource type="Script" path="res://scripts/camera.gd" id="2_5wcse"]
@@ -1711,9 +1711,159 @@ tracks/11/keys = {
 "values": [false]
 }
 
+[sub_resource type="Animation" id="Animation_m37j4"]
+resource_name = "suck"
+length = 0.1
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Body/ArmR/Hand/Melee:visible")
+tracks/0/interp = 0
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Body/ArmR/Hand/Melee/Melee2:visible")
+tracks/1/interp = 0
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "bezier"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Body/ArmR:rotation:x")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/3/type = "bezier"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Body/ArmR:rotation:y")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0.698132, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/4/type = "bezier"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Body/ArmR:rotation:z")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0.575959, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+
+[sub_resource type="Animation" id="Animation_fmjdk"]
+resource_name = "blow"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Body/ArmR/Hand/Melee:visible")
+tracks/0/interp = 0
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Body/ArmR/Hand/Melee/Melee2:visible")
+tracks/1/interp = 0
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/2/type = "bezier"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Body/ArmR:rotation:x")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0, -0.785398, -0.1, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 0.233333)
+}
+tracks/3/type = "bezier"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Body/ArmR:rotation:y")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"handle_modes": PackedInt32Array(0, 0, 0),
+"points": PackedFloat32Array(0.698132, -0.25, 0, 0.25, 0, 1.91986, -0.1, 0, 0, 0, 1.65806, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 0.233333, 0.5)
+}
+tracks/4/type = "bezier"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Body/ArmR:rotation:z")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"handle_modes": PackedInt32Array(0, 0, 0),
+"points": PackedFloat32Array(0.575959, -0.25, 0, 0.25, 0, -0.436332, -0.1, 0, 0, 0, -0.261799, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 0.233333, 0.5)
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("..:is_attacking")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/6/type = "method"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("..")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0.233333),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"blow_soot"
+}]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_81jhr"]
 _data = {
 "RESET": SubResource("Animation_088uu"),
+"blow": SubResource("Animation_fmjdk"),
 "fall": SubResource("Animation_jb65g"),
 "hit_0": SubResource("Animation_jxa5g"),
 "hit_1": SubResource("Animation_5pe3a"),
@@ -1725,8 +1875,12 @@ _data = {
 "idle": SubResource("Animation_0usav"),
 "jump": SubResource("Animation_jmd5t"),
 "push": SubResource("Animation_oqgml"),
+"suck": SubResource("Animation_m37j4"),
 "walk": SubResource("Animation_cxvi3")
 }
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_1lmj8"]
+animation = &"suck"
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_cb2ln"]
 animation = &"push"
@@ -1742,18 +1896,6 @@ transitions = ["Start", "push", SubResource("AnimationNodeStateMachineTransition
 [sub_resource type="AnimationNodeBlend2" id="AnimationNodeBlend2_lyjxy"]
 filter_enabled = true
 filters = ["Body/ArmL:rotation:x", "Body/ArmL:rotation:y", "Body/ArmL:rotation:z", "Body/ArmR:rotation:x", "Body/ArmR:rotation:y", "Body/ArmR:rotation:z"]
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_tx6pa"]
-animation = &"hit_melee"
-
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_5duw8"]
-advance_mode = 2
-
-[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_cti6j"]
-state_machine_type = 1
-states/hit_melee/node = SubResource("AnimationNodeAnimation_tx6pa")
-states/hit_melee/position = Vector2(362, 78)
-transitions = ["Start", "hit_melee", SubResource("AnimationNodeStateMachineTransition_5duw8")]
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_myi5e"]
 animation = &"fall"
@@ -1827,6 +1969,18 @@ states/walk/node = SubResource("AnimationNodeBlendTree_8egx4")
 states/walk/position = Vector2(612, 69)
 transitions = ["Start", "idle", SubResource("AnimationNodeStateMachineTransition_semr8"), "idle", "walk", SubResource("AnimationNodeStateMachineTransition_5pdac"), "walk", "idle", SubResource("AnimationNodeStateMachineTransition_k0n3e"), "idle", "jump", SubResource("AnimationNodeStateMachineTransition_o7c3m"), "walk", "jump", SubResource("AnimationNodeStateMachineTransition_bsqsx"), "jump", "fall", SubResource("AnimationNodeStateMachineTransition_upj02"), "fall", "idle", SubResource("AnimationNodeStateMachineTransition_p5mp6"), "fall", "walk", SubResource("AnimationNodeStateMachineTransition_3j8ym")]
 
+[sub_resource type="AnimationNodeBlend2" id="AnimationNodeBlend2_l78w3"]
+filter_enabled = true
+filters = ["Body/ArmR/Hand/Melee/Melee2:visible", "Body/ArmR/Hand/Melee:visible", "Body/ArmR:rotation:x", "Body/ArmR:rotation:y", "Body/ArmR:rotation:z"]
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_dfh7e"]
+filter_enabled = true
+filters = ["..", "..:is_attacking", "Body/ArmR/Hand/Melee/Melee2:visible", "Body/ArmR/Hand/Melee:visible", "Body/ArmR:rotation:x", "Body/ArmR:rotation:y", "Body/ArmR:rotation:z"]
+fadeout_time = 0.2
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_o2e2q"]
+animation = &"blow"
+
 [sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_6dyii"]
 filter_enabled = true
 filters = ["..", "..:is_attacking", "Body/ArmR/Hand/Knife:visible", "Body/ArmR/Hand:rotation:x", "Body/ArmR/Hand:rotation:y", "Body/ArmR/Hand:rotation:z", "Body/ArmR:rotation:x", "Body/ArmR:rotation:y", "Body/ArmR:rotation:z"]
@@ -1835,6 +1989,9 @@ fadeout_time = 0.1
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_f157o"]
 animation = &"hit_0"
 
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_21kpu"]
+animation = &"hit_melee"
+
 [sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_rvof4"]
 filter_enabled = true
 filters = ["..", "..:is_attacking", "Body/ArmR/Hand/Melee/Melee2:visible", "Body/ArmR/Hand/Melee:visible", "Body/ArmR/Hand:rotation:x", "Body/ArmR/Hand:rotation:y", "Body/ArmR/Hand:rotation:z", "Body/ArmR:rotation:x", "Body/ArmR:rotation:y", "Body/ArmR:rotation:z"]
@@ -1842,23 +1999,31 @@ fadein_time = 0.1
 fadeout_time = 0.1
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_i3hi0"]
-graph_offset = Vector2(-545.914, -46.4743)
+graph_offset = Vector2(-410.214, 19.6888)
+nodes/Animation/node = SubResource("AnimationNodeAnimation_1lmj8")
+nodes/Animation/position = Vector2(80, 280)
 nodes/Hands/node = SubResource("AnimationNodeStateMachine_3fvcu")
 nodes/Hands/position = Vector2(-340, 320)
 nodes/HandsBlend/node = SubResource("AnimationNodeBlend2_lyjxy")
 nodes/HandsBlend/position = Vector2(-120, 60)
-nodes/HitMelee/node = SubResource("AnimationNodeStateMachine_cti6j")
-nodes/HitMelee/position = Vector2(-120, 260)
 nodes/Movement/node = SubResource("AnimationNodeStateMachine_qfvjy")
 nodes/Movement/position = Vector2(-340, 60)
+nodes/SuckBlend/node = SubResource("AnimationNodeBlend2_l78w3")
+nodes/SuckBlend/position = Vector2(280, 60)
+nodes/blow/node = SubResource("AnimationNodeOneShot_dfh7e")
+nodes/blow/position = Vector2(480, 60)
+nodes/blow_anim/node = SubResource("AnimationNodeAnimation_o2e2q")
+nodes/blow_anim/position = Vector2(280, 260)
 nodes/hit/node = SubResource("AnimationNodeOneShot_6dyii")
-nodes/hit/position = Vector2(280, 60)
+nodes/hit/position = Vector2(700, 60)
 nodes/hit_knife/node = SubResource("AnimationNodeAnimation_f157o")
-nodes/hit_knife/position = Vector2(80, 300)
+nodes/hit_knife/position = Vector2(480, 300)
 nodes/hit_melee/node = SubResource("AnimationNodeOneShot_rvof4")
 nodes/hit_melee/position = Vector2(80, 60)
-nodes/output/position = Vector2(480, 60)
-node_connections = [&"HandsBlend", 0, &"Movement", &"HandsBlend", 1, &"Hands", &"hit", 0, &"hit_melee", &"hit", 1, &"hit_knife", &"hit_melee", 0, &"HandsBlend", &"hit_melee", 1, &"HitMelee", &"output", 0, &"hit"]
+"nodes/hit_melee 2/node" = SubResource("AnimationNodeAnimation_21kpu")
+"nodes/hit_melee 2/position" = Vector2(-120, 260)
+nodes/output/position = Vector2(900, 60)
+node_connections = [&"HandsBlend", 0, &"Movement", &"HandsBlend", 1, &"Hands", &"SuckBlend", 0, &"hit_melee", &"SuckBlend", 1, &"Animation", &"blow", 0, &"SuckBlend", &"blow", 1, &"blow_anim", &"hit", 0, &"blow", &"hit", 1, &"hit_knife", &"hit_melee", 0, &"HandsBlend", &"hit_melee", 1, &"hit_melee 2", &"output", 0, &"hit"]
 
 [node name="Player" type="CharacterBody3D" groups=["Player"]]
 collision_layer = 3
@@ -1944,7 +2109,7 @@ mesh = SubResource("BoxMesh_0ovey")
 skeleton = NodePath("../../..")
 
 [node name="SuckedSoot" type="Marker3D" parent="Model/Body/ArmR/Hand/Melee"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2, 0, 0)
 
 [node name="Knife" type="MeshInstance3D" parent="Model/Body/ArmR/Hand"]
 transform = Transform3D(0.726575, -0.687087, 0, 0.687087, 0.726575, 0, 0, 0, 1, 0.35, 0.35, 0)
@@ -1996,6 +2161,10 @@ parameters/Movement/conditions/idle = false
 parameters/Movement/conditions/jump = false
 parameters/Movement/conditions/walk = false
 parameters/Movement/walk/TimeScale/scale = 1.0
+parameters/SuckBlend/blend_amount = 0.0
+parameters/blow/active = false
+parameters/blow/internal_active = false
+parameters/blow/request = 0
 parameters/hit/active = false
 parameters/hit/internal_active = false
 parameters/hit/request = 0
