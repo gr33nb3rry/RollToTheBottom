@@ -7,8 +7,9 @@ extends CharacterBody3D
 @onready var ray_ground: RayCast3D = $RayGround
 @onready var ray_crosshair: RayCast3D = $CamRoot/CamYaw/CamPitch/SpringArm3D/RayCrosshair
 @onready var animation_tree: AnimationTree = $Model/AnimationTree
+@onready var sucked_soot_pos: Marker3D = $Model/Body/ArmR/Hand/Melee/SuckedSoot
 
-
+var type : int = 0
 var gravity_force = Vector3(0,-1,0)
 var gravity_acceleration : float = 0.0
 @export var is_rolling : bool = false
@@ -28,6 +29,8 @@ const WALK_SPEED := 10.0
 const RUN_SPEED := 20.0
 const JUMP_VELOCITY := 25.0
 const HIT_FORCE := 14.0
+
+var sucked_soot : Node3D = null
 
 func _ready() -> void:
 	if is_multiplayer_authority():
@@ -62,6 +65,14 @@ func _physics_process(delta: float) -> void:
 	elif !ray_push.is_colliding() and is_rolling:
 		is_rolling = false
 		hands_blend_off()
+		
+func _process(delta: float) -> void:
+	if type == 0 and Input.is_action_pressed("aim") and sucked_soot == null:
+		suck_soot()
+	elif type == 0 and Input.is_action_just_released("aim") and sucked_soot != null:
+		blow_soot()
+	if sucked_soot != null:
+		sucked_soot.global_position = sucked_soot.global_position.lerp(sucked_soot_pos.global_position, 10.0 * delta)
 
 func hands_blend_on() -> void:
 	var t = get_tree().create_tween()
@@ -156,10 +167,24 @@ func hit_check() -> void:
 		else:
 			Globals.processor.hit_ball(1)
 
+func suck_soot() -> void:
+	if ray_crosshair.is_colliding() and sucked_soot == null:
+		var collider = ray_crosshair.get_collider()
+		if collider.is_in_group("Soot"):
+			sucked_soot = collider
+
+func blow_soot() -> void:
+	var t = get_tree().create_tween()
+	t.tween_property(sucked_soot, "global_position", global_position + (-camera.global_transform.basis.z).normalized() * 30.0, 3.0).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
+	sucked_soot = null
+
 func attack() -> void:
-	animation_tree.tree_root.get_node("hit_knife").animation = "hit" if randi_range(0, 1) == 0 else "hit_2"
+	animation_tree.tree_root.get_node("hit_knife").animation = "hit_" + str(attack_count)
 	animation_tree.set("parameters/hit/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
 	attack_count += 1
+	if attack_count > 5: attack_count = 0
+func end_attack() -> void:
+	attack_count = 0
 
 func aim(is_aim:bool) -> void:
 	$/root/Main/Canvas/Crosshair.visible = is_aim
@@ -180,8 +205,7 @@ func _input(_event) -> void:
 	elif Input.is_action_just_released("aim"):
 		aim(false)
 	elif !Input.is_action_pressed("aim") and Input.is_action_just_pressed("hit"):
-		#hit()
-		attack()
+		hit() if type == 0 else attack()
 	elif Input.is_action_pressed("aim") and Input.is_action_just_pressed("hit"):
 		shoot()
 	if Input.is_key_pressed(KEY_M):

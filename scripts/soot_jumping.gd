@@ -14,6 +14,8 @@ var target
 var direction : Vector3
 var is_attacking : bool = false
 
+var is_alive : bool = true
+
 func _ready() -> void:
 	if !multiplayer.is_server(): return
 	await get_tree().create_timer(1.0).timeout
@@ -23,6 +25,7 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	if !multiplayer.is_server(): return
 	if !is_attacking: return
+	if !is_alive: return
 	var dir : Vector3 = (target.global_position - global_position).normalized()
 	global_position += dir * MOVE_SPEED * 2.0 * delta
 	if is_near_enough_to_attack(): 
@@ -30,6 +33,7 @@ func _physics_process(delta: float) -> void:
 		death()
 		
 func move() -> void:
+	if !is_alive: return
 	if !is_near_enough():
 		var next_pos : Vector3 = Globals.world.get_next_jumping_position(global_position + direction * MOVE_SPEED)
 		direction = (next_pos - global_position).normalized()
@@ -63,4 +67,4 @@ func damage(peer_id:int, damage:float) -> void:
 		Globals.processor.damage_soot(self, peer_id, damage)
 
 func death() -> void:
-	queue_free()
+	is_alive = false
