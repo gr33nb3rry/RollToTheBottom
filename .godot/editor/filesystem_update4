@@ -28,3 +28,4 @@ res://main.tscn
 res://skills.tscn
 res://scenes/coin.tscn
 res://scripts/player.gd
+res://scripts/soot_flying.gd

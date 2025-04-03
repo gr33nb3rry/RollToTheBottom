@@ -5,6 +5,7 @@ const STRENGTH : float = 20.0
 const DUNG_PICKUP_VALUE_MULTIPLIER : float = 5.0
 const MIN_TIME_IN_AIR_TO_BREAK : float = 0.5
 
+var radius : float = 2.0
 var is_on_ground : bool = true
 var is_hitted : bool = false
 var time_in_air : float = 0.0
@@ -55,6 +56,7 @@ func grow(value:float) -> void:
 	$Collision.scale += Vector3(value, value, value)
 	$Area/Collision.scale += Vector3(value, value, value)
 	mass = clamp(mass + INITIAL_MASS * value, 1.0, 75.0)
+	radius = $Mesh.mesh.radius * $Mesh.scale.x
 	update_pieces()
 func shrink(value:float) -> void:
 	$Mesh.scale -= Vector3(value, value, value)
@@ -67,11 +69,10 @@ func shrink(value:float) -> void:
 func _on_area_area_entered(area: Area3D) -> void:
 	var item = area.get_parent()
 	if item.has_meta("dung"):
-		var r1 = $Mesh.mesh.radius * $Mesh.scale.x
 		var r2 = item.get_node("Mesh").mesh.radius * item.scale.x
-		var v1 = get_volume(r1)
+		var v1 = get_volume(radius)
 		var v2 = get_volume(r2)
-		var scale_increase : float = get_radius(v1+v2)/r1-1.0
+		var scale_increase : float = get_radius(v1+v2)/radius-1.0
 		grow(scale_increase * DUNG_PICKUP_VALUE_MULTIPLIER)
 		item.queue_free()
 func _on_area_area_exited(_area: Area3D) -> void:
@@ -100,11 +101,10 @@ func _on_area_body_entered(body: Node3D) -> void:
 				shrink(break_value)
 			else: queue_free()
 	elif body.is_in_group("Soot"):
-		var r1 = $Mesh.mesh.radius * $Mesh.scale.x
 		var r2 = body.get_node("Mesh").mesh.radius * body.scale.x
-		var v1 = get_volume(r1)
+		var v1 = get_volume(radius)
 		var v2 = get_volume(r2)
-		var scale_increase : float = get_radius(v1+v2)/r1-1.0
+		var scale_increase : float = get_radius(v1+v2)/radius-1.0
 		grow(scale_increase * DUNG_PICKUP_VALUE_MULTIPLIER)
 		body.queue_free()
 func _on_area_body_exited(body: Node3D) -> void:

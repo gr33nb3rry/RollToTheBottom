@@ -2111,6 +2111,9 @@ skeleton = NodePath("../../..")
 [node name="SuckedSoot" type="Marker3D" parent="Model/Body/ArmR/Hand/Melee"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2, 0, 0)
 
+[node name="HitMelee" type="Marker3D" parent="Model/Body/ArmR/Hand/Melee"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4, 0, 0)
+
 [node name="Knife" type="MeshInstance3D" parent="Model/Body/ArmR/Hand"]
 transform = Transform3D(0.726575, -0.687087, 0, 0.687087, 0.726575, 0, 0, 0, 1, 0.35, 0.35, 0)
 visible = false

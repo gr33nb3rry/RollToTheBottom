@@ -8,6 +8,7 @@ extends CharacterBody3D
 @onready var ray_crosshair: RayCast3D = $CamRoot/CamYaw/CamPitch/SpringArm3D/RayCrosshair
 @onready var animation_tree: AnimationTree = $Model/AnimationTree
 @onready var sucked_soot_pos: Marker3D = $Model/Body/ArmR/Hand/Melee/SuckedSoot
+@onready var hit_melee_pos: Marker3D = $Model/Body/ArmR/Hand/Melee/HitMelee
 
 var type : int = 0
 var gravity_force = Vector3(0,-1,0)
@@ -160,18 +161,21 @@ func apply_impulse() -> void:
 func hit() -> void:
 	animation_tree.set("parameters/hit_melee/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
 func hit_check() -> void:
-	if ray_hit.is_colliding() and ray_hit.get_collider().name == "Ball":
+	var ball_r : float = Globals.ball.radius
+	if hit_melee_pos.global_position.distance_squared_to(Globals.ball.global_position) < ball_r * ball_r + 0.8:
 		if multiplayer.get_unique_id() != 1:
 			Globals.processor.rpc_id(1, "hit_ball", multiplayer.get_unique_id())
 		else:
 			Globals.processor.hit_ball(1)
+	for soot in get_tree().get_nodes_in_group("Soot"):
+		if hit_melee_pos.global_position.distance_squared_to(soot.global_position) < soot.RADIUS * soot.RADIUS + 0.8:
+			soot.damage(multiplayer.get_unique_id(), 1.0)
 
 func suck_soot() -> void:
 	if ray_crosshair.is_colliding() and sucked_soot == null:
 		var collider = ray_crosshair.get_collider()
 		if collider.is_in_group("Soot"):
 			sucked_soot = collider
-
 func blow_soot() -> void:
 	if sucked_soot != null:
 		var t = get_tree().create_tween()

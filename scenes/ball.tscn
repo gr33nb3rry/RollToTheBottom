@@ -39,6 +39,8 @@ material = ExtResource("3_1psfg")
 material = ExtResource("3_1psfg")
 
 [node name="Ball" type="RigidBody3D"]
+collision_layer = 3
+collision_mask = 3
 mass = 25.0
 freeze_mode = 1
 script = ExtResource("1_tkqkc")
