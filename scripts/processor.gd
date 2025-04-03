@@ -95,9 +95,11 @@ func add_coin(pos:Vector3) -> void:
 	c.move()
 	
 @rpc("any_peer")
-func push_ball(peer_id: int) -> void:
+func push_ball(peer_id: int, is_attacking: bool) -> void:
 	var player = Globals.ms.get_player_by_id(peer_id)
-	Globals.ball.add_impulse(player, BALL_PUSH_FORCE + BALL_PUSH_FORCE * float(get_skill(peer_id, "Mountain’s Strength")) / 100.0, false)
+	var force : float = BALL_PUSH_FORCE + BALL_PUSH_FORCE * float(get_skill(peer_id, "Mountain’s Strength")) / 100.0
+	if is_attacking: force /= 2.0
+	Globals.ball.add_impulse(player, force, false)
 @rpc("any_peer")
 func hit_ball(peer_id: int) -> void:
 	var player = Globals.ms.get_player_by_id(peer_id)

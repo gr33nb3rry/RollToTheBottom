@@ -1999,7 +1999,6 @@ fadein_time = 0.1
 fadeout_time = 0.1
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_i3hi0"]
-graph_offset = Vector2(-398.681, -64.2562)
 nodes/Animation/node = SubResource("AnimationNodeAnimation_1lmj8")
 nodes/Animation/position = Vector2(80, 280)
 nodes/Hands/node = SubResource("AnimationNodeStateMachine_3fvcu")
@@ -2112,7 +2111,7 @@ skeleton = NodePath("../../..")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2, 0, 0)
 
 [node name="HitMelee" type="Marker3D" parent="Model/Body/ArmR/Hand/Melee"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.4, 0, 0)
 
 [node name="Knife" type="MeshInstance3D" parent="Model/Body/ArmR/Hand"]
 transform = Transform3D(0.726575, -0.687087, 0, 0.687087, 0.726575, 0, 0, 0, 1, 0.35, 0.35, 0)

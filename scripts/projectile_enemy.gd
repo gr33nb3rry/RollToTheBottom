@@ -8,7 +8,7 @@ var is_on_ground : bool = false
 
 func _ready() -> void:
 	if !multiplayer.is_server(): return
-	$Model.look_at(global_position + direction * 10)
+	#$Model.look_at(global_position + direction * 10)
 	await get_tree().create_timer(20).timeout
 	queue_free()
 	

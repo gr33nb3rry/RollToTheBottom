@@ -148,33 +148,35 @@ func resurrect() -> void:
 	model.visible = true
 
 func apply_impulse() -> void:
-	if is_attacking: return
 	for i in get_slide_collision_count():
 		var collision = get_slide_collision(i)
 		if collision.get_collider().name == "Ball":
 			if multiplayer.get_unique_id() != 1:
-				Globals.processor.rpc_id(1, "push_ball", multiplayer.get_unique_id())
+				Globals.processor.rpc_id(1, "push_ball", multiplayer.get_unique_id(), is_attacking)
 			else:
-				Globals.processor.push_ball(1)
+				Globals.processor.push_ball(1, is_attacking)
 			break
 
 func hit() -> void:
 	animation_tree.set("parameters/hit_melee/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
 func hit_check() -> void:
 	var ball_r : float = Globals.ball.radius
-	if hit_melee_pos.global_position.distance_squared_to(Globals.ball.global_position) < ball_r * ball_r + 0.8:
+	if hit_melee_pos.global_position.distance_squared_to(Globals.ball.global_position) < ball_r * ball_r + 1.0:
 		if multiplayer.get_unique_id() != 1:
 			Globals.processor.rpc_id(1, "hit_ball", multiplayer.get_unique_id())
 		else:
 			Globals.processor.hit_ball(1)
+		print("Hit melee: Ball")
 	for soot in get_tree().get_nodes_in_group("Soot"):
-		if hit_melee_pos.global_position.distance_squared_to(soot.global_position) < soot.RADIUS * soot.RADIUS + 0.8:
+		print(hit_melee_pos.global_position.distance_to(soot.global_position), " < ", soot.RADIUS * soot.RADIUS + 1.0)
+		if hit_melee_pos.global_position.distance_to(soot.global_position) < soot.RADIUS + 1.0:
 			soot.damage(multiplayer.get_unique_id(), 1.0)
+			print("Hit melee: ", soot)
 
 func suck_soot() -> void:
 	if ray_crosshair.is_colliding() and sucked_soot == null:
 		var collider = ray_crosshair.get_collider()
-		if collider.is_in_group("Soot"):
+		if collider.is_in_group("Soot") and !collider.is_alive:
 			sucked_soot = collider
 func blow_soot() -> void:
 	if sucked_soot != null:

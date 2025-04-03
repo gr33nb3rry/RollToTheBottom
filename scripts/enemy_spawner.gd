@@ -47,7 +47,7 @@ func end() -> void:
 
 	
 func start_wave() -> void:
-	var enemies : Array[String] = ["J", "F", "F", "J", "S"]
+	var enemies : Array[String] = ["J", "J", "S"]
 	for enemy in enemies:
 		match enemy:
 			"J": add_jumping()
