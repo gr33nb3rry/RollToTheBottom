@@ -1,3 +1,4 @@
+Control
 CollisionShape3D
 StaticBody3D
 Marker3D
@@ -7,9 +8,7 @@ AnimationTree
 AnimationPlayer
 TextureProgressBar
 ProgressBar
-Control
 Path3D
 MultiplayerSynchronizer
 TextureRect
 SubViewport
-SubViewportContainer
