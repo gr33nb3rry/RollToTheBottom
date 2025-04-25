@@ -25,6 +25,7 @@ Globals="*res://scripts/Globals.gd"
 
 window/size/viewport_width=1280
 window/size/viewport_height=720
+window/stretch/aspect="expand"
 window/vsync/vsync_mode=0
 
 [editor_plugins]
@@ -118,5 +119,4 @@ lights_and_shadows/directional_shadow/size=16000
 environment/screen_space_reflection/roughness_quality=3
 environment/volumetric_fog/volume_depth=256
 environment/volumetric_fog/use_filter=0
-anti_aliasing/quality/msaa_2d=2
 anti_aliasing/quality/screen_space_aa=1

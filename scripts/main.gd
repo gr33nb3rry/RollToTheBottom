@@ -24,21 +24,14 @@ func join_lobby(this_lobby_id: int) -> void:
 	multiplayer.multiplayer_peer = peer
 	multiplayer.multiplayer_peer.as_relay = true
 	lobby_id = this_lobby_id
-	$Canvas/HostButton.hide()
-	$Canvas/RefreshButton.hide()
-	$Canvas/LobbiesContainer/Lobbies.hide()
 	
 func _on_lobby_joined(_this_lobby_id: int, _permissions: int, _locked: bool, _response: int) -> void:
-	pass
+	start_game()
 
 func create_lobby() -> void:
 	if lobby_id == 0:
 		peer.create_lobby(peer.LOBBY_TYPE_PUBLIC)
 		multiplayer.multiplayer_peer = peer
-		multiplayer_spawner.spawn("res://world.tscn")
-		$Canvas/HostButton.hide()
-		$Canvas/RefreshButton.hide()
-		$Canvas/LobbiesContainer/Lobbies.hide()
 
 func _on_lobby_created(is_connect, this_lobby_id) -> void:
 	if is_connect:
@@ -48,8 +41,25 @@ func _on_lobby_created(is_connect, this_lobby_id) -> void:
 		Steam.setLobbyJoinable(lobby_id, true)
 		#var relay = Steam.allowP2PPacketRelay(true)
 		print("Lobby created.               ID: ", lobby_id, "  NAME: ", lobby_name)
-		
+		start_game()
 
+func pregame() -> void:
+	var lobby_members_count : int = Steam.getNumLobbyMembers(lobby_id)
+	if lobby_members_count == 1: start_game()
+	else:
+		await get_tree().create_timer(2.0).timeout
+		pregame()
+
+func start_game() -> void:
+	var is_host : bool = Steam.getLobbyOwner(lobby_id) == SteamGlobal.steam_id
+	print("Start game.   is host: ", is_host)
+	if is_host: multiplayer_spawner.spawn("res://world.tscn")
+	$Canvas/HostButton.hide()
+	$Canvas/RefreshButton.hide()
+	$Canvas/StartButton.hide()
+	$Canvas/LobbiesContainer/Lobbies.hide()
+
+	
 func open_lobby_list():
 	Steam.addRequestLobbyListDistanceFilter(Steam.LOBBY_DISTANCE_FILTER_WORLDWIDE)
 	Steam.requestLobbyList()

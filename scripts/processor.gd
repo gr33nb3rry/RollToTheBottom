@@ -7,24 +7,24 @@ const BALL_HIT_FORCE : float = 20.0
 
 var max_health : Array = [20.0, 20.0]
 var health : Array = [max_health[0], max_health[1]]
-var coins : Array = [0, 0]
+var coins : float = 0.0
 
-# NAME: [P1, P2, Step, Max]
+# NAME: [P, FOR, Step, Max]
 var skills = {
-	"Fireproof Spirit": [0, 0, 10, 100],
-	"Serpent's Bane": [0, 0, 10, 100],
-	"Frozen Resolve": [0, 0, 10, 100],
-	"Shinigami’s Sight": [0, 0, 15, 150],
-	"Mountain’s Strength": [0, 0, 5, 50],
-	"Way of the Blade": [0, 0, 3, 30],
-	"Tengu’s Leap": [0, 0, 1, 2],
-	"Iron Will": [0, 0, 2, 30],
-	"Fortune Beckons": [0, 0, 5, 100],
-	"Blood Pact": [0, 0, 1, 5],
-	"Killer Instinct": [0, 0, 2, 10],
-	"Skyward Strike": [0, 0, 4, 20],
-	"Shadow Flow": [0, 0, 3, 30],
-	"Cursed Blood": [0, 0, 5, 50]
+	"Fireproof Spirit": [0, 'B', 10, 100],
+	"Serpent's Bane": [0, 'B', 10, 100],
+	"Frozen Resolve": [0, 'B', 10, 100],
+	"Shinigami’s Sight": [0, 'B', 15, 150],
+	"Mountain’s Strength": [0, 'F', 5, 50],
+	"Way of the Blade": [0, 'M', 3, 30],
+	"Tengu’s Leap": [0, 'M', 1, 2],
+	"Iron Will": [0, 'B', 2, 30],
+	"Fortune Beckons": [0, 'E', 5, 100],
+	"Blood Pact": [0, 'M', 1, 5],
+	"Killer Instinct": [0, 'M', 2, 10],
+	"Skyward Strike": [0, 'M', 4, 20],
+	"Shadow Flow": [0, 'M', 3, 30],
+	"Cursed Blood": [0, 'E', 5, 50]
 }
 
 func _ready() -> void:
@@ -37,15 +37,15 @@ func get_skill(peer_id:int, skill_name:String) -> int:
 	if !skills.has(skill_name):
 		print("Skill ", skill_name, " not found")
 		return 0
-	return skills[skill_name][index]
+	return skills[skill_name][0]
 @rpc("any_peer")
 func add_skill(peer_id:int, skill_name:String) -> void:
 	var index : int = 0 if peer_id == 1 else 1
 	if !skills.has(skill_name):
 		print("Skill ", skill_name, " not found")
 		return
-	if skills[skill_name][index] + skills[skill_name][2] <= skills[skill_name][3]: 
-		skills[skill_name][index] += skills[skill_name][2]
+	if skills[skill_name][0] + skills[skill_name][2] <= skills[skill_name][3]: 
+		skills[skill_name][0] += skills[skill_name][2]
 		if peer_id != 1:
 			sync_skills.rpc_id(Globals.ms.get_second_player_peer_id(), skills)
 @rpc("any_peer")
@@ -64,8 +64,12 @@ func is_skill_max(peer_id:int, skill_name:String) -> bool:
 	if !skills.has(skill_name):
 		print("Skill ", skill_name, " not found")
 		return true
-	return skills[skill_name][index] >= skills[skill_name][3]
+	return skills[skill_name][0] >= skills[skill_name][3]
 
+func attack() -> void:
+	Globals.health.hit_ball()
+	Globals.health.hit_ball.rpc_id(Globals.ms.get_second_player_peer_id())
+	
 @rpc("any_peer")
 func change_health(peer_id:int, v:float) -> void:
 	print("Damage in processor")
@@ -82,11 +86,10 @@ func change_health(peer_id:int, v:float) -> void:
 	Globals.health.update.rpc_id(Globals.ms.get_second_player_peer_id(), max_health, health)
 	
 @rpc("any_peer")
-func change_coins(v:int) -> void:
+func change_coins(v:float) -> void:
 	print("Change coins: ", v)
 	if v > 0:
-		coins[0] += v + v * float(get_skill(1, "Fortune Beckons")) / 100.0
-		coins[1] += v + v * float(get_skill(1, "Fortune Beckons")) / 100.0
+		coins += v + v * float(get_skill(1, "Fortune Beckons")) / 100.0
 @rpc("any_peer")
 func add_coin(pos:Vector3) -> void:
 	var c = COIN.instantiate()
@@ -131,5 +134,5 @@ func damage_soot(soot:Node3D, peer_id:int, damage:float) -> void:
 		print("Kill soot ", soot)
 		change_health(peer_id, damage * float(get_skill(peer_id, "Blood Pact")) / 100.0)
 		print("Heal player on kill: ", damage * float(get_skill(peer_id, "Blood Pact")) / 100.0)
-		add_coin(soot.global_position)
+		#add_coin(soot.global_position)
 		soot.death()

@@ -9,6 +9,7 @@ var current_room : Node3D
 func _ready() -> void:
 	Globals.define()
 	#start()
+	Globals.character_select.open()
 	
 func start() -> void:
 	current_zone_instance = get_zone()

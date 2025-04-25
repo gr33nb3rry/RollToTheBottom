@@ -53,3 +53,9 @@ func get_players_count() -> int:
 
 func get_second_player_peer_id() -> int:
 	return second_player_peer_id
+
+func get_ball_player() -> Node:
+	if players.is_empty(): return null
+	for player in players.values():
+		if player.type == 0: return player
+	return null

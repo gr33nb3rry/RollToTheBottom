@@ -45,6 +45,7 @@ func _physics_process(delta: float) -> void:
 	apply_impulse()
 	apply_gravity(delta)
 	rotate_to_gravity(delta)
+	if !is_active: return
 	
 	var movement = move(delta)
 		
@@ -189,6 +190,13 @@ func attack() -> void:
 	animation_tree.set("parameters/hit/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
 	attack_count += 1
 	if attack_count > 5: attack_count = 0
+	for soot in get_tree().get_nodes_in_group("Soot"):
+		print(hit_melee_pos.global_position.distance_to(soot.global_position), " < ", soot.RADIUS + 1.0)
+		if hit_melee_pos.global_position.distance_to(soot.global_position) < soot.RADIUS + 1.0:
+			soot.damage(multiplayer.get_unique_id(), 1.0)
+			print("Attack: ", soot)
+			break
+	Globals.processor.attack()
 func end_attack() -> void:
 	attack_count = 0
 
@@ -202,6 +210,7 @@ func shoot() -> void:
 		Globals.processor.shoot(1, !ray_ground.is_colliding())
 
 func _input(_event) -> void:
+	if !is_active or !is_multiplayer_authority(): return
 	if Input.is_action_just_pressed("ui_cancel"):
 		get_tree().quit()
 	elif Input.is_action_just_pressed("jump"): 
@@ -214,7 +223,6 @@ func _input(_event) -> void:
 		if type == 0: 
 			blend_off("SuckBlend", 0.2)
 			animation_tree.set("parameters/blow/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
-			#blow_soot()
 	elif !Input.is_action_pressed("aim") and Input.is_action_just_pressed("hit"):
 		hit() if type == 0 else attack()
 	elif Input.is_action_pressed("aim") and Input.is_action_just_pressed("hit"):

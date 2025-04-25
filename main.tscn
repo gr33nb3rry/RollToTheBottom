@@ -7,6 +7,7 @@
 script = ExtResource("1_7hsgq")
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("res://world.tscn")
 spawn_path = NodePath("..")
 
 [node name="Canvas" type="CanvasLayer" parent="."]
@@ -23,6 +24,13 @@ offset_right = 78.0
 offset_bottom = 102.0
 theme_override_font_sizes/font_size = 16
 text = "REFRESH"
+
+[node name="StartButton" type="Button" parent="Canvas"]
+offset_top = 102.0
+offset_right = 78.0
+offset_bottom = 153.0
+theme_override_font_sizes/font_size = 16
+text = "START"
 
 [node name="LobbiesContainer" type="ScrollContainer" parent="Canvas"]
 offset_left = 78.0
@@ -63,3 +71,4 @@ stretch_mode = 3
 
 [connection signal="pressed" from="Canvas/HostButton" to="." method="create_lobby"]
 [connection signal="pressed" from="Canvas/RefreshButton" to="." method="refresh_lobby_list"]
+[connection signal="pressed" from="Canvas/StartButton" to="." method="refresh_lobby_list"]

@@ -9,6 +9,7 @@ var projectile_spawner
 var enemy_spawner
 var health
 var stats
+var character_select
 
 func define() -> void:
 	skills = $/root/Main/World/Canvas/Skills
@@ -20,3 +21,4 @@ func define() -> void:
 	enemy_spawner = $/root/Main/World/EnemySpawner
 	health = $/root/Main/World/Canvas/Health
 	stats = $/root/Main/World/Stats
+	character_select = $/root/Main/World/Canvas/CharacterSelect

@@ -107,6 +107,8 @@ func _on_area_body_entered(body: Node3D) -> void:
 		var scale_increase : float = get_radius(v1+v2)/radius-1.0
 		grow(scale_increase * DUNG_PICKUP_VALUE_MULTIPLIER)
 		body.queue_free()
+		if multiplayer.is_server():
+			Globals.processor.change_coins(1)
 func _on_area_body_exited(body: Node3D) -> void:
 	for b in $Area.get_overlapping_bodies(): if b.is_in_group("Ground"): return
 	if body.is_in_group("Ground"): is_on_ground = false

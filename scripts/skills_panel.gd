@@ -2,7 +2,7 @@ extends HBoxContainer
 
 @onready var container: HBoxContainer = $VBox/Container
 
-const SKILLS = {
+const SKILLS : Dictionary = {
 	"Fireproof Spirit": "Fire damage is reduced by XX%.",
 	"Serpent's Bane": "Poison effect duration is reduced by XX%.",
 	"Frozen Resolve": "Ice effect duration is reduced by XX%.",
@@ -17,7 +17,24 @@ const SKILLS = {
 	"Skyward Strike": "Deal XX% more damage while in the air.", # DONE
 	"Shadow Flow": "Weapon cooldowns are reduced by XX%.",
 	"Cursed Blood": "Enemies have XX% less health." # DONE
-};
+}
+const PRICES : Dictionary = {
+	"Fireproof Spirit": 10,
+	"Serpent's Bane": 8,
+	"Frozen Resolve": 8,
+	"Shinigami’s Sight": 18,
+	"Mountain’s Strength": 14,
+	"Way of the Blade": 22,
+	"Tengu’s Leap": 10,
+	"Iron Will": 16,
+	"Fortune Beckons": 10,
+	"Blood Pact": 24,
+	"Killer Instinct": 27,
+	"Skyward Strike": 14,
+	"Shadow Flow": 16,
+	"Cursed Blood": 30
+}
+
 
 
 var player : CharacterBody3D
@@ -65,7 +82,8 @@ func get_skill() -> Dictionary:
 		available_skills[skill] = SKILLS[skill]
 	var title : String = available_skills.keys()[randi() % available_skills.size()]
 	var description : String = available_skills[title]
-	return {"title":title, "description":description}
+	var price : int = PRICES[title]
+	return {"title":title, "description":description, "price":price}
 	
 func update_skills() -> void:
 	current_skills = []

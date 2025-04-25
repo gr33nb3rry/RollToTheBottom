@@ -68,7 +68,7 @@ void fragment(){
 shader = SubResource("Shader_js3ps")
 shader_parameter/fov = 10.0
 shader_parameter/cull_back = false
-shader_parameter/y_rot = -180.0
+shader_parameter/y_rot = 0.0
 shader_parameter/x_rot = 0.0
 shader_parameter/inset = 0.0
 
@@ -160,10 +160,10 @@ _data = {
 "show_front": SubResource("Animation_vkcjd")
 }
 
-[node name="Skill" type="Control"]
+[node name="Skill" type="VBoxContainer"]
 custom_minimum_size = Vector2(250, 400)
-layout_mode = 3
-anchors_preset = 0
+offset_right = 250.0
+offset_bottom = 400.0
 size_flags_horizontal = 4
 size_flags_vertical = 4
 script = ExtResource("1_xx5d6")
@@ -171,9 +171,7 @@ script = ExtResource("1_xx5d6")
 [node name="Main" type="SubViewportContainer" parent="."]
 material = SubResource("ShaderMaterial_y0q2a")
 custom_minimum_size = Vector2(250, 400)
-layout_mode = 0
-offset_right = 250.0
-offset_bottom = 350.0
+layout_mode = 2
 
 [node name="SubViewport" type="SubViewport" parent="Main"]
 transparent_bg = true
@@ -182,7 +180,6 @@ size = Vector2i(250, 400)
 render_target_update_mode = 4
 
 [node name="Front" type="TextureRect" parent="Main/SubViewport"]
-visible = false
 custom_minimum_size = Vector2(250, 400)
 anchors_preset = 15
 anchor_right = 1.0
@@ -291,6 +288,7 @@ scroll_active = false
 shortcut_keys_enabled = false
 
 [node name="Back" type="TextureRect" parent="Main/SubViewport"]
+visible = false
 custom_minimum_size = Vector2(250, 400)
 anchors_preset = 15
 anchor_right = 1.0
@@ -317,6 +315,19 @@ flat = true
 libraries = {
 "": SubResource("AnimationLibrary_1hjl6")
 }
+
+[node name="Price" type="HBoxContainer" parent="."]
+layout_mode = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="Price"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.916505, 0.669434, 0.261986, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+theme_override_fonts/font = ExtResource("4_m7y6q")
+theme_override_font_sizes/font_size = 20
+text = "0 coins"
 
 [connection signal="gui_input" from="Main" to="." method="_on_main_gui_input"]
 [connection signal="mouse_entered" from="Main/SubViewport/Button" to="." method="_on_button_mouse_entered"]

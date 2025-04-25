@@ -9,6 +9,7 @@ var is_able_to_hover : bool = false
 var is_rotated : bool = false
 
 func choose() -> void:
+	_on_button_mouse_exited()
 	Globals.skills.choose_skill(get_index())
 
 func reset() -> void:
@@ -28,8 +29,10 @@ func turn_over() -> void:
 func update_info(info:Dictionary) -> void:
 	var title = info["title"]
 	var description = info["description"]
+	var price : String = str(info["price"])
 	front.get_node("Margin/HBox/TitleLabel").text = "[center]"+title+"[/center]"
 	front.get_node("Margin/HBox/DescriptionLabel").text = "[center]"+description+"[/center]"
+	$Price/Label.text = price + " coins"
 
 func _on_button_mouse_entered() -> void:
 	if !is_rotated: return
