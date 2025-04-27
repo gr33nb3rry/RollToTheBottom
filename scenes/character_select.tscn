@@ -1,0 +1,533 @@
+[gd_scene load_steps=11 format=3 uid="uid://bhh5bnpt01w8c"]
+
+[ext_resource type="Script" path="res://scripts/character_select.gd" id="1_mloob"]
+[ext_resource type="Texture2D" uid="uid://c51yud8iytdon" path="res://images/skill_front.png" id="2_j0ukj"]
+[ext_resource type="FontFile" uid="uid://cvi3gyfvhx2xl" path="res://fonts/Carlito-BoldItalic.ttf" id="3_2o8a2"]
+[ext_resource type="Texture2D" uid="uid://btxfjad4jnwek" path="res://images/ui/p1_icon.png" id="4_4nhqd"]
+[ext_resource type="Texture2D" uid="uid://ds70we4m2ep8j" path="res://images/ui/p2_icon.png" id="5_0fohk"]
+[ext_resource type="Script" path="res://scripts/button_ui.gd" id="6_muw11"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8ptcj"]
+bg_color = Color(0.871324, 0.891613, 0.933808, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_stw2p"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2p613"]
+content_margin_left = 10.0
+content_margin_right = 10.0
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 25
+corner_radius_top_right = 25
+corner_radius_bottom_right = 25
+corner_radius_bottom_left = 25
+corner_detail = 16
+anti_aliasing_size = 0.25
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3aux0"]
+content_margin_left = 10.0
+content_margin_right = 10.0
+bg_color = Color(0.501407, 0.501406, 0.501406, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 25
+corner_radius_top_right = 25
+corner_radius_bottom_right = 25
+corner_radius_bottom_left = 25
+corner_detail = 16
+anti_aliasing_size = 0.25
+
+[node name="CharacterSelect" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_mloob")
+
+[node name="BG" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_8ptcj")
+
+[node name="VBox" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="Cards" type="HBoxContainer" parent="VBox"]
+layout_mode = 2
+theme_override_constants/separation = 40
+alignment = 1
+
+[node name="1" type="Control" parent="VBox/Cards"]
+custom_minimum_size = Vector2(250, 400)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Main" type="TextureRect" parent="VBox/Cards/1"]
+custom_minimum_size = Vector2(250, 400)
+layout_mode = 2
+offset_right = 250.0
+offset_bottom = 400.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(125, 200)
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("2_j0ukj")
+expand_mode = 3
+
+[node name="Margin" type="MarginContainer" parent="VBox/Cards/1/Main"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="HBox" type="Control" parent="VBox/Cards/1/Main/Margin"]
+layout_mode = 2
+
+[node name="FILLER3" type="Control" parent="VBox/Cards/1/Main/Margin/HBox"]
+visible = false
+layout_mode = 2
+anchors_preset = 0
+offset_right = 210.0
+offset_bottom = 114.0
+size_flags_vertical = 3
+
+[node name="TitleLabel" type="RichTextLabel" parent="VBox/Cards/1/Main/Margin/HBox"]
+clip_contents = false
+custom_minimum_size = Vector2(250, 40)
+layout_mode = 2
+offset_left = -20.0
+offset_top = 182.0
+offset_right = 230.0
+offset_bottom = 222.0
+theme_override_colors/default_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_fonts/normal_font = ExtResource("3_2o8a2")
+theme_override_font_sizes/normal_font_size = 24
+bbcode_enabled = true
+text = "[center]Pirmais[/center]"
+scroll_active = false
+autowrap_mode = 0
+shortcut_keys_enabled = false
+
+[node name="FILLER" type="Control" parent="VBox/Cards/1/Main/Margin/HBox"]
+visible = false
+layout_mode = 2
+anchors_preset = 0
+offset_top = 162.0
+offset_right = 210.0
+offset_bottom = 276.0
+size_flags_vertical = 3
+
+[node name="DescriptionLabel" type="RichTextLabel" parent="VBox/Cards/1/Main/Margin/HBox"]
+visible = false
+clip_contents = false
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+offset_top = 217.0
+offset_right = 210.0
+offset_bottom = 360.0
+theme_override_colors/default_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_fonts/normal_font = ExtResource("3_2o8a2")
+theme_override_font_sizes/normal_font_size = 24
+bbcode_enabled = true
+text = "[center]After each kill, your damage increases by N%, stacking up to 5 times."
+scroll_active = false
+shortcut_keys_enabled = false
+
+[node name="FILLER2" type="Control" parent="VBox/Cards/1/Main/Margin/HBox"]
+visible = false
+layout_mode = 2
+anchors_preset = 0
+offset_top = 285.0
+offset_right = 210.0
+offset_bottom = 360.0
+size_flags_vertical = 3
+
+[node name="ValueLabel" type="RichTextLabel" parent="VBox/Cards/1/Main/Margin/HBox"]
+visible = false
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+theme_override_font_sizes/bold_font_size = 24
+bbcode_enabled = true
+text = "[center][b]00[/b][/center]"
+scroll_active = false
+shortcut_keys_enabled = false
+
+[node name="Players" type="HBoxContainer" parent="VBox/Cards/1/Main"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = -10.0
+offset_bottom = 40.0
+grow_horizontal = 2
+alignment = 1
+
+[node name="P1" type="Control" parent="VBox/Cards/1/Main/Players"]
+visible = false
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Main" type="TextureRect" parent="VBox/Cards/1/Main/Players/P1"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+offset_right = 50.0
+offset_bottom = 50.0
+scale = Vector2(1e-05, 1e-05)
+pivot_offset = Vector2(25, 25)
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("4_4nhqd")
+expand_mode = 2
+
+[node name="Label" type="Label" parent="VBox/Cards/1/Main/Players/P1/Main"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+theme_override_fonts/font = ExtResource("3_2o8a2")
+theme_override_font_sizes/font_size = 20
+text = "P1"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="P2" type="Control" parent="VBox/Cards/1/Main/Players"]
+visible = false
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Main" type="TextureRect" parent="VBox/Cards/1/Main/Players/P2"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+offset_right = 50.0
+offset_bottom = 50.0
+scale = Vector2(1e-05, 1e-05)
+pivot_offset = Vector2(25, 25)
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("5_0fohk")
+expand_mode = 2
+
+[node name="Label" type="Label" parent="VBox/Cards/1/Main/Players/P2/Main"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+theme_override_fonts/font = ExtResource("3_2o8a2")
+theme_override_font_sizes/font_size = 20
+text = "P2"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Button" type="Button" parent="VBox/Cards/1/Main"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_stw2p")
+flat = true
+
+[node name="2" type="Control" parent="VBox/Cards"]
+custom_minimum_size = Vector2(250, 400)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Main" type="TextureRect" parent="VBox/Cards/2"]
+custom_minimum_size = Vector2(250, 400)
+layout_mode = 2
+offset_right = 250.0
+offset_bottom = 400.0
+pivot_offset = Vector2(125, 200)
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("2_j0ukj")
+expand_mode = 3
+
+[node name="Margin" type="MarginContainer" parent="VBox/Cards/2/Main"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="HBox" type="Control" parent="VBox/Cards/2/Main/Margin"]
+layout_mode = 2
+
+[node name="FILLER3" type="Control" parent="VBox/Cards/2/Main/Margin/HBox"]
+visible = false
+layout_mode = 2
+anchors_preset = 0
+offset_right = 210.0
+offset_bottom = 114.0
+size_flags_vertical = 3
+
+[node name="TitleLabel" type="RichTextLabel" parent="VBox/Cards/2/Main/Margin/HBox"]
+clip_contents = false
+custom_minimum_size = Vector2(250, 40)
+layout_mode = 2
+offset_left = -20.0
+offset_top = 182.0
+offset_right = 230.0
+offset_bottom = 222.0
+theme_override_colors/default_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_fonts/normal_font = ExtResource("3_2o8a2")
+theme_override_font_sizes/normal_font_size = 24
+bbcode_enabled = true
+text = "[center]Otrais[/center]"
+scroll_active = false
+autowrap_mode = 0
+shortcut_keys_enabled = false
+
+[node name="FILLER" type="Control" parent="VBox/Cards/2/Main/Margin/HBox"]
+visible = false
+layout_mode = 2
+anchors_preset = 0
+offset_top = 162.0
+offset_right = 210.0
+offset_bottom = 276.0
+size_flags_vertical = 3
+
+[node name="DescriptionLabel" type="RichTextLabel" parent="VBox/Cards/2/Main/Margin/HBox"]
+visible = false
+clip_contents = false
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+offset_top = 217.0
+offset_right = 210.0
+offset_bottom = 360.0
+theme_override_colors/default_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_fonts/normal_font = ExtResource("3_2o8a2")
+theme_override_font_sizes/normal_font_size = 24
+bbcode_enabled = true
+text = "[center]After each kill, your damage increases by N%, stacking up to 5 times."
+scroll_active = false
+shortcut_keys_enabled = false
+
+[node name="FILLER2" type="Control" parent="VBox/Cards/2/Main/Margin/HBox"]
+visible = false
+layout_mode = 2
+anchors_preset = 0
+offset_top = 285.0
+offset_right = 210.0
+offset_bottom = 360.0
+size_flags_vertical = 3
+
+[node name="ValueLabel" type="RichTextLabel" parent="VBox/Cards/2/Main/Margin/HBox"]
+visible = false
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+theme_override_font_sizes/bold_font_size = 24
+bbcode_enabled = true
+text = "[center][b]00[/b][/center]"
+scroll_active = false
+shortcut_keys_enabled = false
+
+[node name="Players" type="HBoxContainer" parent="VBox/Cards/2/Main"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = -10.0
+offset_bottom = 40.0
+grow_horizontal = 2
+alignment = 1
+
+[node name="P1" type="Control" parent="VBox/Cards/2/Main/Players"]
+visible = false
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Main" type="TextureRect" parent="VBox/Cards/2/Main/Players/P1"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+offset_right = 50.0
+offset_bottom = 50.0
+scale = Vector2(1e-05, 1e-05)
+pivot_offset = Vector2(25, 25)
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("4_4nhqd")
+expand_mode = 2
+
+[node name="Label" type="Label" parent="VBox/Cards/2/Main/Players/P1/Main"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+theme_override_fonts/font = ExtResource("3_2o8a2")
+theme_override_font_sizes/font_size = 20
+text = "P1"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="P2" type="Control" parent="VBox/Cards/2/Main/Players"]
+visible = false
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Main" type="TextureRect" parent="VBox/Cards/2/Main/Players/P2"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+offset_right = 50.0
+offset_bottom = 50.0
+scale = Vector2(1e-05, 1e-05)
+pivot_offset = Vector2(25, 25)
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("5_0fohk")
+expand_mode = 2
+
+[node name="Label" type="Label" parent="VBox/Cards/2/Main/Players/P2/Main"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+theme_override_fonts/font = ExtResource("3_2o8a2")
+theme_override_font_sizes/font_size = 20
+text = "P2"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Button" type="Button" parent="VBox/Cards/2/Main"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_stw2p")
+flat = true
+
+[node name="Footer" type="HBoxContainer" parent="VBox"]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+alignment = 1
+
+[node name="Notification" type="Label" parent="VBox/Footer"]
+visible = false
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 5
+theme_override_fonts/font = ExtResource("3_2o8a2")
+theme_override_font_sizes/font_size = 24
+text = "Text field for notifications"
+
+[node name="FILLER" type="Control" parent="VBox/Footer"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Play" type="Control" parent="VBox/Footer" node_paths=PackedStringArray("method_owner")]
+custom_minimum_size = Vector2(100, 50)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+script = ExtResource("6_muw11")
+method_owner = NodePath("../../..")
+method_name = "play"
+
+[node name="Main" type="Control" parent="VBox/Footer/Play"]
+custom_minimum_size = Vector2(100, 50)
+anchors_preset = 0
+offset_right = 100.0
+offset_bottom = 50.0
+pivot_offset = Vector2(50, 25)
+
+[node name="ButtonContainer" type="CenterContainer" parent="VBox/Footer/Play/Main"]
+custom_minimum_size = Vector2(100, 50)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Button" type="Button" parent="VBox/Footer/Play/Main/ButtonContainer"]
+modulate = Color(1, 0.878431, 0, 1)
+custom_minimum_size = Vector2(100, 50)
+layout_mode = 2
+theme_override_colors/font_disabled_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("3_2o8a2")
+theme_override_font_sizes/font_size = 24
+theme_override_styles/focus = SubResource("StyleBoxFlat_2p613")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_3aux0")
+theme_override_styles/hover = SubResource("StyleBoxFlat_2p613")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_2p613")
+theme_override_styles/normal = SubResource("StyleBoxFlat_2p613")
+text = "Play"
+
+[connection signal="mouse_entered" from="VBox/Cards/1/Main/Button" to="." method="hover_selection_start" binds= [0]]
+[connection signal="mouse_exited" from="VBox/Cards/1/Main/Button" to="." method="hover_selection_end" binds= [0]]
+[connection signal="pressed" from="VBox/Cards/1/Main/Button" to="." method="select" binds= [0]]
+[connection signal="mouse_entered" from="VBox/Cards/2/Main/Button" to="." method="hover_selection_start" binds= [1]]
+[connection signal="mouse_exited" from="VBox/Cards/2/Main/Button" to="." method="hover_selection_end" binds= [1]]
+[connection signal="pressed" from="VBox/Cards/2/Main/Button" to="." method="select" binds= [1]]
+[connection signal="mouse_entered" from="VBox/Footer/Play/Main/ButtonContainer/Button" to="VBox/Footer/Play" method="hover_selection_start"]
+[connection signal="mouse_exited" from="VBox/Footer/Play/Main/ButtonContainer/Button" to="VBox/Footer/Play" method="hover_selection_end"]
+[connection signal="pressed" from="VBox/Footer/Play/Main/ButtonContainer/Button" to="VBox/Footer/Play" method="click"]

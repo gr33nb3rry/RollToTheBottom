@@ -6,12 +6,15 @@ var is_rolling : bool = false
 @rpc("any_peer")
 func update(max_health:Array, health:Array) -> void:
 	print("Damage in health")
-	$HP1.max_value = max_health[0]
-	$HP1.value = health[0]
-	$HP1/Label.text = str(health[0]) + "/" + str(max_health[0])
-	$HP2.max_value = max_health[1]
-	$HP2.value = health[1]
-	$HP2/Label.text = str(health[1]) + "/" + str(max_health[1])
+	var type_0_index : int = 0 if Globals.ms.players.values()[0].type == 0 else 1
+	var type_1_index : int = 0 if Globals.ms.players.values()[0].type == 1 else 1
+	
+	$HP1.max_value = max_health[type_1_index]
+	$HP1.value = health[type_1_index]
+	$HP1/Label.text = str(health[type_1_index]) + "/" + str(max_health[type_1_index])
+	$HP2.max_value = max_health[type_0_index]
+	$HP2.value = health[type_0_index]
+	$HP2/Label.text = str(health[type_0_index]) + "/" + str(max_health[type_0_index])
 
 func push_ball(is_start:bool) -> void:
 	var t : Tween = get_tree().create_tween()

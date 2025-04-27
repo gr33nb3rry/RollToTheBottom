@@ -22,7 +22,7 @@ var attack_count : int = 0
 const GRAVITY : float = 9.8
 const GRAVITY_ACCELERATION : float = 1.0
 
-var is_active : bool = true
+var is_active : bool = false
 var is_running : bool = false
 
 var jump_buffer := 0.0

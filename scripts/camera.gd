@@ -21,7 +21,7 @@ var position_offset_target : Vector3 = Vector3(0, 1, 0)
 var is_aiming := false
 
 func _ready():
-	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	#Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	spring_arm.add_excluded_object(player.get_rid())
 	$CamYaw/CamPitch/SpringArm3D/RayCrosshair.add_exception(player)
 	#top_level = true
