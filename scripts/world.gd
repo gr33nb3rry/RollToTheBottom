@@ -67,4 +67,9 @@ func add_waiting_soots() -> void:
 
 func get_jumping_start_position() -> Vector3:
 	return get_room().get_jumping_start_position()
-	
+
+func get_passed_position() -> float:
+	return current_zone_instance.get_passed_position()
+
+func get_length() -> float:
+	return current_zone_instance.get_length()

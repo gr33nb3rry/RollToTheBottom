@@ -32,3 +32,7 @@ res://materials/gold_material.tres
 res://materials/gold_ver2_material.tres
 res://scripts/character_select.gd
 res://scripts/player.gd
+res://scripts/zone.gd
+res://scripts/soot_stealing.gd
+res://scripts/enemy_spawner.gd
+res://scripts/world.gd

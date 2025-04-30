@@ -19,6 +19,7 @@ func _ready() -> void:
 
 func _process(_delta: float) -> void:
 	if !multiplayer.is_server(): return
+	$/root/Main/Canvas/DebugLabel.text = str(path.curve.get_closest_offset(path.to_local(Globals.ball.global_position))) + "   " + str(path.curve.get_baked_length())
 	var ball_dir : Vector3 = Globals.ball.get_linear_velocity()
 	ball_dir.y = 0.0
 	var ball_pos : Vector3 = Globals.ball.global_position + ball_dir.normalized() * 25.0
@@ -91,3 +92,9 @@ func add_waiting_soots() -> void:
 		var soot := SOOT_WAITING.instantiate()
 		Globals.enemy_spawner.add_child(soot, true)
 		soot.global_position = global_point
+	
+func get_passed_position() -> float:
+	return path_follow.progress
+
+func get_length() -> float:
+	return path.curve.get_baked_length()

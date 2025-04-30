@@ -21,6 +21,8 @@ var is_achieved : bool = false
 var target_pos : Vector3
 var state : int = 0
 
+var is_alive : bool = true
+
 func _ready() -> void:
 	if !multiplayer.is_server(): return
 	calculate_target_pos()
