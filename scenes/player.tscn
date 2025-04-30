@@ -1,4 +1,4 @@
-[gd_scene load_steps=57 format=3 uid="uid://cxlkxr1ykhym6"]
+[gd_scene load_steps=60 format=3 uid="uid://cxlkxr1ykhym6"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_x72jo"]
 [ext_resource type="Script" path="res://scripts/camera.gd" id="2_5wcse"]
@@ -29,7 +29,16 @@ properties/4/path = NodePath("Model/AnimationTree:parameters/Movement/walk/TimeS
 properties/4/spawn = true
 properties/4/replication_mode = 1
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_feul3"]
+
 [sub_resource type="SphereMesh" id="SphereMesh_wmb2u"]
+material = SubResource("StandardMaterial3D_feul3")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kqk7b"]
+albedo_color = Color(0.0656105, 0.0656061, 0.0951202, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_gc2ie"]
+material = SubResource("StandardMaterial3D_kqk7b")
 
 [sub_resource type="SphereMesh" id="SphereMesh_i11u5"]
 radius = 0.15
@@ -97,7 +106,7 @@ tracks/3/keys = {
 tracks/4/type = "bezier"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("Body/Body:position:y")
+tracks/4/path = NodePath("Body/Body0:position:y")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
@@ -1451,7 +1460,7 @@ tracks/3/keys = {
 tracks/4/type = "bezier"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("Body/Body:position:y")
+tracks/4/path = NodePath("Body/Body0:position:y")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
@@ -2065,8 +2074,13 @@ replication_config = SubResource("SceneReplicationConfig_7jwr1")
 
 [node name="Body" type="Node3D" parent="Model"]
 
-[node name="Body" type="MeshInstance3D" parent="Model/Body"]
+[node name="Body0" type="MeshInstance3D" parent="Model/Body"]
 mesh = SubResource("SphereMesh_wmb2u")
+
+[node name="Body1" type="MeshInstance3D" parent="Model/Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0473515, 0)
+visible = false
+mesh = SubResource("SphereMesh_gc2ie")
 
 [node name="ArmL" type="Node3D" parent="Model/Body"]
 

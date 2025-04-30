@@ -83,6 +83,7 @@ func play() -> void:
 	var player = Globals.ms.get_player_by_id(multiplayer.get_unique_id())
 	var type : int = selection[0 if multiplayer.get_unique_id() == 1 else 1]
 	player.type = type
+	#Globals.ms.get_player_by_id(Globals.ms.get_second_player_peer_id()).type = 0 if type == 1 else 1
 	play_not_host.rpc_id(Globals.ms.get_second_player_peer_id())
 	close()
 
@@ -91,4 +92,5 @@ func play_not_host() -> void:
 	var player = Globals.ms.get_player_by_id(multiplayer.get_unique_id())
 	var type : int = selection[0 if multiplayer.get_unique_id() == 1 else 1]
 	player.type = type
+	Globals.ms.get_player_by_id(1).type = 0 if type == 1 else 1
 	close()

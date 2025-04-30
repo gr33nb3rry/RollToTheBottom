@@ -10,7 +10,11 @@ extends CharacterBody3D
 @onready var sucked_soot_pos: Marker3D = $Model/Body/ArmR/Hand/Melee/SuckedSoot
 @onready var hit_melee_pos: Marker3D = $Model/Body/ArmR/Hand/Melee/HitMelee
 
-var type : int = 0
+var type : int = 0:
+	set(v):
+		type = v
+		model.get_node("Body/Body0").visible = type == 0
+		model.get_node("Body/Body1").visible = type == 1
 var gravity_force = Vector3(0,-1,0)
 var gravity_acceleration : float = 0.0
 @export var is_rolling : bool = false
