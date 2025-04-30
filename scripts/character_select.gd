@@ -10,7 +10,7 @@ var is_able_to_select : bool = true
 
 func _ready() -> void:
 	update_selection()
-	$VBox/Footer/Play.deactivate()
+	#$VBox/Footer/Play.deactivate()
 	
 func open() -> void:
 	visible = true
@@ -24,7 +24,8 @@ func close() -> void:
 	Globals.health.visible = true
 	
 func select(index:int) -> void:
-	if !is_able_to_select or Globals.ms.players.size() == 1: return
+	#if !is_able_to_select or Globals.ms.players.size() == 1: return
+	if !is_able_to_select: return
 	selection[0 if multiplayer.get_unique_id() == 1 else 1] = index
 	hover_selection_end(index)
 	send_selection()
