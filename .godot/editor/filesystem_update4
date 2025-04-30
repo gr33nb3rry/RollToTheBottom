@@ -28,3 +28,5 @@ res://skills.tscn
 res://scenes/coin.tscn
 res://scenes/soot_jumping.tscn
 res://scenes/character_select.tscn
+res://materials/gold_material.tres
+res://materials/gold_ver2_material.tres
