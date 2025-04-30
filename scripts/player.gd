@@ -9,6 +9,8 @@ extends CharacterBody3D
 @onready var animation_tree: AnimationTree = $Model/AnimationTree
 @onready var sucked_soot_pos: Marker3D = $Model/Body/ArmR/Hand/Melee/SuckedSoot
 @onready var hit_melee_pos: Marker3D = $Model/Body/ArmR/Hand/Melee/HitMelee
+@onready var hit_knife_pos: Marker3D = $Model/Body/ArmR/Hand/Knife/HitKnife
+
 
 var type : int = 0:
 	set(v):
@@ -79,7 +81,7 @@ func _process(delta: float) -> void:
 	if type == 0 and Input.is_action_pressed("aim") and sucked_soot == null:
 		suck_soot()
 	if sucked_soot != null:
-		sucked_soot.global_position = sucked_soot.global_position.lerp(sucked_soot_pos.global_position, 10.0 * delta)
+		sucked_soot.global_position = sucked_soot.global_position.lerp(sucked_soot_pos.global_position, 1.0 * delta)
 
 func blend_on(blend_name:String, time:float) -> void:
 	var t = get_tree().create_tween()
@@ -194,9 +196,10 @@ func attack() -> void:
 	animation_tree.set("parameters/hit/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
 	attack_count += 1
 	if attack_count > 5: attack_count = 0
+	
 	for soot in get_tree().get_nodes_in_group("Soot"):
-		print(hit_melee_pos.global_position.distance_to(soot.global_position), " < ", soot.RADIUS + 1.0)
-		if hit_melee_pos.global_position.distance_to(soot.global_position) < soot.RADIUS + 1.0:
+		print(soot.name, "   ", hit_knife_pos.global_position.distance_to(soot.global_position), " < ", soot.RADIUS + 1.0)
+		if hit_knife_pos.global_position.distance_to(soot.global_position) < soot.RADIUS + 0.5:
 			soot.damage(multiplayer.get_unique_id(), 1.0)
 			print("Attack: ", soot)
 			break
@@ -231,5 +234,3 @@ func _input(_event) -> void:
 		hit() if type == 0 else attack()
 	elif Input.is_action_pressed("aim") and Input.is_action_just_pressed("hit"):
 		shoot()
-	if Input.is_key_pressed(KEY_M):
-		damage(1)

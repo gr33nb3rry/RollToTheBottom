@@ -2118,6 +2118,9 @@ visible = false
 mesh = SubResource("BoxMesh_xsqvs")
 skeleton = NodePath("../..")
 
+[node name="HitKnife" type="Marker3D" parent="Model/Body/ArmR/Hand/Knife"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.635, 0, 0)
+
 [node name="LegL" type="Node3D" parent="Model/Body"]
 
 [node name="Pivot" type="Node3D" parent="Model/Body/LegL"]

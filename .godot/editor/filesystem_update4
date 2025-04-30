@@ -36,3 +36,8 @@ res://scripts/zone.gd
 res://scripts/soot_stealing.gd
 res://scripts/enemy_spawner.gd
 res://scripts/world.gd
+res://scripts/skills.gd
+res://scripts/soot_flying.gd
+res://scenes/soot_flying.tscn
+res://scenes/soot_stealing.tscn
+res://scripts/soot_jumping.gd

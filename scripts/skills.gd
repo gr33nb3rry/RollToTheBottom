@@ -16,8 +16,8 @@ func pull_ball(peer_id, force:float) -> void:
 	
 # ACTIVE GLOBAL SKILLS
 
-func kill_all_ants() -> void:
-	get_tree().call_group("Soot", "damage")
+func kill_all_soots() -> void:
+	get_tree().call_group("Soot", "death")
 
 func freeze_ball() -> void:
 	$/root/Main/World/Ball.freeze_on_time(3.0)
@@ -25,3 +25,7 @@ func freeze_ball() -> void:
 func refresh_ball() -> void:
 	$/root/Main/World/Ball.refresh_size()
 	
+
+func _input(_event: InputEvent) -> void:
+	if Input.is_key_pressed(KEY_M):
+		kill_all_soots()

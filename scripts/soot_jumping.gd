@@ -1,5 +1,6 @@
 extends Node3D
 
+const GOLD_MATERIAL = preload("res://materials/gold_ver2_material.tres")
 
 const MOVE_SPEED : float = 7.0
 const MOVE_DELAY : float = 0.5
@@ -68,3 +69,4 @@ func damage(peer_id:int, damage:float) -> void:
 
 func death() -> void:
 	is_alive = false
+	$Mesh.material_override = GOLD_MATERIAL

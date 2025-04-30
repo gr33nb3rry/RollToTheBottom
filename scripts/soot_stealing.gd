@@ -1,6 +1,7 @@
 extends RigidBody3D
 
 const PROJECTILE_S = preload("res://scenes/projectile_s.tscn")
+const GOLD_MATERIAL = preload("res://materials/gold_ver2_material.tres")
 
 const MOVE_SPEED : float = 10.0
 const MOVE_WITH_BALL_SPEED : float = 5.0
@@ -20,6 +21,7 @@ var is_active := true
 var is_achieved : bool = false
 var target_pos : Vector3
 var state : int = 0
+var tween_steal : Tween
 
 var is_alive : bool = true
 
@@ -33,6 +35,7 @@ func _ready() -> void:
 	
 func _process(delta: float) -> void:
 	if !multiplayer.is_server(): return
+	if !is_alive: return
 	if state == 0:
 		achieve_target_pos() 
 	elif state == 1:
@@ -63,6 +66,7 @@ func achieve_target_pos() -> void:
 func achieve_final_pos() -> void:
 	is_achieved = true
 	await get_tree().create_timer(ATTACK_DELAY).timeout
+	if !is_alive: return
 	steal()
 	
 func steal() -> void:
@@ -70,15 +74,18 @@ func steal() -> void:
 	Globals.ball.stop()
 	state = 2
 	var pos : float = global_position.y + 4.0
-	var t = get_tree().create_tween()
-	t.tween_property(self, "global_position:y", pos, abs(pos - global_position.y) / MOVE_WITH_BALL_SPEED).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN_OUT)
-	t.tween_property(self, "global_position:x", target_pos.x, abs(target_pos.x - global_position.x) / MOVE_WITH_BALL_SPEED)
-	t.parallel().tween_property(self, "global_position:z", target_pos.z, abs(target_pos.z - global_position.z) / MOVE_WITH_BALL_SPEED)
-	t.tween_property(self, "global_position:y", target_pos.y-INITIAL_HEIGHT, abs(target_pos.y-INITIAL_HEIGHT - global_position.y) / MOVE_WITH_BALL_SPEED).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN_OUT)
+	tween_steal = get_tree().create_tween()
+	tween_steal.tween_property(self, "global_position:y", pos, abs(pos - global_position.y) / MOVE_WITH_BALL_SPEED).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN_OUT)
+	tween_steal.tween_property(self, "global_position:x", target_pos.x, abs(target_pos.x - global_position.x) / MOVE_WITH_BALL_SPEED)
+	tween_steal.parallel().tween_property(self, "global_position:z", target_pos.z, abs(target_pos.z - global_position.z) / MOVE_WITH_BALL_SPEED)
+	tween_steal.tween_property(self, "global_position:y", target_pos.y-INITIAL_HEIGHT, abs(target_pos.y-INITIAL_HEIGHT - global_position.y) / MOVE_WITH_BALL_SPEED).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN_OUT)
+
 func damage(peer_id:int, damage:float) -> void:
 	if multiplayer.is_server():
 		Globals.processor.damage_soot(self, peer_id, damage)
 
 func death() -> void:
 	Globals.ball.is_simplified = true
-	queue_free()
+	is_alive = false
+	if tween_steal != null: tween_steal.kill()
+	$Mesh.material_override = GOLD_MATERIAL
