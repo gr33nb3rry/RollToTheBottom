@@ -1,5 +1,6 @@
 extends Node
 
+var main
 var skills
 var ball
 var ms
@@ -12,6 +13,7 @@ var stats
 var character_select
 
 func define() -> void:
+	main = $/root/Main
 	skills = $/root/Main/World/Canvas/Skills
 	ball = $/root/Main/World/Ball
 	ms = $/root/Main/World/MultiplayerSpawner

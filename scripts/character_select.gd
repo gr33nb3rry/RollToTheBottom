@@ -8,7 +8,10 @@ extends Control
 var selection : Array = [-1, -1]
 var is_able_to_select : bool = true
 
+var friends : Array = []
+
 func _ready() -> void:
+	Steam.avatar_loaded.connect(update_avatar)
 	update_selection()
 	#$VBox/Footer/Play.deactivate()
 	
@@ -94,3 +97,40 @@ func play_not_host() -> void:
 	player.type = type
 	Globals.ms.get_player_by_id(1).type = 0 if type == 1 else 1
 	close()
+
+func invite() -> void:
+	#Globals.main.open_invite_overlay()
+	get_friends()
+
+func get_friends() -> void:
+	friends = []
+	var new_friends : Array = Globals.main.get_friends()
+	print(new_friends)
+	for f in new_friends:
+		#Steam.avatar_loaded.connect(func(avatar_id:int, s:int, data:Array): 
+		#	print(avatar_id)
+		#	var avatar_image: Image = Image.create_from_data(s, s, false, Image.FORMAT_RGBA8, data)
+		#	var btn = Button.new()
+		#	btn.set_size(Vector2(250, 50))
+		#	btn.set_text(str(Steam.getFriendPersonaName(f)))
+		#	btn.set("theme_override_constants/icon_max_width", 50)
+		#	btn.set("theme_override_icons/icon", ImageTexture.create_from_image(avatar_image))
+		#	#btn.connect("pressed", Callable(self,"join_lobby").bind(lobby))
+		#	$FriendsContainer/Friends.add_child(btn)
+		#	)
+		friends.append(f)
+		create_friend(f)
+		Steam.getPlayerAvatar(2, f)
+	
+func create_friend(steam_id) -> void:
+	var btn = Button.new()
+	btn.set_size(Vector2(250, 50))
+	btn.set_text(str(Steam.getFriendPersonaName(steam_id)))
+	btn.set("theme_override_constants/icon_max_width", 50)
+	#btn.set("theme_override_icons/icon", ImageTexture.create_from_image(avatar_image))
+	#btn.connect("pressed", Callable(self,"join_lobby").bind(lobby))
+	$FriendsContainer/Friends.add_child(btn)
+
+func update_avatar(id:int, s:int, data:Array) -> void:
+	var avatar_image: Image = Image.create_from_data(s, s, false, Image.FORMAT_RGBA8, data)
+	$FriendsContainer/Friends.get_child(friends.find(id)).set("theme_override_icons/icon", ImageTexture.create_from_image(avatar_image))

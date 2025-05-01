@@ -32,7 +32,7 @@ func _on_lobby_joined(_this_lobby_id: int, _permissions: int, _locked: bool, _re
 
 func create_lobby() -> void:
 	if lobby_id == 0:
-		peer.create_lobby(peer.LOBBY_TYPE_PUBLIC)
+		peer.create_lobby(peer.LOBBY_TYPE_FRIENDS_ONLY)
 		multiplayer.multiplayer_peer = peer
 
 func _on_lobby_created(is_connect, this_lobby_id) -> void:
@@ -63,6 +63,9 @@ func start_game() -> void:
 	$Canvas/LobbiesContainer/Lobbies.hide()
 	$Canvas/Start.hide()
 
+
+func open_invite_overlay() -> void:
+	Steam.activateGameOverlayInviteDialog(lobby_id)
 	
 func open_lobby_list():
 	Steam.addRequestLobbyListDistanceFilter(Steam.LOBBY_DISTANCE_FILTER_WORLDWIDE)
@@ -70,6 +73,8 @@ func open_lobby_list():
 	#show_lobby_list_with_profiles(get_lobbies_with_friends())
 	
 func show_lobby_list(lobbies:Array):
+	show_lobby_list_with_profiles(get_lobbies_with_friends())
+	return
 	for lobby in lobbies:
 		var lobby_name = Steam.getLobbyData(lobby, "name")
 		var member_count = Steam.getNumLobbyMembers(lobby)
@@ -104,6 +109,22 @@ func get_lobbies_with_friends() -> Dictionary:
 			if not results.has(lobby):
 				results[lobby] = []
 			results[lobby].append(steam_id)
+	return results
+
+func get_friends() -> Array:
+	var results: Array = []
+	for i in range(0, Steam.getFriendCount()):
+		var steam_id: int = Steam.getFriendByIndex(i, Steam.FRIEND_FLAG_IMMEDIATE)
+		if steam_id == 0: continue
+		var game_info: Dictionary = Steam.getFriendGamePlayed(steam_id)
+		if game_info.is_empty():
+			results.append(steam_id)
+		else:
+			var app_id: int = game_info['id']
+			var lobby = game_info['lobby']
+			if app_id != Steam.getAppID() or lobby is String:
+				continue
+			results.append(steam_id)
 	return results
 
 func refresh_lobby_list() -> void:

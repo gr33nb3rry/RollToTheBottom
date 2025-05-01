@@ -60,7 +60,6 @@ func end() -> void:
 
 	
 func add_enemy() -> void:
-	print("Added new enemy")
 	var enemies : Array[String] = ["J", "F", "S"]
 	var enemy : String = enemies[randi_range(0, enemies.size()-1)]
 	match enemy:
@@ -75,3 +74,7 @@ func _input(_event: InputEvent) -> void:
 		add_jumping()
 	if Input.is_key_pressed(KEY_7):
 		add_stealing()
+
+
+func _on_spawned(node: Node) -> void:
+	print("New enemy spawned: ", node)
