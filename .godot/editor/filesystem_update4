@@ -41,3 +41,4 @@ res://scripts/soot_flying.gd
 res://scenes/soot_flying.tscn
 res://scenes/soot_stealing.tscn
 res://scripts/soot_jumping.gd
+res://scripts/main.gd

@@ -61,6 +61,7 @@ func start_game() -> void:
 	$Canvas/RefreshButton.hide()
 	$Canvas/StartButton.hide()
 	$Canvas/LobbiesContainer/Lobbies.hide()
+	$Canvas/Start.hide()
 
 	
 func open_lobby_list():
