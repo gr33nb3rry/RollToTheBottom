@@ -1,9 +1,10 @@
-[gd_scene load_steps=14 format=3 uid="uid://yhpgoa10oh6y"]
+[gd_scene load_steps=15 format=3 uid="uid://yhpgoa10oh6y"]
 
 [ext_resource type="Script" path="res://scripts/zone.gd" id="1_7maf6"]
 [ext_resource type="Script" path="res://addons/curvemesh3d/curvemesh3d.gd" id="2_keamj"]
 [ext_resource type="PackedScene" uid="uid://bwf13nepw51ts" path="res://scenes/room.tscn" id="3_4veeh"]
 [ext_resource type="Material" uid="uid://c4n2awfh8fos1" path="res://materials/steb_a_m_s.tres" id="3_7jgtr"]
+[ext_resource type="Texture2D" uid="uid://bmkbgftqec3cm" path="res://images/decals/decal1.png" id="4_pm8h3"]
 [ext_resource type="Material" uid="uid://btw6bhbo8oi8k" path="res://materials/steb_item_m_s.tres" id="6_tq0b3"]
 
 [sub_resource type="Curve3D" id="Curve3D_r7bhb"]
@@ -80,6 +81,28 @@ mesh = SubResource("BoxMesh_8qa26")
 [node name="L" type="MeshInstance3D" parent="Curve/PathFollow/Marker"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0, 0)
 mesh = SubResource("BoxMesh_8qa26")
+
+[node name="DecalsMaker" type="PathFollow3D" parent="Curve"]
+transform = Transform3D(0.872585, 0, 0.488454, 0, 0.999997, 0, -0.488454, 0, 0.872585, 5.08328, -0.305542, 0.0300232)
+rotation_mode = 1
+loop = false
+
+[node name="Center" type="MeshInstance3D" parent="Curve/DecalsMaker"]
+mesh = SubResource("SphereMesh_kpajd")
+skeleton = NodePath("")
+
+[node name="Mesh" type="MeshInstance3D" parent="Curve/DecalsMaker/Center"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 25, 0)
+mesh = SubResource("BoxMesh_8qa26")
+
+[node name="Decal" type="Decal" parent="Curve/DecalsMaker/Center/Mesh"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -8.195, 0)
+size = Vector3(1, 15, 1)
+texture_albedo = ExtResource("4_pm8h3")
+modulate = Color(0.364231, 0.572187, 0.232781, 1)
+upper_fade = 3.18806e-05
+lower_fade = 3.92494e-05
+cull_mask = 524288
 
 [node name="Room" parent="." instance=ExtResource("3_4veeh")]
 transform = Transform3D(-0.809017, 0, -0.587785, 0, 1, 0, 0.587785, 0, -0.809017, 54.4111, -80.9182, -191.874)
@@ -274,3 +297,8 @@ gizmo_extents = 3.0
 [node name="Path3D" type="Path3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.424, 0, 0)
 curve = SubResource("Curve3D_r7bhb")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(0.694072, -0.149958, 0.704114, -0.202369, 0.897984, 0.390731, -0.690876, -0.413687, 0.592919, 84.803, 52.858, 0)
+
+[node name="Decals" type="Node3D" parent="."]

@@ -1,3 +1,9 @@
+Node3D
+Camera3D
+PathFollow3D
+Decal
+CollisionShape3D
+Area3D
 Button
 MarginContainer
 VBoxContainer
@@ -7,8 +13,3 @@ Label
 TextureRect
 Panel
 CenterContainer
-MeshInstance2D
-TextureButton
-NinePatchRect
-CollisionShape3D
-StaticBody3D

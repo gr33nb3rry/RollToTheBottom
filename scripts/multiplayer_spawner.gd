@@ -3,7 +3,7 @@ extends MultiplayerSpawner
 @onready var player_scene = preload("res://scenes/player.tscn")
 @onready var ball_scene = preload("res://scenes/ball.tscn")
 var players = {}
-var second_player_peer_id : int
+var second_player_peer_id : int = -1
 
 
 func _ready() -> void:

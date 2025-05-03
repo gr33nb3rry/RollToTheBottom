@@ -1,4 +1,4 @@
-res://scenes/player.tscn
+res://scenes/zones/zone1.tscn
 res://materials/r_shader.gdshader
 res://materials/dung_m_s.tres
 res://materials/gold_ver2_material.tres
@@ -16,9 +16,9 @@ res://cloud.gdshader
 res://aaa.gdshader
 res://materials/shaders/cell_shading_shader.gdshader
 res://shaders/card_perspective.gdshader
-res://scripts/main.gd
+res://scripts/zone.gd
+res://scenes/player.tscn
 res://scenes/ball.tscn
-res://scenes/zones/zone1.tscn
 res://scenes/room.tscn
 res://world.tscn
 res://scenes/projectile_s.tscn
@@ -31,6 +31,3 @@ res://scenes/soot_jumping.tscn
 res://scenes/character_select.tscn
 res://scenes/soot_stealing.tscn
 res://scenes/soot_flying.tscn
-res://scripts/enemy_spawner.gd
-res://scripts/character_select.gd
-res://scripts/Globals.gd

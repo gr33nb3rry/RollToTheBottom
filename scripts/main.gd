@@ -10,6 +10,7 @@ func _ready() -> void:
 	multiplayer_spawner.spawn_function = spawn_level
 	peer.lobby_created.connect(_on_lobby_created)
 	Steam.lobby_match_list.connect(show_lobby_list)
+	Steam.join_requested.connect(accept_invite)
 	peer.lobby_joined.connect(_on_lobby_joined)
 	open_lobby_list()
 	#$Canvas/HostButton.emit_signal("pressed")
@@ -126,6 +127,13 @@ func get_friends() -> Array:
 				continue
 			results.append(steam_id)
 	return results
+
+func invite(steam_id:int) -> void:
+	Steam.inviteUserToLobby(lobby_id, steam_id)
+	print("User ", steam_id, " invited")
+
+func accept_invite(lobby_id: int, steam_id: int) -> void:
+	join_lobby(lobby_id)
 
 func refresh_lobby_list() -> void:
 	if $Canvas/LobbiesContainer/Lobbies.get_child_count() > 0:

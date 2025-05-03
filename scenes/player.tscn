@@ -1,4 +1,4 @@
-[gd_scene load_steps=60 format=3 uid="uid://cxlkxr1ykhym6"]
+[gd_scene load_steps=61 format=3 uid="uid://cxlkxr1ykhym6"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_x72jo"]
 [ext_resource type="Script" path="res://scripts/camera.gd" id="2_5wcse"]
@@ -56,6 +56,9 @@ size = Vector3(1.375, 0.05, 0.1)
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_3y0t8"]
 radius = 0.2
 height = 0.6
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_014sp"]
+size = Vector3(2.2, 1.5, 2.5)
 
 [sub_resource type="Animation" id="Animation_088uu"]
 length = 0.001
@@ -2149,6 +2152,15 @@ debug_shape_custom_color = Color(0.625152, 0.411786, 1, 1)
 target_position = Vector3(0, 0, -1.2)
 debug_shape_custom_color = Color(0.80583, 0.466335, 3.85046e-07, 1)
 debug_shape_thickness = 4
+
+[node name="AreaKnife" type="Area3D" parent="Model/Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.5)
+collision_layer = 2
+collision_mask = 2
+monitorable = false
+
+[node name="Collision" type="CollisionShape3D" parent="Model/Body/AreaKnife"]
+shape = SubResource("BoxShape3D_014sp")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Model"]
 libraries = {

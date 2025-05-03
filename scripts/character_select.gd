@@ -105,19 +105,9 @@ func invite() -> void:
 func get_friends() -> void:
 	friends = []
 	var new_friends : Array = Globals.main.get_friends()
-	print(new_friends)
+	if $FriendsContainer/Friends.get_child_count() > 0:
+		for f in $FriendsContainer/Friends.get_children(): f.queue_free()
 	for f in new_friends:
-		#Steam.avatar_loaded.connect(func(avatar_id:int, s:int, data:Array): 
-		#	print(avatar_id)
-		#	var avatar_image: Image = Image.create_from_data(s, s, false, Image.FORMAT_RGBA8, data)
-		#	var btn = Button.new()
-		#	btn.set_size(Vector2(250, 50))
-		#	btn.set_text(str(Steam.getFriendPersonaName(f)))
-		#	btn.set("theme_override_constants/icon_max_width", 50)
-		#	btn.set("theme_override_icons/icon", ImageTexture.create_from_image(avatar_image))
-		#	#btn.connect("pressed", Callable(self,"join_lobby").bind(lobby))
-		#	$FriendsContainer/Friends.add_child(btn)
-		#	)
 		friends.append(f)
 		create_friend(f)
 		Steam.getPlayerAvatar(2, f)
@@ -127,8 +117,10 @@ func create_friend(steam_id) -> void:
 	btn.set_size(Vector2(250, 50))
 	btn.set_text(str(Steam.getFriendPersonaName(steam_id)))
 	btn.set("theme_override_constants/icon_max_width", 50)
+	if Steam.getFriendPersonaState(steam_id) == Steam.PERSONA_STATE_OFFLINE:
+		btn.modulate = Color(0.502, 0.502, 0.502)
 	#btn.set("theme_override_icons/icon", ImageTexture.create_from_image(avatar_image))
-	#btn.connect("pressed", Callable(self,"join_lobby").bind(lobby))
+	btn.connect("pressed", Callable(Globals.main,"invite").bind(steam_id))
 	$FriendsContainer/Friends.add_child(btn)
 
 func update_avatar(id:int, s:int, data:Array) -> void:

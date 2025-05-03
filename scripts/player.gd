@@ -81,7 +81,8 @@ func _process(delta: float) -> void:
 	if type == 0 and Input.is_action_pressed("aim") and sucked_soot == null:
 		suck_soot()
 	if sucked_soot != null:
-		sucked_soot.global_position = sucked_soot.global_position.lerp(sucked_soot_pos.global_position, 1.0 * delta)
+		if multiplayer.get_unique_id() != 1: Globals.processor.change_soot_position.rpc_id(1, sucked_soot, sucked_soot.global_position.lerp(sucked_soot_pos.global_position, 10.0 * delta))
+		else: Globals.processor.change_soot_position(sucked_soot, sucked_soot.global_position.lerp(sucked_soot_pos.global_position, 10.0 * delta))
 
 func blend_on(blend_name:String, time:float) -> void:
 	var t = get_tree().create_tween()
@@ -177,7 +178,8 @@ func hit_check() -> void:
 	for soot in get_tree().get_nodes_in_group("Soot"):
 		print(hit_melee_pos.global_position.distance_to(soot.global_position), " < ", soot.RADIUS * soot.RADIUS + 1.0)
 		if hit_melee_pos.global_position.distance_to(soot.global_position) < soot.RADIUS + 1.0:
-			soot.damage(multiplayer.get_unique_id(), 1.0)
+			if multiplayer.get_unique_id() != 1: Globals.processor.damage_soot.rpc_id(1, soot, multiplayer.get_unique_id(), 1.0)
+			else: Globals.processor.damage_soot(soot, multiplayer.get_unique_id(), 1.0)
 			print("Hit melee: ", soot)
 
 func suck_soot() -> void:
@@ -187,8 +189,8 @@ func suck_soot() -> void:
 			sucked_soot = collider
 func blow_soot() -> void:
 	if sucked_soot != null:
-		var t = get_tree().create_tween()
-		t.tween_property(sucked_soot, "global_position", global_position + (-camera.global_transform.basis.z).normalized() * 30.0, 3.0).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
+		if multiplayer.get_unique_id() != 1: Globals.processor.blow_soot.rpc_id(1, sucked_soot, global_position + (-camera.global_transform.basis.z).normalized())
+		else: Globals.processor.blow_soot(sucked_soot, global_position + (-camera.global_transform.basis.z).normalized())
 		sucked_soot = null
 
 func attack() -> void:
@@ -197,13 +199,14 @@ func attack() -> void:
 	attack_count += 1
 	if attack_count > 5: attack_count = 0
 	
-	for soot in get_tree().get_nodes_in_group("Soot"):
-		print(soot.name, "   ", hit_knife_pos.global_position.distance_to(soot.global_position), " < ", soot.RADIUS + 1.0)
-		if hit_knife_pos.global_position.distance_to(soot.global_position) < soot.RADIUS + 0.5:
-			soot.damage(multiplayer.get_unique_id(), 1.0)
-			print("Attack: ", soot)
-			break
-	Globals.processor.attack()
+	for s in $Model/Body/AreaKnife.get_overlapping_bodies():
+		if s.is_in_group("Soot"):
+			if multiplayer.get_unique_id() != 1: Globals.processor.damage_soot.rpc_id(1, s, multiplayer.get_unique_id(), 1.0)
+			else: Globals.processor.damage_soot(s, multiplayer.get_unique_id(), 1.0)
+			print("Attack: ", s)
+	
+	if multiplayer.get_unique_id() != 1: Globals.processor.attack.rpc_id(1)
+	else: Globals.processor.attack()
 func end_attack() -> void:
 	attack_count = 0
 
