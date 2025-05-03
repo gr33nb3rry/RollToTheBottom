@@ -31,3 +31,5 @@ res://scenes/soot_jumping.tscn
 res://scenes/character_select.tscn
 res://scenes/soot_stealing.tscn
 res://scenes/soot_flying.tscn
+res://scripts/player.gd
+res://scripts/camera.gd

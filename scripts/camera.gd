@@ -18,6 +18,7 @@ var pitch_min : float = -90
 var position_offset : Vector3 = Vector3(0, 1, 0)
 var position_offset_target : Vector3 = Vector3(0, 1, 0)
 
+var status : int = 0
 var is_aiming := false
 
 func _ready():
@@ -27,18 +28,18 @@ func _ready():
 	#top_level = true
 
 func _input(event):
-	if !player.is_active: return
+	if status == 0 and !player.is_active: return
 	if event is InputEventMouseMotion:
 		yaw += -event.relative.x * yaw_sensitivity
 		pitch += -event.relative.y * pitch_sensitivity
 func _process(_delta: float) -> void:
-	if !player.is_active: return
+	if status == 0 and !player.is_active: return
 	var view = Input.get_vector("view_left", "view_right", "view_down", "view_up")
 	yaw += -view.x * yaw_sensitivity * 5.0
 	pitch += view.y * pitch_sensitivity * 5.0
 
 func _physics_process(delta):
-	if !player.is_active: return
+	if status == 0 and !player.is_active: return
 	pitch = clamp(pitch, pitch_min, pitch_max)
 	yaw_node.rotation_degrees.y = lerp(yaw_node.rotation_degrees.y, yaw, yaw_acceleration * delta)
 	pitch_node.rotation_degrees.x = lerp(pitch_node.rotation_degrees.x, pitch, pitch_acceleration * delta)
@@ -47,3 +48,14 @@ func _physics_process(delta):
 	#yaw_node.rotation_degrees.y = yaw
 	#pitch_node.rotation_degrees.x = pitch
 	
+	if status == 1:
+		var movement := Vector3.ZERO
+		var forward : Vector3 = -$CamYaw/CamPitch.global_transform.basis.z
+		var right : Vector3 = $CamYaw.global_transform.basis.x
+		#var up : Vector3 = global_transform.basis.y
+		var direction = Input.get_vector("move_left", "move_right", "move_back", "move_forward")
+		forward *= direction.y
+		right *= direction.x
+		movement += forward + right
+		movement = movement.normalized() * (player.RUN_SPEED * 4.0 if Input.is_action_pressed("run") else player.RUN_SPEED * 2.0)
+		global_position += movement * delta

@@ -71,8 +71,6 @@ func generate_decals() -> void:
 	decals_maker.queue_free()
 	print(decals_count)
 
-func _input(_event: InputEvent) -> void:
-	if Input.is_key_pressed(KEY_P): generate_decals()
 	
 func get_next_zone_position() -> Vector3:
 	return $Room/Pos2.global_position

@@ -213,14 +213,17 @@ func end_attack() -> void:
 func aim(is_aim:bool) -> void:
 	$/root/Main/Canvas/Crosshair.visible = is_aim
 
-func shoot() -> void:
-	if multiplayer.get_unique_id() != 1:
-		Globals.processor.rpc_id(1, "shoot", multiplayer.get_unique_id(), !ray_ground.is_colliding())
-	else:
-		Globals.processor.shoot(1, !ray_ground.is_colliding())
+func flying_camera() -> void:
+	is_active = !is_active
+	$CamRoot.status = 0 if is_active else 1
+	if $CamRoot.status == 0:
+		$CamRoot.position = Vector3(0, 1, 0)
 
 func _input(_event) -> void:
-	if !is_active or !is_multiplayer_authority(): return
+	if !is_multiplayer_authority(): return
+	if Input.is_action_pressed("aim") and Input.is_action_just_pressed("hit"):
+		flying_camera()
+	if !is_active: return
 	if Input.is_action_just_pressed("ui_cancel"):
 		get_tree().quit()
 	elif Input.is_action_just_pressed("jump"): 
@@ -235,5 +238,3 @@ func _input(_event) -> void:
 			animation_tree.set("parameters/blow/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
 	elif !Input.is_action_pressed("aim") and Input.is_action_just_pressed("hit"):
 		hit() if type == 0 else attack()
-	elif Input.is_action_pressed("aim") and Input.is_action_just_pressed("hit"):
-		shoot()
