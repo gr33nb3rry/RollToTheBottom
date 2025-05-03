@@ -10,15 +10,16 @@ var is_on_ground : bool = true
 var is_hitted : bool = false
 var time_in_air : float = 0.0
 var direction : Vector3
+var jump_force : float = 20.0
 const GRAVITY : float = 7.0
 @onready var world = $/root/Main/World
 
 var is_simplified : bool = false
-var simplicity_level : float = 7.0
+var simplicity_level : float = 3.5 # 7 MAX
 var simplicity_current : float = 1.0
 
 func _physics_process(delta: float) -> void:
-	#$/root/Main/Canvas/DebugLabel.text = str(direction.length())
+	$/root/Main/Canvas/DebugLabel.text = str(is_on_ground)
 	#if !is_on_ground:
 	#	time_in_air += delta
 	#else: time_in_air = 0.0
@@ -32,24 +33,35 @@ func _physics_process(delta: float) -> void:
 				linear_velocity += simplicity_direction * simplicity_level * simplicity_current
 			
 		if linear_velocity.length() > direction.length():
-			linear_velocity = linear_velocity.normalized() * direction.length()
+			linear_velocity.x = linear_velocity.normalized().x * direction.length()
+			linear_velocity.z = linear_velocity.normalized().z * direction.length()
 			
 		direction /= 1.0 + delta * 3
 		simplicity_current /= 1.0 + delta * 3
 	else:
 		direction = Vector3.ZERO
+	#if is_on_ground:
+	#	jump_current = 0.0
 
 func add_impulse(from:Node3D, push_force:float, is_hit:bool = false) -> void:
 	var push_normal : Vector3 = global_position - from.global_position
 	#direction = Vector3(push_normal.x,push_normal.y,push_normal.z).normalized() * push_force
 	if !is_hitted:
-		direction = push_normal.normalized() * push_force
+		direction.x = push_normal.normalized().x * push_force
+		direction.z = push_normal.normalized().z * push_force
 	else:
-		direction = direction.normalized() * direction.length()
+		direction.x = direction.normalized().x * direction.length()
+		direction.z = direction.normalized().z * direction.length()
 	if !is_hitted:
 		is_hitted = is_hit
 	simplicity_current = 1.0
 
+func jump() -> void:
+	direction += Vector3.UP * jump_force
+		
+func _input(_event: InputEvent) -> void:
+	if Input.is_key_pressed(KEY_P):
+		jump()
 
 func grow(value:float) -> void:
 	$Mesh.scale += Vector3(value, value, value)

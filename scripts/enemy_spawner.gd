@@ -39,6 +39,7 @@ func _ready() -> void:
 		process_mode = Node.PROCESS_MODE_DISABLED
 		
 func _process(delta: float) -> void:
+	return
 	if !is_on: return
 	var current_progress : float = Globals.world.get_passed_position()
 	if current_progress > max_progress: 
