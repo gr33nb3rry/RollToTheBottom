@@ -59,7 +59,7 @@ func _physics_process(delta):
 		forward *= direction.y
 		right *= direction.x
 		movement += forward + right
-		velocity = movement.normalized() * (player.RUN_SPEED * 4.0 if Input.is_action_pressed("run") else player.RUN_SPEED * 2.0)
+		velocity = lerp(velocity, movement.normalized() * (player.RUN_SPEED * 4.0 if Input.is_action_pressed("run") else player.RUN_SPEED * 2.0), 0.15)
 		#global_position += movement * delta
 		move_and_slide()
 
@@ -75,5 +75,9 @@ func select_decal() -> void:
 			nearest_decal_to_point = decal
 	print("Nearest position: ", nearest_distance)
 	if nearest_distance <= 1.0:
-		nearest_decal_to_point.modulate = Color(1, 0.941, 0)
+		nearest_decal_to_point.select()
+		if multiplayer.get_unique_id() == 1:
+			nearest_decal_to_point.select.rpc_id(Globals.ms.get_second_player_peer_id())
+		else:
+			nearest_decal_to_point.select.rpc_id(1)
 			
