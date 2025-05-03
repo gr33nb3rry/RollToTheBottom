@@ -1,10 +1,11 @@
-[gd_scene load_steps=15 format=3 uid="uid://yhpgoa10oh6y"]
+[gd_scene load_steps=17 format=3 uid="uid://yhpgoa10oh6y"]
 
 [ext_resource type="Script" path="res://scripts/zone.gd" id="1_7maf6"]
 [ext_resource type="Script" path="res://addons/curvemesh3d/curvemesh3d.gd" id="2_keamj"]
 [ext_resource type="PackedScene" uid="uid://bwf13nepw51ts" path="res://scenes/room.tscn" id="3_4veeh"]
 [ext_resource type="Material" uid="uid://c4n2awfh8fos1" path="res://materials/steb_a_m_s.tres" id="3_7jgtr"]
 [ext_resource type="Texture2D" uid="uid://bmkbgftqec3cm" path="res://images/decals/decal1.png" id="4_pm8h3"]
+[ext_resource type="Script" path="res://scripts/decal_zone.gd" id="5_5m77l"]
 [ext_resource type="Material" uid="uid://btw6bhbo8oi8k" path="res://materials/steb_item_m_s.tres" id="6_tq0b3"]
 
 [sub_resource type="Curve3D" id="Curve3D_r7bhb"]
@@ -25,6 +26,11 @@ radius = 2.0
 height = 4.0
 
 [sub_resource type="BoxMesh" id="BoxMesh_8qa26"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_k8i8i"]
+properties/0/path = NodePath(".:modulate")
+properties/0/spawn = true
+properties/0/replication_mode = 2
 
 [sub_resource type="Curve3D" id="Curve3D_6aul8"]
 _data = {
@@ -102,7 +108,15 @@ texture_albedo = ExtResource("4_pm8h3")
 modulate = Color(0.364231, 0.572187, 0.232781, 1)
 upper_fade = 3.18806e-05
 lower_fade = 3.92494e-05
-cull_mask = 524288
+cull_mask = 524289
+script = ExtResource("5_5m77l")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="Curve/DecalsMaker/Center/Mesh/Decal"]
+replication_config = SubResource("SceneReplicationConfig_k8i8i")
+
+[node name="Ray" type="RayCast3D" parent="Curve/DecalsMaker/Center/Mesh/Decal"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.47904, 0)
+target_position = Vector3(0, -15, 0)
 
 [node name="Room" parent="." instance=ExtResource("3_4veeh")]
 transform = Transform3D(-0.809017, 0, -0.587785, 0, 1, 0, 0.587785, 0, -0.809017, 54.4111, -80.9182, -191.874)
@@ -135,170 +149,9 @@ radius = 3.0
 radius_profile = SubResource("Curve_il8gj")
 material = ExtResource("6_tq0b3")
 
-[node name="Markers" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.4245, 0, 0)
-
-[node name="Marker3D" type="Marker3D" parent="Markers"]
-transform = Transform3D(0.474996, -0.0797997, 0.876362, -0.0378448, 0.993105, 0.110942, -0.879173, -0.085863, 0.468701, 0.0225432, -0.820387, -8.57832)
-gizmo_extents = 3.0
-
-[node name="Marker3D2" type="Marker3D" parent="Markers"]
-transform = Transform3D(0.49821, -0.0970629, 0.861606, -0.0537456, 0.988345, 0.142418, -0.865389, -0.117262, 0.487187, -5.05607, -1.69713, -17.1473)
-gizmo_extents = 3.0
-
-[node name="Marker3D3" type="Marker3D" parent="Markers"]
-transform = Transform3D(0.578978, -0.111257, 0.807716, -0.0620917, 0.981752, 0.179738, -0.812974, -0.154217, 0.561506, -9.60257, -2.93153, -25.9632)
-gizmo_extents = 3.0
-
-[node name="Marker3D4" type="Marker3D" parent="Markers"]
-transform = Transform3D(0.72724, -0.118317, 0.676108, -0.0538942, 0.972146, 0.228092, -0.684263, -0.202316, 0.700608, -12.8162, -4.54176, -35.2769)
-gizmo_extents = 3.0
-
-[node name="Marker3D5" type="Marker3D" parent="Markers"]
-transform = Transform3D(0.85035, -0.11541, 0.513404, -0.0460389, 0.955594, 0.291066, -0.524198, -0.271144, 0.807277, -13.7871, -6.55696, -45.0042)
-gizmo_extents = 3.0
-
-[node name="Marker3D6" type="Marker3D" parent="Markers"]
-transform = Transform3D(0.932091, -0.102254, 0.347489, -0.0283583, 0.935781, 0.351436, -0.36111, -0.337425, 0.869335, -13.0767, -9.10817, -54.6315)
-gizmo_extents = 3.0
-
-[node name="Marker3D7" type="Marker3D" parent="Markers"]
-transform = Transform3D(0.99691, -0.0685064, 0.0384293, 0.0478289, 0.917501, 0.394844, -0.0623085, -0.391786, 0.917943, -9.97764, -11.9044, -63.6719)
-gizmo_extents = 3.0
-
-[node name="Marker3D8" type="Marker3D" parent="Markers"]
-transform = Transform3D(0.902663, -0.0154057, -0.430071, 0.192736, 0.908001, 0.372001, 0.384775, -0.418682, 0.822589, -3.41706, -14.2658, -70.6995)
-gizmo_extents = 3.0
-
-[node name="Marker3D9" type="Marker3D" parent="Markers"]
-transform = Transform3D(0.707117, 0.132907, -0.694492, 0.236534, 0.881132, 0.409458, 0.66636, -0.453806, 0.591627, 5.73877, -15.9803, -74.1806)
-gizmo_extents = 3.0
-
-[node name="Marker3D10" type="Marker3D" parent="Markers"]
-transform = Transform3D(0.616517, 0.208249, -0.759301, 0.246696, 0.86473, 0.43747, 0.747694, -0.457025, 0.481747, 15.4663, -18.0237, -75.1981)
-gizmo_extents = 3.0
-
-[node name="Marker3D11" type="Marker3D" parent="Markers"]
-transform = Transform3D(0.672523, 0.17108, -0.72003, 0.235491, 0.872876, 0.42735, 0.701609, -0.456964, 0.546742, 25.2046, -20.14, -75.9862)
-gizmo_extents = 3.0
-
-[node name="Marker3D12" type="Marker3D" parent="Markers"]
-transform = Transform3D(0.803081, 0.0633993, -0.592487, 0.21578, 0.895895, 0.388342, 0.555427, -0.439717, 0.705796, 34.7056, -22.1183, -78.3127)
-gizmo_extents = 3.0
-
-[node name="Marker3D13" type="Marker3D" parent="Markers"]
-transform = Transform3D(0.945439, -0.01396, -0.325496, 0.14639, 0.910747, 0.386144, 0.291055, -0.412726, 0.863101, 43.1641, -24.1171, -83.1701)
-gizmo_extents = 3.0
-
-[node name="Marker3D14" type="Marker3D" parent="Markers"]
-transform = Transform3D(0.993372, -0.0660391, -0.0940737, 0.096311, 0.924946, 0.36769, 0.0627314, -0.374313, 0.925177, 49.8821, -26.3466, -90.1994)
-gizmo_extents = 3.0
-
-[node name="Marker3D15" type="Marker3D" parent="Markers"]
-transform = Transform3D(0.987776, -0.106311, 0.113997, 0.062399, 0.93986, 0.335809, -0.142842, -0.324591, 0.935006, 54.8126, -28.5626, -98.59)
-gizmo_extents = 3.0
-
-[node name="Marker3D16" type="Marker3D" parent="Markers"]
-transform = Transform3D(0.931981, -0.139258, 0.33469, 0.0401578, 0.957246, 0.28647, -0.360274, -0.253544, 0.897728, 57.7617, -30.5716, -107.908)
-gizmo_extents = 3.0
-
-[node name="Marker3D17" type="Marker3D" parent="Markers"]
-transform = Transform3D(0.77613, -0.160828, 0.609717, 0.00958642, 0.969824, 0.243613, -0.630498, -0.18323, 0.754253, 58.1136, -32.1397, -117.735)
-gizmo_extents = 3.0
-
-[node name="Marker3D18" type="Marker3D" parent="Markers"]
-transform = Transform3D(0.51084, -0.202736, 0.835427, -0.123937, 0.944273, 0.304934, -0.850694, -0.259313, 0.457247, 54.9799, -34.4241, -126.887)
-gizmo_extents = 3.0
-
-[node name="Marker3D19" type="Marker3D" parent="Markers"]
-transform = Transform3D(0.261231, -0.245355, 0.933573, -0.229201, 0.923729, 0.306903, -0.937669, -0.294149, 0.185071, 49.1644, -37.575, -134.34)
-gizmo_extents = 3.0
-
-[node name="Marker3D20" type="Marker3D" parent="Markers"]
-transform = Transform3D(0.0131898, -0.281556, 0.959453, -0.314958, 0.909523, 0.271233, -0.949013, -0.305765, -0.0766818, 41.5723, -41.0644, -139.781)
-gizmo_extents = 3.0
-
-[node name="Marker3D21" type="Marker3D" parent="Markers"]
-transform = Transform3D(-0.299069, -0.31307, 0.901412, -0.393776, 0.900954, 0.182265, -0.869193, -0.300444, -0.392727, 32.6694, -44.468, -142.654)
-gizmo_extents = 3.0
-
-[node name="Marker3D22" type="Marker3D" parent="Markers"]
-transform = Transform3D(-0.533467, -0.355107, 0.767665, -0.444135, 0.890011, 0.103063, -0.71983, -0.285966, -0.632508, 23.1503, -47.3939, -142.243)
-gizmo_extents = 3.0
-
-[node name="Marker3D23" type="Marker3D" parent="Markers"]
-transform = Transform3D(-0.583783, -0.352539, 0.731377, -0.446851, 0.891615, 0.0731018, -0.677879, -0.284141, -0.678043, 13.7463, -49.9931, -140.062)
-gizmo_extents = 3.0
-
-[node name="Marker3D24" type="Marker3D" parent="Markers"]
-transform = Transform3D(-0.353292, -0.263059, 0.897766, -0.385998, 0.915144, 0.116252, -0.852167, -0.305465, -0.424854, 4.17244, -52.5081, -138.969)
-gizmo_extents = 3.0
-
-[node name="Marker3D25" type="Marker3D" parent="Markers"]
-transform = Transform3D(0.0498863, -0.171023, 0.984002, -0.295427, 0.938614, 0.178112, -0.954061, -0.299586, -0.00370085, -4.867, -55.0653, -142.159)
-gizmo_extents = 3.0
-
-[node name="Marker3D26" type="Marker3D" parent="Markers"]
-transform = Transform3D(0.372753, -0.121315, 0.919965, -0.214272, 0.953369, 0.21254, -0.902851, -0.276348, 0.329377, -12.1125, -57.6468, -148.473)
-gizmo_extents = 3.0
-
-[node name="Marker3D27" type="Marker3D" parent="Markers"]
-transform = Transform3D(0.64501, -0.0817456, 0.759788, -0.128443, 0.968518, 0.213242, -0.753301, -0.235133, 0.614205, -16.8057, -59.9362, -156.948)
-gizmo_extents = 3.0
-
-[node name="Marker3D28" type="Marker3D" parent="Markers"]
-transform = Transform3D(0.822967, -0.0600939, 0.5649, -0.0590355, 0.979957, 0.190253, -0.565011, -0.189921, 0.802926, -18.7539, -61.71, -166.562)
-gizmo_extents = 3.0
-
-[node name="Marker3D29" type="Marker3D" parent="Markers"]
-transform = Transform3D(0.905474, -0.0488361, 0.42158, -0.0524648, 0.972855, 0.225381, -0.421144, -0.226195, 0.878335, -18.5051, -63.1633, -176.442)
-gizmo_extents = 3.0
-
-[node name="Marker3D30" type="Marker3D" parent="Markers"]
-transform = Transform3D(0.953801, -0.027595, 0.299165, -0.0698223, 0.948146, 0.310066, -0.292208, -0.31663, 0.902418, -16.8959, -65.3559, -186.054)
-gizmo_extents = 3.0
-
-[node name="Marker3D31" type="Marker3D" parent="Markers"]
-transform = Transform3D(0.987366, 0.00395819, 0.158404, -0.0656514, 0.920062, 0.386229, -0.144213, -0.391749, 0.908699, -13.9393, -68.2921, -195.131)
-gizmo_extents = 3.0
-
-[node name="Marker3D32" type="Marker3D" parent="Markers"]
-transform = Transform3D(0.998936, 0.0421905, -0.0185753, -0.0294632, 0.894232, 0.44663, 0.0354542, -0.445607, 0.894525, -9.50275, -71.7398, -203.386)
-gizmo_extents = 3.0
-
-[node name="Marker3D33" type="Marker3D" parent="Markers"]
-transform = Transform3D(0.96415, 0.0860412, -0.251019, 0.0474238, 0.874869, 0.482029, 0.261084, -0.476653, 0.839426, -3.23014, -75.278, -210.329)
-gizmo_extents = 3.0
-
-[node name="Marker3D34" type="Marker3D" parent="Markers"]
-transform = Transform3D(0.926403, 0.163924, -0.338976, 0.0539058, 0.833245, 0.550267, 0.372653, -0.528042, 0.763086, 4.12392, -79.1043, -215.844)
-gizmo_extents = 3.0
-
-[node name="Marker3D35" type="Marker3D" parent="Markers"]
-transform = Transform3D(0.83954, 0.23823, -0.48828, 0.118324, 0.796986, 0.592292, 0.530255, -0.555028, 0.640915, 12.2429, -83.2606, -219.903)
-gizmo_extents = 3.0
-
-[node name="Marker3D36" type="Marker3D" parent="Markers"]
-transform = Transform3D(0.628589, 0.32182, -0.70803, 0.265499, 0.766889, 0.584284, 0.731016, -0.555256, 0.396616, 21.2839, -87.0886, -221.536)
-gizmo_extents = 3.0
-
-[node name="Marker3D37" type="Marker3D" parent="Markers"]
-transform = Transform3D(0.337879, 0.339107, -0.877976, 0.433996, 0.771608, 0.465043, 0.835155, -0.538167, 0.11354, 30.8164, -89.4003, -219.877)
-gizmo_extents = 3.0
-
-[node name="Marker3D38" type="Marker3D" parent="Markers"]
-transform = Transform3D(0.113499, 0.382527, -0.916946, 0.505578, 0.772245, 0.384742, 0.855282, -0.507255, -0.105748, 39.8816, -90.2553, -215.798)
-gizmo_extents = 3.0
-
-[node name="Marker3D39" type="Marker3D" parent="Markers"]
-transform = Transform3D(-0.103232, 0.470556, -0.876309, 0.5277, 0.772714, 0.352764, 0.843133, -0.426012, -0.328082, 47.8684, -90.3903, -209.87)
-gizmo_extents = 3.0
-
 [node name="Path3D" type="Path3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.424, 0, 0)
 curve = SubResource("Curve3D_r7bhb")
 
-[node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(0.694072, -0.149958, 0.704114, -0.202369, 0.897984, 0.390731, -0.690876, -0.413687, 0.592919, 84.803, 52.858, 0)
-
-[node name="Decals" type="Node3D" parent="."]
+[node name="Decals" type="MultiplayerSpawner" parent="."]
+spawn_path = NodePath(".")

@@ -45,33 +45,43 @@ func _process(_delta: float) -> void:
 	marker_r.position.x = r
 	
 func generate_decals() -> void:
+	if !multiplayer.is_server(): return
 	var offset : float = 20.0
-	var step : float = 3.0
+	var step : float = 5.0
 	var max : float = path.curve.get_baked_length() - offset
 	var iteration_count : int = floori(max / step)
 	decals_maker.progress = offset
 	
 	for i in iteration_count:
+		var decal : Decal = decals_center.get_node("Mesh/Decal")
 		var type : int = randi_range(0, 5)
 		match type:
-			1: decals_center.get_node("Mesh/Decal").texture_albedo = DECAL_1
-			2: decals_center.get_node("Mesh/Decal").texture_albedo = DECAL_2
-			3: decals_center.get_node("Mesh/Decal").texture_albedo = DECAL_3
-			4: decals_center.get_node("Mesh/Decal").texture_albedo = DECAL_4
-			5: decals_center.get_node("Mesh/Decal").texture_albedo = DECAL_5
+			1: decal.texture_albedo = DECAL_1
+			2: decal.texture_albedo = DECAL_2
+			3: decal.texture_albedo = DECAL_3
+			4: decal.texture_albedo = DECAL_4
+			5: decal.texture_albedo = DECAL_5
+		decal.type = type
 		decals_count[type] += 1
 		decals_maker.progress += step
 		decals_center.rotation_degrees.y = randf_range(0.0, 360.0)
 		decals_center.rotation_degrees.z = randf_range(0.0, 360.0)
 		await get_tree().process_frame
 		await get_tree().process_frame
-		var d : Decal = decals_center.get_node("Mesh/Decal").duplicate()
+		var d : Decal = decal.duplicate()
 		$Decals.add_child(d)
-		d.global_position = decals_center.get_node("Mesh/Decal").global_position
-		d.global_rotation = decals_center.get_node("Mesh/Decal").global_rotation
+		update_decal_position_rotation(d, decal.global_position, decal.global_rotation)
+		
 	decals_maker.queue_free()
 	print(decals_count)
 
+@rpc("any_peer")
+func update_decal_position_rotation(decal:Decal, pos:Vector3, rot:Vector3) -> void:
+	decal.global_position = pos
+	decal.global_rotation = rot
+	
+func get_decals() -> Array:
+	return $Decals.get_children()
 	
 func get_next_zone_position() -> Vector3:
 	return $Room/Pos2.global_position

@@ -220,9 +220,8 @@ func flying_camera() -> void:
 	$CamRoot.status = 0 if is_active else 1
 	if $CamRoot.status == 0:
 		$CamRoot.position = Vector3(0, 1, 0)
-		$CamRoot/CamYaw/CamPitch/SpringArm3D.spring_length = 7
-	else:
-		$CamRoot/CamYaw/CamPitch/SpringArm3D.spring_length = 0
+	var t = get_tree().create_tween()
+	t.tween_property($CamRoot/CamYaw/CamPitch/SpringArm3D, "spring_length", 7 if $CamRoot.status == 0 else 0, 0.1)
 
 func _input(_event) -> void:
 	if !is_multiplayer_authority(): return

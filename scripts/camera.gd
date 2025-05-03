@@ -32,6 +32,8 @@ func _input(event):
 	if event is InputEventMouseMotion:
 		yaw += -event.relative.x * yaw_sensitivity
 		pitch += -event.relative.y * pitch_sensitivity
+	if status == 1 and !Input.is_action_pressed("aim") and Input.is_action_just_pressed("hit"):
+		select_decal()
 func _process(_delta: float) -> void:
 	if status == 0 and !player.is_active: return
 	var view = Input.get_vector("view_left", "view_right", "view_down", "view_up")
@@ -60,3 +62,18 @@ func _physics_process(delta):
 		velocity = movement.normalized() * (player.RUN_SPEED * 4.0 if Input.is_action_pressed("run") else player.RUN_SPEED * 2.0)
 		#global_position += movement * delta
 		move_and_slide()
+
+func select_decal() -> void:
+	var decals : Array = Globals.world.get_zone().get_decals()
+	var point : Vector3 = ray_crosshair.get_collision_point()
+	var nearest_decal_to_point : Decal = null
+	var nearest_distance : float = INF
+	for decal in decals:
+		var distance = point.distance_squared_to(decal.get_node("Ray").get_collision_point())
+		if distance < nearest_distance:
+			nearest_distance = distance
+			nearest_decal_to_point = decal
+	print("Nearest position: ", nearest_distance)
+	if nearest_distance <= 1.0:
+		nearest_decal_to_point.modulate = Color(1, 0.941, 0)
+			
