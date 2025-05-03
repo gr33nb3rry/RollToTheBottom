@@ -27,7 +27,7 @@ func close() -> void:
 	Globals.health.visible = true
 	
 func select(index:int) -> void:
-	#if !is_able_to_select or Globals.ms.players.size() == 1: return
+	if !is_able_to_select or Globals.ms.players.size() == 1: return
 	if !is_able_to_select: return
 	selection[0 if multiplayer.get_unique_id() == 1 else 1] = index
 	hover_selection_end(index)
@@ -82,11 +82,11 @@ func hover_selection_end(index:int) -> void:
 
 func play() -> void:
 	if !multiplayer.is_server(): return
-	#if selection[0] == -1 or selection[1] == -1 or selection[0] == selection[1]: return
+	if selection[0] == -1 or selection[1] == -1 or selection[0] == selection[1]: return
 	var player = Globals.ms.get_player_by_id(multiplayer.get_unique_id())
 	var type : int = selection[0 if multiplayer.get_unique_id() == 1 else 1]
 	player.type = type
-	#Globals.ms.get_player_by_id(Globals.ms.get_second_player_peer_id()).type = 0 if type == 1 else 1
+	Globals.ms.get_player_by_id(Globals.ms.get_second_player_peer_id()).type = 0 if type == 1 else 1
 	play_not_host.rpc_id(Globals.ms.get_second_player_peer_id())
 	close()
 

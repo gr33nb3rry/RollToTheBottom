@@ -22,10 +22,12 @@ var max_h_offset : float = 10.0
 
 func _ready() -> void:
 	$Curve.get_child(2).create_trimesh_collision()
+	#$Curve.get_child(2).get_child(0).set_collision_layer(4)
 	$Curve.get_child(2).set_layer_mask(524288)
 	if has_node("CurveB"): 
 		for i in $CurveB.get_children():
 			i.get_child(0).create_trimesh_collision()
+			#i.get_child(0).get_child(0).set_collision_layer(4)
 			i.get_child(0).set_layer_mask(524288)
 	#process_mode = Node.PROCESS_MODE_DISABLED
 	generate_decals()

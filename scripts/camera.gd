@@ -1,4 +1,4 @@
-extends Node3D
+extends CharacterBody3D
 
 @export var player : CharacterBody3D
 @onready var yaw_node = $CamYaw
@@ -57,5 +57,6 @@ func _physics_process(delta):
 		forward *= direction.y
 		right *= direction.x
 		movement += forward + right
-		movement = movement.normalized() * (player.RUN_SPEED * 4.0 if Input.is_action_pressed("run") else player.RUN_SPEED * 2.0)
-		global_position += movement * delta
+		velocity = movement.normalized() * (player.RUN_SPEED * 4.0 if Input.is_action_pressed("run") else player.RUN_SPEED * 2.0)
+		#global_position += movement * delta
+		move_and_slide()

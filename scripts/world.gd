@@ -15,7 +15,7 @@ func start() -> void:
 	current_zone_instance = get_zone()
 	Globals.ball.is_simplified = true
 	is_able_to_zone_up = true
-	#add_waiting_soots()
+	add_waiting_soots()
 	$Map.get_child(zone).get_node("Room").process_mode = Node.PROCESS_MODE_INHERIT
 	if zone >= 2:
 		$Map.get_node("Room").disable()

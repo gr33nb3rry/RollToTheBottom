@@ -189,8 +189,10 @@ func suck_soot() -> void:
 			sucked_soot = collider
 func blow_soot() -> void:
 	if sucked_soot != null:
-		if multiplayer.get_unique_id() != 1: Globals.processor.blow_soot.rpc_id(1, sucked_soot, global_position + (-camera.global_transform.basis.z).normalized())
-		else: Globals.processor.blow_soot(sucked_soot, global_position + (-camera.global_transform.basis.z).normalized())
+		#if multiplayer.get_unique_id() != 1: Globals.processor.blow_soot.rpc_id(1, sucked_soot, global_position + (-camera.global_transform.basis.z).normalized())
+		#else: Globals.processor.blow_soot(sucked_soot, global_position + (-camera.global_transform.basis.z).normalized())
+		var t = get_tree().create_tween()
+		t.tween_property(sucked_soot, "global_position", global_position + (-camera.global_transform.basis.z).normalized() * 30.0, 3.0).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
 		sucked_soot = null
 
 func attack() -> void:
@@ -218,6 +220,9 @@ func flying_camera() -> void:
 	$CamRoot.status = 0 if is_active else 1
 	if $CamRoot.status == 0:
 		$CamRoot.position = Vector3(0, 1, 0)
+		$CamRoot/CamYaw/CamPitch/SpringArm3D.spring_length = 7
+	else:
+		$CamRoot/CamYaw/CamPitch/SpringArm3D.spring_length = 0
 
 func _input(_event) -> void:
 	if !is_multiplayer_authority(): return
