@@ -61,7 +61,7 @@ func add_impulse(from:Node3D, push_force:float, is_hit:bool = false) -> void:
 	simplicity_current = 1.0
 
 func jump() -> void:
-	direction += Vector3.UP * jump_force
+	direction.y = jump_force
 		
 func _input(_event: InputEvent) -> void:
 	if Input.is_key_pressed(KEY_P):

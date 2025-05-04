@@ -56,7 +56,7 @@ func _process(_delta: float) -> void:
 		Globals.ball.stop()
 		Globals.ball.is_active = false
 		var t = get_tree().create_tween()
-		t.tween_property(Globals.ball, "global_position", $ActivityPoint/BallPos.global_position, 2.0).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
+		t.tween_property(Globals.ball, "global_position", $ActivityPoint/BallPos.global_position, 2.0).set_trans(Tween.TRANS_SPRING).set_ease(Tween.EASE_OUT)
 		Globals.world.start_activity()
 	elif is_activity_started and is_activity_finished:
 		Globals.ball.is_active = true
@@ -89,6 +89,7 @@ func generate_decals() -> void:
 		d.type = type
 		$Decals.add_child(d)
 		update_decal_position_rotation_type(d, decal.global_position, decal.global_rotation, d.type)
+		update_decal_position_rotation_type.rpc_id(Globals.ms.get_second_player_peer_id(), d, decal.global_position, decal.global_rotation, d.type)
 		
 	decals_maker.queue_free()
 	print(decals_count)
