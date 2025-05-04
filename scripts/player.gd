@@ -51,7 +51,7 @@ func _physics_process(delta: float) -> void:
 	apply_impulse()
 	apply_gravity(delta)
 	rotate_to_gravity(delta)
-	if !is_active: return
+	#if !is_active: return
 	
 	var movement = move(delta)
 		
@@ -110,6 +110,7 @@ func rotate_model_to_camera(delta:float) -> void:
 	$Model/Body.rotation.y = lerp_angle($Model/Body.rotation.y, $CamRoot/CamYaw.rotation.y, ROTATION_SPEED * delta)
 	
 func move(delta:float) -> Vector3:
+	if !is_active: return Vector3.ZERO
 	var movement := Vector3.ZERO
 	var forward : Vector3 = -$CamRoot/CamYaw.global_transform.basis.z
 	var right : Vector3 = $CamRoot/CamYaw.global_transform.basis.x
@@ -216,7 +217,10 @@ func aim(is_aim:bool) -> void:
 	$/root/Main/Canvas/Crosshair.visible = is_aim
 
 func flying_camera() -> void:
+	stop()
 	is_active = !is_active
+	$CamRoot.top_level = !is_active
+	aim(!is_active)
 	$CamRoot.status = 0 if is_active else 1
 	if $CamRoot.status == 0:
 		$CamRoot.position = Vector3(0, 1, 0)
@@ -225,7 +229,7 @@ func flying_camera() -> void:
 
 func _input(_event) -> void:
 	if !is_multiplayer_authority(): return
-	if Input.is_action_pressed("aim") and Input.is_action_just_pressed("hit"):
+	if Input.is_action_just_pressed("switch_camera"):
 		flying_camera()
 	if !is_active: return
 	if Input.is_action_just_pressed("ui_cancel"):
