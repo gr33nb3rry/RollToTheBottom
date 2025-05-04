@@ -40,7 +40,7 @@ func _process(delta: float) -> void:
 		Globals.enemy_spawner.start()
 
 func disable() -> void:
-	$Area1.process_mode = Node.PROCESS_MODE_DISABLED
+	process_mode = Node.PROCESS_MODE_DISABLED
 
 func get_jumping_start_position() -> Vector3:
 	return to_global($Pos1.position + Vector3(0, 0, 5))

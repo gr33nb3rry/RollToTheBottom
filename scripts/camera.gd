@@ -73,8 +73,8 @@ func select_decal() -> void:
 		if distance < nearest_distance:
 			nearest_distance = distance
 			nearest_decal_to_point = decal
-	print("Nearest position: ", nearest_distance)
-	if nearest_distance <= 1.0:
+	print("Selected decal.  Distance: ", nearest_distance, "  Type: ", nearest_decal_to_point.type)
+	if !nearest_decal_to_point.is_selected and nearest_distance <= 2.0 and Globals.world.activity_type == 0 and Globals.world.activity_value == str(nearest_decal_to_point.type):
 		nearest_decal_to_point.select()
 		if multiplayer.get_unique_id() == 1:
 			nearest_decal_to_point.select.rpc_id(Globals.ms.get_second_player_peer_id())

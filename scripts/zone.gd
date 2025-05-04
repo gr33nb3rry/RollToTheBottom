@@ -1,6 +1,7 @@
 extends Node3D
 
 const SOOT_WAITING = preload("res://scenes/soot_waiting.tscn")
+const DECAL_0 = preload("res://images/decals/decal0.png")
 const DECAL_1 = preload("res://images/decals/decal1.png")
 const DECAL_2 = preload("res://images/decals/decal2.png")
 const DECAL_3 = preload("res://images/decals/decal3.png")
@@ -22,12 +23,12 @@ var max_h_offset : float = 10.0
 
 func _ready() -> void:
 	$Curve.get_child(2).create_trimesh_collision()
-	#$Curve.get_child(2).get_child(0).set_collision_layer(4)
+	$Curve.get_child(2).get_child(0).set_collision_layer_value(3, true)
 	$Curve.get_child(2).set_layer_mask(524288)
 	if has_node("CurveB"): 
 		for i in $CurveB.get_children():
 			i.get_child(0).create_trimesh_collision()
-			#i.get_child(0).get_child(0).set_collision_layer(4)
+			i.get_child(0).get_child(0).set_collision_layer_value(3, true)
 			i.get_child(0).set_layer_mask(524288)
 	#process_mode = Node.PROCESS_MODE_DISABLED
 	generate_decals()
@@ -47,7 +48,7 @@ func _process(_delta: float) -> void:
 func generate_decals() -> void:
 	if !multiplayer.is_server(): return
 	var offset : float = 20.0
-	var step : float = 5.0
+	var step : float = 7.0
 	var max : float = path.curve.get_baked_length() - offset
 	var iteration_count : int = floori(max / step)
 	decals_maker.progress = offset
@@ -56,12 +57,12 @@ func generate_decals() -> void:
 		var decal : Decal = decals_center.get_node("Mesh/Decal")
 		var type : int = randi_range(0, 5)
 		match type:
+			0: decal.texture_albedo = DECAL_0
 			1: decal.texture_albedo = DECAL_1
 			2: decal.texture_albedo = DECAL_2
 			3: decal.texture_albedo = DECAL_3
 			4: decal.texture_albedo = DECAL_4
 			5: decal.texture_albedo = DECAL_5
-		decal.type = type
 		decals_count[type] += 1
 		decals_maker.progress += step
 		decals_center.rotation_degrees.y = randf_range(0.0, 360.0)
@@ -69,19 +70,23 @@ func generate_decals() -> void:
 		await get_tree().process_frame
 		await get_tree().process_frame
 		var d : Decal = decal.duplicate()
+		d.type = type
 		$Decals.add_child(d)
-		update_decal_position_rotation(d, decal.global_position, decal.global_rotation)
+		update_decal_position_rotation_type(d, decal.global_position, decal.global_rotation, d.type)
 		
 	decals_maker.queue_free()
 	print(decals_count)
 
 @rpc("any_peer")
-func update_decal_position_rotation(decal:Decal, pos:Vector3, rot:Vector3) -> void:
+func update_decal_position_rotation_type(decal:Decal, pos:Vector3, rot:Vector3, type:int) -> void:
 	decal.global_position = pos
 	decal.global_rotation = rot
+	decal.type = type
 	
 func get_decals() -> Array:
 	return $Decals.get_children()
+func get_decal_count(type:int) -> int:
+	return decals_count[type]
 	
 func get_next_zone_position() -> Vector3:
 	return $Room/Pos2.global_position
@@ -151,3 +156,7 @@ func get_passed_position() -> float:
 
 func get_length() -> float:
 	return path.curve.get_baked_length()
+
+func disable() -> void:
+	process_mode = PROCESS_MODE_DISABLED
+	$Room.disable()

@@ -98,9 +98,9 @@ mesh = SubResource("BoxMesh_8qa26")
 
 [node name="Decal" type="Decal" parent="Curve/DecalsMaker/Center/Mesh"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -8.195, 0)
-size = Vector3(1, 15, 1)
+size = Vector3(1.4, 15, 1.4)
 texture_albedo = ExtResource("4_pm8h3")
-modulate = Color(0.364231, 0.572187, 0.232781, 1)
+modulate = Color(0.303884, 0.533833, 0.234427, 1)
 upper_fade = 3.18806e-05
 lower_fade = 3.92494e-05
 cull_mask = 524289
