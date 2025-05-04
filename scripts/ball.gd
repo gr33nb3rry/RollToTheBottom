@@ -18,7 +18,10 @@ var is_simplified : bool = false
 var simplicity_level : float = 7.0 # 7 MAX 3.5 OK
 var simplicity_current : float = 1.0
 
-var is_active : bool = true
+var is_active : bool = true:
+	set(v):
+		is_active = v
+		gravity_scale = 1 if is_active else 0
 
 func _physics_process(delta: float) -> void:
 	if !is_active: return
@@ -140,4 +143,5 @@ func refresh_size() -> void:
 	update_pieces()
 
 func stop() -> void:
+	angular_velocity = Vector3.ZERO
 	linear_velocity = Vector3.ZERO

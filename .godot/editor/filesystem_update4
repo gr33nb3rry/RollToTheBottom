@@ -32,3 +32,9 @@ res://scenes/character_select.tscn
 res://scenes/soot_stealing.tscn
 res://scenes/soot_flying.tscn
 res://scenes/zones/zone2.tscn
+res://scripts/processor.gd
+res://scripts/ball.gd
+res://scripts/zone.gd
+res://scripts/world.gd
+res://scripts/activity_ui.gd
+res://scripts/Globals.gd

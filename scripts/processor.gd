@@ -2,8 +2,8 @@ extends Node
 
 const PROJECTILE = preload("res://scenes/projectile.tscn")
 const COIN = preload("res://scenes/coin.tscn")
-const BALL_PUSH_FORCE : float = 7.0
-const BALL_HIT_FORCE : float = 20.0
+const BALL_PUSH_FORCE : float = 14.0
+const BALL_HIT_FORCE : float = 40.0
 
 var max_health : Array = [20.0, 20.0]
 var health : Array = [max_health[0], max_health[1]]

@@ -5,7 +5,7 @@ enum Activities {
 }
 
 var zone : int = 1
-var activity_type : int
+var activity_type : int = -1
 var activity_value : String
 var activity_answer : String
 var selected_decals : int
@@ -21,9 +21,9 @@ func _ready() -> void:
 	
 func start() -> void:
 	current_zone_instance = get_zone()
-	generate_activity()
 	Globals.ball.is_simplified = true
 	is_able_to_zone_up = true
+	activity_type = -1
 	#add_waiting_soots()
 	$Map.get_child(zone).get_node("Room").process_mode = Node.PROCESS_MODE_INHERIT
 	if zone >= 2:
@@ -53,14 +53,19 @@ func generate_activity() -> void:
 func select_decal() -> void:
 	print("Selected decals: ", selected_decals)
 	selected_decals += 1
+	Globals.activity.update_current()
 	if str(selected_decals) == activity_answer:
 		finish_activity()
 
 func start_activity() -> void:
+	generate_activity()
 	print("Activity started")
+	Globals.activity.update(activity_type, activity_value, activity_answer)
 	
 func finish_activity() -> void:
 	print("Activity finished")
+	current_zone_instance.is_activity_finished = true
+	Globals.activity.finish()
 	
 	
 func get_zone() -> Node3D:

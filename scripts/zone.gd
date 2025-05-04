@@ -58,6 +58,8 @@ func _process(_delta: float) -> void:
 		var t = get_tree().create_tween()
 		t.tween_property(Globals.ball, "global_position", $ActivityPoint/BallPos.global_position, 2.0).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
 		Globals.world.start_activity()
+	elif is_activity_started and is_activity_finished:
+		Globals.ball.is_active = true
 	
 func generate_decals() -> void:
 	if !multiplayer.is_server(): return
@@ -79,7 +81,7 @@ func generate_decals() -> void:
 			5: decal.texture_albedo = DECAL_5
 		decals_count[type] += 1
 		decals_maker.progress += step
-		decals_center.rotation_degrees.y = randf_range(0.0, 360.0)
+		decals_center.get_node("Mesh").rotation_degrees.y = randf_range(0.0, 360.0)
 		decals_center.rotation_degrees.z = randf_range(0.0, 360.0)
 		await get_tree().process_frame
 		await get_tree().process_frame
