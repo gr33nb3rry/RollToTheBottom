@@ -36,7 +36,8 @@ func _ready() -> void:
 			i.get_child(0).set_layer_mask(524288)
 	#process_mode = Node.PROCESS_MODE_DISABLED
 	activity_decal_animation()
-	generate_decals()
+	if multiplayer.get_unique_id() != 1:
+		decals_maker.queue_free()
 
 func _process(_delta: float) -> void:
 	if !multiplayer.is_server(): return
@@ -72,13 +73,6 @@ func generate_decals() -> void:
 	for i in iteration_count:
 		var decal : Decal = decals_center.get_node("Mesh/Decal")
 		var type : int = randi_range(0, 5)
-		match type:
-			0: decal.texture_albedo = DECAL_0
-			1: decal.texture_albedo = DECAL_1
-			2: decal.texture_albedo = DECAL_2
-			3: decal.texture_albedo = DECAL_3
-			4: decal.texture_albedo = DECAL_4
-			5: decal.texture_albedo = DECAL_5
 		decals_count[type] += 1
 		decals_maker.progress += step
 		decals_center.get_node("Mesh").rotation_degrees.y = randf_range(0.0, 360.0)
@@ -87,21 +81,27 @@ func generate_decals() -> void:
 		await get_tree().process_frame
 		var d : Decal = decal.duplicate()
 		d.type = type
-		$Decals.add_child(d)
-		update_decal_position_rotation_type(d, decal.global_position, decal.global_rotation, d.type)
-		update_decal_position_rotation_type.rpc_id(Globals.ms.get_second_player_peer_id(), d, decal.global_position, decal.global_rotation, d.type)
+		Globals.world.get_node("Decals").add_child(d, true)
+		update_decal_position_rotation_type(Globals.world.get_node("Decals").get_child_count()-1, decal.global_position, decal.global_rotation, d.type)
+		update_decal_position_rotation_type.rpc_id(Globals.ms.get_second_player_peer_id(), Globals.world.get_node("Decals").get_child_count()-1, decal.global_position, decal.global_rotation, d.type)
 		
 	decals_maker.queue_free()
 	print(decals_count)
 
 @rpc("any_peer")
-func update_decal_position_rotation_type(decal:Decal, pos:Vector3, rot:Vector3, type:int) -> void:
-	decal.global_position = pos
-	decal.global_rotation = rot
-	decal.type = type
+func update_decal_position_rotation_type(index:int, pos:Vector3, rot:Vector3, type:int) -> void:
+	Globals.world.get_node("Decals").get_child(index).global_position = pos
+	Globals.world.get_node("Decals").get_child(index).global_rotation = rot
+	Globals.world.get_node("Decals").get_child(index).type = type
+	match type:
+		0: Globals.world.get_node("Decals").get_child(index).texture_albedo = DECAL_0
+		1: Globals.world.get_node("Decals").get_child(index).texture_albedo = DECAL_1
+		2: Globals.world.get_node("Decals").get_child(index).texture_albedo = DECAL_2
+		3: Globals.world.get_node("Decals").get_child(index).texture_albedo = DECAL_3
+		4: Globals.world.get_node("Decals").get_child(index).texture_albedo = DECAL_4
+		5: Globals.world.get_node("Decals").get_child(index).texture_albedo = DECAL_5
 	
-func get_decals() -> Array:
-	return $Decals.get_children()
+	
 func get_decal_count(type:int) -> int:
 	return decals_count[type]
 	
@@ -184,4 +184,3 @@ func activity_decal_animation() -> void:
 func disable() -> void:
 	process_mode = PROCESS_MODE_DISABLED
 	$Room.disable()
-	for decal in $Decals.get_children(): decal.queue_free()

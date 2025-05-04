@@ -38,3 +38,6 @@ res://scripts/zone.gd
 res://scripts/world.gd
 res://scripts/activity_ui.gd
 res://scripts/Globals.gd
+res://scenes/box.tscn
+res://scripts/camera.gd
+res://scripts/decal_zone.gd

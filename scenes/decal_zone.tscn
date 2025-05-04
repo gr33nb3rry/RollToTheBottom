@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://rugtnvlvhw3s"]
+
+[ext_resource type="Texture2D" uid="uid://bmkbgftqec3cm" path="res://images/decals/decal1.png" id="1_guwqb"]
+[ext_resource type="Script" path="res://scripts/decal_zone.gd" id="2_vo8s8"]
+
+[node name="Decal" type="Decal"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -8.195, 0)
+size = Vector3(1.4, 15, 1.4)
+texture_albedo = ExtResource("1_guwqb")
+modulate = Color(0.303884, 0.533833, 0.234427, 1)
+upper_fade = 3.18806e-05
+lower_fade = 3.92494e-05
+cull_mask = 524288
+script = ExtResource("2_vo8s8")
+
+[node name="Ray" type="RayCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.47904, 0)
+target_position = Vector3(0, -15, 0)

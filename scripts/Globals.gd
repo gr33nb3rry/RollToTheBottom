@@ -6,7 +6,6 @@ var ball
 var ms
 var world
 var processor
-var projectile_spawner
 var enemy_spawner
 var health
 var activity
@@ -20,7 +19,6 @@ func define() -> void:
 	ms = $/root/Main/World/MultiplayerSpawner
 	world = $/root/Main/World
 	processor = $/root/Main/World/Processor
-	projectile_spawner = $/root/Main/World/ProjectileSpawner
 	enemy_spawner = $/root/Main/World/EnemySpawner
 	health = $/root/Main/World/Canvas/Health
 	activity = $/root/Main/World/Canvas/Activity

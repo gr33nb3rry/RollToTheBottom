@@ -29,7 +29,7 @@ var skills = {
 
 func _ready() -> void:
 	await get_tree().process_frame
-	Globals.health.update(max_health, health)
+	#Globals.health.update(max_health, health)
 
 @rpc("any_peer")
 func get_skill(peer_id:int, skill_name:String) -> int:

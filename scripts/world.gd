@@ -31,6 +31,8 @@ func start() -> void:
 		if zone >= 3:
 			$Map.get_child(zone-2).disable()
 			#$Map.get_child(zone-2).call_deferred("set_process_mode", Node.PROCESS_MODE_DISABLED)
+	for decal in Globals.world.get_node("Decals").get_children(): decal.queue_free()
+	current_zone_instance.generate_decals()
 	
 func end() -> void:
 	if is_able_to_zone_up:
@@ -49,23 +51,38 @@ func generate_activity() -> void:
 			activity_answer = str(get_zone().get_decal_count(decal_type))
 			activity_value = str(decal_type)
 	print("Activity generated.  Type: ", activity_type, "  Value: ", activity_value, "  Answer: ", activity_answer)
+	sync_activity.rpc_id(Globals.ms.get_second_player_peer_id(), activity_type, activity_value, activity_answer)
+
+@rpc("any_peer")
+func sync_activity(type:int, value:String, answer:String) -> void:
+	activity_type = type
+	activity_value = value
+	activity_answer = answer
 
 func select_decal() -> void:
 	print("Selected decals: ", selected_decals)
 	selected_decals += 1
 	Globals.activity.update_current()
+	sync_selected_decals.rpc_id(Globals.ms.get_second_player_peer_id(), selected_decals)
 	if str(selected_decals) == activity_answer:
 		finish_activity()
+
+@rpc("any_peer")
+func sync_selected_decals(v:int) -> void:
+	selected_decals = v
+	Globals.activity.update_current()
 
 func start_activity() -> void:
 	generate_activity()
 	print("Activity started")
 	Globals.activity.update(activity_type, activity_value, activity_answer)
+	Globals.activity.update.rpc_id(Globals.ms.get_second_player_peer_id(), activity_type, activity_value, activity_answer)
 	
 func finish_activity() -> void:
 	print("Activity finished")
 	current_zone_instance.is_activity_finished = true
 	Globals.activity.finish()
+	Globals.activity.finish.rpc_id(Globals.ms.get_second_player_peer_id())
 	
 	
 func get_zone() -> Node3D:
