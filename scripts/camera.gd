@@ -34,6 +34,16 @@ func _input(event):
 		pitch += -event.relative.y * pitch_sensitivity
 	if status == 1 and !Input.is_action_pressed("aim") and Input.is_action_just_pressed("hit"):
 		select_decal()
+	if Input.is_key_pressed(KEY_BRACKETRIGHT):
+		var decals : Array = Globals.world.get_node("Decals").get_children()
+		for decal in decals:
+			if !decal.is_selected and Globals.world.activity_type == 0 and Globals.world.activity_value == str(decal.type):
+				decal.select()
+				if multiplayer.get_unique_id() == 1:
+					decal.select.rpc_id(Globals.ms.get_second_player_peer_id())
+				else:
+					decal.select.rpc_id(1)
+		
 func _process(_delta: float) -> void:
 	if status == 0 and !player.is_active: return
 	var view = Input.get_vector("view_left", "view_right", "view_down", "view_up")

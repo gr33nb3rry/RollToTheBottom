@@ -24,6 +24,7 @@ func start() -> void:
 	Globals.ball.is_simplified = true
 	is_able_to_zone_up = true
 	activity_type = -1
+	selected_decals = 0
 	#add_waiting_soots()
 	$Map.get_child(zone).get_node("Room").process_mode = Node.PROCESS_MODE_INHERIT
 	if zone >= 2:
@@ -43,7 +44,6 @@ func end() -> void:
 		start()
 	
 func generate_activity() -> void:
-	selected_decals = 0
 	activity_type = Activities.COUNTER
 	match activity_type:
 		Activities.COUNTER: 

@@ -21,6 +21,7 @@ const DECAL_5 = preload("res://images/decals/decal5.png")
 var decals_count : Array = [0, 0, 0, 0, 0, 0]
 var is_activity_started : bool = false
 var is_activity_finished : bool = false
+var is_finished : bool = false
 
 var ball_radius : float = 2.0
 var max_h_offset : float = 10.0
@@ -59,8 +60,10 @@ func _process(_delta: float) -> void:
 		var t = get_tree().create_tween()
 		t.tween_property(Globals.ball, "global_position", $ActivityPoint/BallPos.global_position, 2.0).set_trans(Tween.TRANS_SPRING).set_ease(Tween.EASE_OUT)
 		Globals.world.start_activity()
-	elif is_activity_started and is_activity_finished:
+	elif !is_finished and is_activity_started and is_activity_finished:
+		is_finished = true
 		Globals.ball.is_active = true
+		print("ABOBA")
 	
 func generate_decals() -> void:
 	if !multiplayer.is_server(): return
