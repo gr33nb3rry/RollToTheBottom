@@ -15,8 +15,12 @@ const DECAL_5 = preload("res://images/decals/decal5.png")
 @onready var marker_l: MeshInstance3D = $Curve/PathFollow/Marker/L
 @onready var decals_maker: PathFollow3D = $Curve/DecalsMaker
 @onready var decals_center: MeshInstance3D = $Curve/DecalsMaker/Center
+@onready var activity_point: Marker3D = $ActivityPoint/Pos
+
 
 var decals_count : Array = [0, 0, 0, 0, 0, 0]
+var is_activity_started : bool = false
+var is_activity_finished : bool = false
 
 var ball_radius : float = 2.0
 var max_h_offset : float = 10.0
@@ -31,10 +35,12 @@ func _ready() -> void:
 			i.get_child(0).get_child(0).set_collision_layer_value(3, true)
 			i.get_child(0).set_layer_mask(524288)
 	#process_mode = Node.PROCESS_MODE_DISABLED
+	activity_decal_animation()
 	generate_decals()
 
 func _process(_delta: float) -> void:
 	if !multiplayer.is_server(): return
+	# BALL SIMPLICITY
 	var ball_dir : Vector3 = Globals.ball.get_linear_velocity()
 	ball_dir.y = 0.0
 	var ball_pos : Vector3 = Globals.ball.global_position + ball_dir.normalized() * 25.0
@@ -44,6 +50,14 @@ func _process(_delta: float) -> void:
 	path_follow.v_offset = r + ball_radius
 	marker_l.position.x = -r
 	marker_r.position.x = r
+	# ACTIVITY CHECKER
+	if !is_activity_started and activity_point.global_position.distance_squared_to(Globals.ball.global_position) < 289.0:
+		is_activity_started = true
+		Globals.ball.stop()
+		Globals.ball.is_active = false
+		var t = get_tree().create_tween()
+		t.tween_property(Globals.ball, "global_position", $ActivityPoint/BallPos.global_position, 2.0).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
+		Globals.world.start_activity()
 	
 func generate_decals() -> void:
 	if !multiplayer.is_server(): return
@@ -157,6 +171,14 @@ func get_passed_position() -> float:
 func get_length() -> float:
 	return path.curve.get_baked_length()
 
+func activity_decal_animation() -> void:
+	$ActivityPoint/Decal.rotation_degrees.y = 0
+	var t = get_tree().create_tween()
+	t.tween_property($ActivityPoint/Decal, "rotation_degrees:y", -360, 20.0)
+	await t.finished
+	activity_decal_animation()
+
 func disable() -> void:
 	process_mode = PROCESS_MODE_DISABLED
 	$Room.disable()
+	for decal in $Decals.get_children(): decal.queue_free()

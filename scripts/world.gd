@@ -55,7 +55,10 @@ func select_decal() -> void:
 	selected_decals += 1
 	if str(selected_decals) == activity_answer:
 		finish_activity()
-		
+
+func start_activity() -> void:
+	print("Activity started")
+	
 func finish_activity() -> void:
 	print("Activity finished")
 	

@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://yhpgoa10oh6y"]
+[gd_scene load_steps=17 format=3 uid="uid://yhpgoa10oh6y"]
 
 [ext_resource type="Script" path="res://scripts/zone.gd" id="1_7maf6"]
 [ext_resource type="Script" path="res://addons/curvemesh3d/curvemesh3d.gd" id="2_keamj"]
@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://bmkbgftqec3cm" path="res://images/decals/decal1.png" id="4_pm8h3"]
 [ext_resource type="Script" path="res://scripts/decal_zone.gd" id="5_5m77l"]
 [ext_resource type="Material" uid="uid://btw6bhbo8oi8k" path="res://materials/steb_item_m_s.tres" id="6_tq0b3"]
+[ext_resource type="Texture2D" uid="uid://r7gwyasg7fnl" path="res://images/decals/decal4.png" id="8_3jj46"]
 
 [sub_resource type="Curve3D" id="Curve3D_r7bhb"]
 bake_interval = 1.0
@@ -103,7 +104,7 @@ texture_albedo = ExtResource("4_pm8h3")
 modulate = Color(0.303884, 0.533833, 0.234427, 1)
 upper_fade = 3.18806e-05
 lower_fade = 3.92494e-05
-cull_mask = 524289
+cull_mask = 524288
 script = ExtResource("5_5m77l")
 
 [node name="Ray" type="RayCast3D" parent="Curve/DecalsMaker/Center/Mesh/Decal"]
@@ -144,6 +145,29 @@ material = ExtResource("6_tq0b3")
 [node name="Path3D" type="Path3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.424, 0, 0)
 curve = SubResource("Curve3D_r7bhb")
+
+[node name="PathFollow3D" type="PathFollow3D" parent="Path3D"]
+transform = Transform3D(0.583377, -0.284654, 0.760676, 0, 0.936562, 0.350474, -0.812193, -0.204459, 0.546373, 45.5662, -39.2975, -137.325)
+progress = 194.985
+rotation_mode = 2
+
+[node name="ActivityPoint" type="Node3D" parent="."]
+transform = Transform3D(0.583376, -0.284654, 0.760675, 0, 0.936561, 0.350473, -0.812192, -0.204459, 0.546373, 40.1422, -39.2975, -137.325)
+
+[node name="Decal" type="Decal" parent="ActivityPoint"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 15, 0)
+size = Vector3(22, 15, 22)
+texture_albedo = ExtResource("8_3jj46")
+modulate = Color(0.301961, 0.533333, 0.235294, 1)
+upper_fade = 5.36165e-05
+lower_fade = 2.77537e-05
+cull_mask = 524288
+
+[node name="Pos" type="Marker3D" parent="ActivityPoint"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 17.5, 0)
+
+[node name="BallPos" type="Marker3D" parent="ActivityPoint"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 25, 0)
 
 [node name="Decals" type="MultiplayerSpawner" parent="."]
 spawn_path = NodePath(".")

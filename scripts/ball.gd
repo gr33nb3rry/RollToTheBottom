@@ -15,10 +15,13 @@ const GRAVITY : float = 7.0
 @onready var world = $/root/Main/World
 
 var is_simplified : bool = false
-var simplicity_level : float = 3.5 # 7 MAX
+var simplicity_level : float = 7.0 # 7 MAX 3.5 OK
 var simplicity_current : float = 1.0
 
+var is_active : bool = true
+
 func _physics_process(delta: float) -> void:
+	if !is_active: return
 	$/root/Main/Canvas/DebugLabel.text = str(is_on_ground)
 	#if !is_on_ground:
 	#	time_in_air += delta
@@ -40,8 +43,6 @@ func _physics_process(delta: float) -> void:
 		simplicity_current /= 1.0 + delta * 3
 	else:
 		direction = Vector3.ZERO
-	#if is_on_ground:
-	#	jump_current = 0.0
 
 func add_impulse(from:Node3D, push_force:float, is_hit:bool = false) -> void:
 	var push_normal : Vector3 = global_position - from.global_position

@@ -40,3 +40,4 @@ res://scripts/enemy_spawner.gd
 res://scripts/ball.gd
 res://scenes/zones/zone2.tscn
 res://scripts/decal_zone.gd
+res://scripts/processor.gd
