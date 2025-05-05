@@ -1,3 +1,7 @@
+Label
+SubViewport
+Node3D
+Decal
 RigidBody3D
 MeshInstance3D
 RayCast3D
@@ -9,7 +13,3 @@ VBoxContainer
 RichTextLabel
 HBoxContainer
 Marker3D
-PathFollow3D
-Decal
-Node3D
-MultiplayerSynchronizer

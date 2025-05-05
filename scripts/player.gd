@@ -74,7 +74,7 @@ func _physics_process(delta: float) -> void:
 			animation_tree["parameters/Movement/walk/TimeScale/scale"] = 1.5
 	
 	move_and_slide()
-	if ray_push.is_colliding() and ray_push.get_collider().name == "Ball" and !is_rolling:
+	if ray_push.is_colliding() and ray_push.get_collider() == Globals.ball and !is_rolling:
 		is_rolling = true
 		blend_on("HandsBlend", 0.1)
 	elif !ray_push.is_colliding() and is_rolling:
@@ -183,26 +183,23 @@ func hit() -> void:
 	else: hit.rpc_id(1)
 func hit_check() -> void:
 	if !multiplayer.is_server(): return
-	var ball_r : float = Globals.ball.radius
-	if hit_melee_pos.global_position.distance_squared_to(Globals.ball.global_position) < ball_r * ball_r + 1.0:
-		Globals.processor.hit_ball(1)
-		#if multiplayer.get_unique_id() != 1:
-		#	Globals.processor.rpc_id(1, "hit_ball", multiplayer.get_unique_id())
-		#else:
-		#	Globals.processor.hit_ball(1)
-		print("Hit melee: Ball")
-	for soot in get_tree().get_nodes_in_group("Soot"):
-		print(hit_melee_pos.global_position.distance_to(soot.global_position), " < ", soot.RADIUS * soot.RADIUS + 1.0)
-		if hit_melee_pos.global_position.distance_to(soot.global_position) < soot.RADIUS + 1.0:
-			Globals.processor.damage_soot(soot, multiplayer.get_unique_id(), 1.0)
-			#if multiplayer.get_unique_id() != 1: Globals.processor.damage_soot.rpc_id(1, soot, multiplayer.get_unique_id(), 1.0)
-			#else: Globals.processor.damage_soot(soot, multiplayer.get_unique_id(), 1.0)
-			print("Hit melee: ", soot)
+	for i in $Model/Body/AreaMelee.get_overlapping_bodies():
+		print(i)
+		if i == Globals.ball:
+			Globals.processor.hit_ball()
+			#if multiplayer.get_unique_id() != 1:
+			#	Globals.processor.rpc_id(1, "hit_ball", multiplayer.get_unique_id())
+			#else:
+			#	Globals.processor.hit_ball(1)
+			print("Hit melee: Ball")
+		elif i.is_in_group("Attackable"):
+			i.damage(0)
 
 func suck_soot() -> void:
 	if ray_crosshair.is_colliding() and sucked_soot == null:
 		var collider = ray_crosshair.get_collider()
-		if collider.is_in_group("Soot") and !collider.is_alive:
+		print(collider)
+		if collider.has_meta("suckable") and collider.get_meta("suckable"):
 			sucked_soot = collider
 func blow_soot() -> void:
 	if sucked_soot != null:

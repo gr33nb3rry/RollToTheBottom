@@ -107,9 +107,9 @@ func push_ball(peer_id: int, is_attacking: bool) -> void:
 	if is_attacking: force /= 2.0
 	Globals.ball.add_impulse(player, force, false)
 @rpc("any_peer")
-func hit_ball(peer_id: int) -> void:
-	var player = Globals.ms.get_player_by_id(peer_id)
-	Globals.ball.add_impulse(player, BALL_HIT_FORCE + BALL_HIT_FORCE * float(get_skill(peer_id, "Mountain’s Strength")) / 100.0, true)
+func hit_ball() -> void:
+	var player = Globals.ms.players.values()[0] if Globals.ms.players.values()[0].type == 0 else Globals.ms.players.values()[1]
+	Globals.ball.add_impulse(player, BALL_HIT_FORCE, true)
 	
 @rpc("any_peer")
 func shoot(peer_id: int, is_in_the_air:bool) -> void:

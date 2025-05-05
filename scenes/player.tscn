@@ -67,7 +67,7 @@ radius = 0.2
 height = 0.6
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_014sp"]
-size = Vector3(2.2, 1.5, 2.5)
+size = Vector3(2.5, 1.5, 1.5)
 
 [sub_resource type="Animation" id="Animation_088uu"]
 length = 0.001
@@ -2005,7 +2005,6 @@ fadein_time = 0.1
 fadeout_time = 0.1
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_i3hi0"]
-graph_offset = Vector2(-706.44, 2.71179)
 nodes/Animation/node = SubResource("AnimationNodeAnimation_1lmj8")
 nodes/Animation/position = Vector2(80, 280)
 "nodes/Animation 2/node" = SubResource("AnimationNodeAnimation_5ouse")
@@ -2073,7 +2072,6 @@ transform = Transform3D(1, 1.77636e-15, 0, -1.77636e-15, 1, 0, 0, 0, 1, 0, -5.96
 visible = false
 target_position = Vector3(0, 0, -400)
 collision_mask = 3
-collide_with_areas = true
 debug_shape_custom_color = Color(4.90934e-06, 0.752644, 0.19658, 1)
 
 [node name="Camera3D" type="Camera3D" parent="CamRoot/CamYaw/CamPitch/SpringArm3D"]
@@ -2169,13 +2167,11 @@ target_position = Vector3(0, 0, -1.2)
 debug_shape_custom_color = Color(0.80583, 0.466335, 3.85046e-07, 1)
 debug_shape_thickness = 4
 
-[node name="AreaKnife" type="Area3D" parent="Model/Body"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.5)
-collision_layer = 2
-collision_mask = 2
+[node name="AreaMelee" type="Area3D" parent="Model/Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.860307)
 monitorable = false
 
-[node name="Collision" type="CollisionShape3D" parent="Model/Body/AreaKnife"]
+[node name="Collision" type="CollisionShape3D" parent="Model/Body/AreaMelee"]
 shape = SubResource("BoxShape3D_014sp")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Model"]
