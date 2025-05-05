@@ -27,7 +27,16 @@ properties/3/spawn = true
 properties/3/replication_mode = 1
 properties/4/path = NodePath("Model/AnimationTree:parameters/Movement/walk/TimeScale/scale")
 properties/4/spawn = true
-properties/4/replication_mode = 1
+properties/4/replication_mode = 2
+properties/5/path = NodePath(".:vel")
+properties/5/spawn = true
+properties/5/replication_mode = 1
+properties/6/path = NodePath(".:is_running")
+properties/6/spawn = true
+properties/6/replication_mode = 2
+properties/7/path = NodePath(".:jump_buffer")
+properties/7/spawn = true
+properties/7/replication_mode = 2
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_feul3"]
 
@@ -1876,19 +1885,11 @@ _data = {
 "walk": SubResource("Animation_cxvi3")
 }
 
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_1lmj8"]
-animation = &"suck"
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_cb2ln"]
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_5ouse"]
 animation = &"push"
 
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_06lrs"]
-advance_mode = 2
-
-[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_3fvcu"]
-states/push/node = SubResource("AnimationNodeAnimation_cb2ln")
-states/push/position = Vector2(328, 102)
-transitions = ["Start", "push", SubResource("AnimationNodeStateMachineTransition_06lrs")]
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_1lmj8"]
+animation = &"suck"
 
 [sub_resource type="AnimationNodeBlend2" id="AnimationNodeBlend2_lyjxy"]
 filter_enabled = true
@@ -1942,7 +1943,7 @@ advance_expression = "jump_buffer > JUMP_VELOCITY / 2"
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_upj02"]
 xfade_time = 0.2
 advance_mode = 2
-advance_expression = "velocity.y < 0"
+advance_expression = "vel.y < 0"
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_p5mp6"]
 xfade_time = 0.2
@@ -1951,6 +1952,14 @@ advance_expression = "ray_ground.is_colliding() and !is_running"
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_3j8ym"]
 xfade_time = 0.2
+advance_mode = 2
+advance_expression = "ray_ground.is_colliding() and is_running"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_wudkq"]
+advance_mode = 2
+advance_expression = "ray_ground.is_colliding() and !is_running"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_mjj46"]
 advance_mode = 2
 advance_expression = "ray_ground.is_colliding() and is_running"
 
@@ -1964,7 +1973,7 @@ states/jump/node = SubResource("AnimationNodeAnimation_mxcfq")
 states/jump/position = Vector2(465, 187)
 states/walk/node = SubResource("AnimationNodeBlendTree_8egx4")
 states/walk/position = Vector2(612, 69)
-transitions = ["Start", "idle", SubResource("AnimationNodeStateMachineTransition_semr8"), "idle", "walk", SubResource("AnimationNodeStateMachineTransition_5pdac"), "walk", "idle", SubResource("AnimationNodeStateMachineTransition_k0n3e"), "idle", "jump", SubResource("AnimationNodeStateMachineTransition_o7c3m"), "walk", "jump", SubResource("AnimationNodeStateMachineTransition_bsqsx"), "jump", "fall", SubResource("AnimationNodeStateMachineTransition_upj02"), "fall", "idle", SubResource("AnimationNodeStateMachineTransition_p5mp6"), "fall", "walk", SubResource("AnimationNodeStateMachineTransition_3j8ym")]
+transitions = ["Start", "idle", SubResource("AnimationNodeStateMachineTransition_semr8"), "idle", "walk", SubResource("AnimationNodeStateMachineTransition_5pdac"), "walk", "idle", SubResource("AnimationNodeStateMachineTransition_k0n3e"), "idle", "jump", SubResource("AnimationNodeStateMachineTransition_o7c3m"), "walk", "jump", SubResource("AnimationNodeStateMachineTransition_bsqsx"), "jump", "fall", SubResource("AnimationNodeStateMachineTransition_upj02"), "fall", "idle", SubResource("AnimationNodeStateMachineTransition_p5mp6"), "fall", "walk", SubResource("AnimationNodeStateMachineTransition_3j8ym"), "jump", "idle", SubResource("AnimationNodeStateMachineTransition_wudkq"), "jump", "walk", SubResource("AnimationNodeStateMachineTransition_mjj46")]
 
 [sub_resource type="AnimationNodeBlend2" id="AnimationNodeBlend2_l78w3"]
 filter_enabled = true
@@ -1996,10 +2005,11 @@ fadein_time = 0.1
 fadeout_time = 0.1
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_i3hi0"]
+graph_offset = Vector2(-706.44, 2.71179)
 nodes/Animation/node = SubResource("AnimationNodeAnimation_1lmj8")
 nodes/Animation/position = Vector2(80, 280)
-nodes/Hands/node = SubResource("AnimationNodeStateMachine_3fvcu")
-nodes/Hands/position = Vector2(-340, 320)
+"nodes/Animation 2/node" = SubResource("AnimationNodeAnimation_5ouse")
+"nodes/Animation 2/position" = Vector2(-320, 220)
 nodes/HandsBlend/node = SubResource("AnimationNodeBlend2_lyjxy")
 nodes/HandsBlend/position = Vector2(-120, 60)
 nodes/Movement/node = SubResource("AnimationNodeStateMachine_qfvjy")
@@ -2019,7 +2029,7 @@ nodes/hit_melee/position = Vector2(80, 60)
 "nodes/hit_melee 2/node" = SubResource("AnimationNodeAnimation_21kpu")
 "nodes/hit_melee 2/position" = Vector2(-120, 260)
 nodes/output/position = Vector2(900, 60)
-node_connections = [&"HandsBlend", 0, &"Movement", &"HandsBlend", 1, &"Hands", &"SuckBlend", 0, &"hit_melee", &"SuckBlend", 1, &"Animation", &"blow", 0, &"SuckBlend", &"blow", 1, &"blow_anim", &"hit", 0, &"blow", &"hit", 1, &"hit_knife", &"hit_melee", 0, &"HandsBlend", &"hit_melee", 1, &"hit_melee 2", &"output", 0, &"hit"]
+node_connections = [&"HandsBlend", 0, &"Movement", &"HandsBlend", 1, &"Animation 2", &"SuckBlend", 0, &"hit_melee", &"SuckBlend", 1, &"Animation", &"blow", 0, &"SuckBlend", &"blow", 1, &"blow_anim", &"hit", 0, &"blow", &"hit", 1, &"hit_knife", &"hit_melee", 0, &"HandsBlend", &"hit_melee", 1, &"hit_melee 2", &"output", 0, &"hit"]
 
 [node name="Player" type="CharacterBody3D" groups=["Player"]]
 collision_layer = 3

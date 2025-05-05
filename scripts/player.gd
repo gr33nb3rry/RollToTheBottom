@@ -11,6 +11,10 @@ extends CharacterBody3D
 @onready var hit_melee_pos: Marker3D = $Model/Body/ArmR/Hand/Melee/HitMelee
 @onready var hit_knife_pos: Marker3D = $Model/Body/ArmR/Hand/Knife/HitKnife
 
+@export var vel : Vector3 = Vector3.ZERO:
+	set(v):
+		velocity = v
+		vel = v
 
 var type : int = 0:
 	set(v):
@@ -29,9 +33,9 @@ const GRAVITY : float = 9.8
 const GRAVITY_ACCELERATION : float = 1.0
 
 var is_active : bool = false
-var is_running : bool = false
+@export var is_running : bool = false
 
-var jump_buffer := 0.0
+@export var jump_buffer := 0.0
 const ROTATION_SPEED := 10.0
 const WALK_SPEED := 10.0
 const RUN_SPEED := 20.0
@@ -55,10 +59,10 @@ func _physics_process(delta: float) -> void:
 	
 	var movement = move(delta)
 		
-	if !ray_ground.is_colliding() and velocity.y < 0:
+	if !ray_ground.is_colliding() and vel.y < 0:
 		#animation_tree["parameters/Movement/conditions/fall"] = true
 		pass
-	elif ray_ground.is_colliding() and velocity.y <= 0: 
+	elif ray_ground.is_colliding() and vel.y <= 0: 
 		is_jumping = false
 		jump_count = 0
 		gravity_acceleration = 0.0
@@ -84,17 +88,23 @@ func _process(delta: float) -> void:
 		if multiplayer.get_unique_id() != 1: Globals.processor.change_soot_position.rpc_id(1, sucked_soot, sucked_soot.global_position.lerp(sucked_soot_pos.global_position, 10.0 * delta))
 		else: Globals.processor.change_soot_position(sucked_soot, sucked_soot.global_position.lerp(sucked_soot_pos.global_position, 10.0 * delta))
 
+@rpc("any_peer")
 func blend_on(blend_name:String, time:float) -> void:
 	var t = get_tree().create_tween()
 	t.tween_property(animation_tree, "parameters/"+blend_name+"/blend_amount", 1.0, time)
+	if multiplayer.get_unique_id() == 1: blend_on.rpc_id(Globals.ms.get_second_player_peer_id(), blend_name, time)
+	else: blend_on.rpc_id(1, blend_name, time)
+@rpc("any_peer")
 func blend_off(blend_name:String, time:float) -> void:
 	var t = get_tree().create_tween()
 	t.tween_property(animation_tree, "parameters/"+blend_name+"/blend_amount", 0.0, time)
+	if multiplayer.get_unique_id() == 1: blend_off.rpc_id(Globals.ms.get_second_player_peer_id(), blend_name, time)
+	else: blend_off.rpc_id(1, blend_name, time)
 
 func apply_gravity(delta:float) -> void:
 	gravity_acceleration += GRAVITY_ACCELERATION * delta
 	jump_buffer = clamp((jump_buffer - delta * 10.0), 0.0, 50.0)
-	velocity = gravity_force * (GRAVITY + GRAVITY * gravity_acceleration) + global_transform.basis.y * jump_buffer
+	vel = gravity_force * (GRAVITY + GRAVITY * gravity_acceleration) + global_transform.basis.y * jump_buffer
 
 func rotate_to_gravity(delta:float) -> void :
 	var up_dir = -gravity_force.normalized()
@@ -122,13 +132,13 @@ func move(delta:float) -> Vector3:
 	if movement != Vector3.ZERO:
 		rotate_model_to_direction(delta, direction if !Input.is_action_pressed("aim") else Vector2(0,1))
 		rotate_model_to_camera(delta)
-		velocity += movement.normalized() * (RUN_SPEED if Input.is_action_pressed("run") else WALK_SPEED)
+		vel += movement.normalized() * (RUN_SPEED if Input.is_action_pressed("run") else WALK_SPEED)
 	elif Input.is_action_pressed("aim"):
 		rotate_model_to_camera(delta)
 	return movement
 
 func stop() -> void:
-	velocity = Vector3.ZERO
+	vel = Vector3.ZERO
 	#animation_tree["parameters/Movement/conditions/idle"] = true
 	
 func jump() -> void:
@@ -165,22 +175,28 @@ func apply_impulse() -> void:
 			else:
 				Globals.processor.push_ball(1, is_attacking)
 			break
-
+			
+@rpc("any_peer")
 func hit() -> void:
 	animation_tree.set("parameters/hit_melee/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
+	if multiplayer.get_unique_id() == 1: hit.rpc_id(Globals.ms.get_second_player_peer_id())
+	else: hit.rpc_id(1)
 func hit_check() -> void:
+	if !multiplayer.is_server(): return
 	var ball_r : float = Globals.ball.radius
 	if hit_melee_pos.global_position.distance_squared_to(Globals.ball.global_position) < ball_r * ball_r + 1.0:
-		if multiplayer.get_unique_id() != 1:
-			Globals.processor.rpc_id(1, "hit_ball", multiplayer.get_unique_id())
-		else:
-			Globals.processor.hit_ball(1)
+		Globals.processor.hit_ball(1)
+		#if multiplayer.get_unique_id() != 1:
+		#	Globals.processor.rpc_id(1, "hit_ball", multiplayer.get_unique_id())
+		#else:
+		#	Globals.processor.hit_ball(1)
 		print("Hit melee: Ball")
 	for soot in get_tree().get_nodes_in_group("Soot"):
 		print(hit_melee_pos.global_position.distance_to(soot.global_position), " < ", soot.RADIUS * soot.RADIUS + 1.0)
 		if hit_melee_pos.global_position.distance_to(soot.global_position) < soot.RADIUS + 1.0:
-			if multiplayer.get_unique_id() != 1: Globals.processor.damage_soot.rpc_id(1, soot, multiplayer.get_unique_id(), 1.0)
-			else: Globals.processor.damage_soot(soot, multiplayer.get_unique_id(), 1.0)
+			Globals.processor.damage_soot(soot, multiplayer.get_unique_id(), 1.0)
+			#if multiplayer.get_unique_id() != 1: Globals.processor.damage_soot.rpc_id(1, soot, multiplayer.get_unique_id(), 1.0)
+			#else: Globals.processor.damage_soot(soot, multiplayer.get_unique_id(), 1.0)
 			print("Hit melee: ", soot)
 
 func suck_soot() -> void:
@@ -195,9 +211,15 @@ func blow_soot() -> void:
 		var t = get_tree().create_tween()
 		t.tween_property(sucked_soot, "global_position", global_position + (-camera.global_transform.basis.z).normalized() * 30.0, 3.0).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
 		sucked_soot = null
-
+@rpc("any_peer")
+func blow_soot_animation() -> void:
+	animation_tree.set("parameters/blow/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
+	if multiplayer.get_unique_id() == 1: blow_soot_animation.rpc_id(Globals.ms.get_second_player_peer_id())
+	else: blow_soot_animation.rpc_id(1)
+	
 func attack() -> void:
-	animation_tree.tree_root.get_node("hit_knife").animation = "hit_" + str(attack_count)
+	var anim : String = "hit_" + str(attack_count)
+	animation_tree.tree_root.get_node("hit_knife").animation = anim
 	animation_tree.set("parameters/hit/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
 	attack_count += 1
 	if attack_count > 5: attack_count = 0
@@ -208,10 +230,19 @@ func attack() -> void:
 			else: Globals.processor.damage_soot(s, multiplayer.get_unique_id(), 1.0)
 			print("Attack: ", s)
 	
-	if multiplayer.get_unique_id() != 1: Globals.processor.attack.rpc_id(1)
-	else: Globals.processor.attack()
+	if multiplayer.get_unique_id() != 1: 
+		attack_animation.rpc_id(1, anim)
+		Globals.processor.attack.rpc_id(1)
+	else: 
+		attack_animation.rpc_id(Globals.ms.get_second_player_peer_id(), anim)
+		Globals.processor.attack()
 func end_attack() -> void:
 	attack_count = 0
+
+@rpc("any_peer")
+func attack_animation(anim:String) -> void:
+	animation_tree.tree_root.get_node("hit_knife").animation = anim
+	animation_tree.set("parameters/hit/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
 
 func aim(is_aim:bool) -> void:
 	$/root/Main/Canvas/Crosshair.visible = is_aim
@@ -243,6 +274,7 @@ func _input(_event) -> void:
 		aim(false)
 		if type == 0: 
 			blend_off("SuckBlend", 0.2)
-			animation_tree.set("parameters/blow/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
+			blow_soot_animation()
+			
 	elif !Input.is_action_pressed("aim") and Input.is_action_just_pressed("hit"):
 		hit() if type == 0 else attack()

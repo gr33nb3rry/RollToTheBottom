@@ -63,7 +63,6 @@ func _process(_delta: float) -> void:
 	elif !is_finished and is_activity_started and is_activity_finished:
 		is_finished = true
 		Globals.ball.is_active = true
-		print("ABOBA")
 	
 func generate_decals() -> void:
 	if !multiplayer.is_server(): return
