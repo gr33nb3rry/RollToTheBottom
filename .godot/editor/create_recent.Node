@@ -1,6 +1,8 @@
+RigidBody3D
+MeshInstance3D
+RayCast3D
 CollisionShape3D
 StaticBody3D
-MeshInstance3D
 AnimationPlayer
 Control
 VBoxContainer
@@ -10,5 +12,4 @@ Marker3D
 PathFollow3D
 Decal
 Node3D
-RayCast3D
 MultiplayerSynchronizer

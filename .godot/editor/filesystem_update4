@@ -41,3 +41,4 @@ res://scripts/Globals.gd
 res://scenes/box.tscn
 res://scripts/camera.gd
 res://scripts/decal_zone.gd
+res://scripts/box.gd
