@@ -221,18 +221,18 @@ func attack() -> void:
 	attack_count += 1
 	if attack_count > 5: attack_count = 0
 	
-	for s in $Model/Body/AreaKnife.get_overlapping_bodies():
-		if s.is_in_group("Soot"):
-			if multiplayer.get_unique_id() != 1: Globals.processor.damage_soot.rpc_id(1, s, multiplayer.get_unique_id(), 1.0)
-			else: Globals.processor.damage_soot(s, multiplayer.get_unique_id(), 1.0)
-			print("Attack: ", s)
+	if ray_crosshair.is_colliding() and ray_crosshair.get_collider() == Globals.ball:
+		Globals.ball.jump()
+	elif ray_crosshair.is_colliding() and ray_crosshair.get_collider().is_in_group("Attackable"):
+		ray_crosshair.get_collider().damage(1)
 	
+	Globals.health.hit_ball()
 	if multiplayer.get_unique_id() != 1: 
 		attack_animation.rpc_id(1, anim)
-		Globals.processor.attack.rpc_id(1)
+		Globals.health.hit_ball.rpc_id(1)
 	else: 
 		attack_animation.rpc_id(Globals.ms.get_second_player_peer_id(), anim)
-		Globals.processor.attack()
+		Globals.health.hit_ball.rpc_id(Globals.ms.get_second_player_peer_id())
 func end_attack() -> void:
 	attack_count = 0
 
@@ -272,6 +272,7 @@ func _input(_event) -> void:
 		if type == 0: 
 			blend_off("SuckBlend", 0.2)
 			blow_soot_animation()
-			
-	elif !Input.is_action_pressed("aim") and Input.is_action_just_pressed("hit"):
-		hit() if type == 0 else attack()
+	elif type == 0 and !Input.is_action_pressed("aim") and Input.is_action_just_pressed("hit"):
+		hit()
+	elif type == 1 and Input.is_action_just_pressed("hit"):
+		attack()

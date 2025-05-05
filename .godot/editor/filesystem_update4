@@ -31,3 +31,4 @@ res://scripts/box.gd
 res://scripts/activity_point.gd
 res://scripts/player.gd
 res://scripts/processor.gd
+res://scripts/health.gd

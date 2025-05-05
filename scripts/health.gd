@@ -20,6 +20,7 @@ func push_ball(is_start:bool) -> void:
 	var t : Tween = get_tree().create_tween()
 	t.tween_property($HP2, "position:x", 60 if is_start else 80, 0.2)
 
+@rpc("any_peer")
 func hit_ball() -> void:
 	var t : Tween = get_tree().create_tween()
 	t.tween_property($HP1, "position:y", -55, 0.1)

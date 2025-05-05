@@ -66,12 +66,6 @@ func is_skill_max(peer_id:int, skill_name:String) -> bool:
 		return true
 	return skills[skill_name][0] >= skills[skill_name][3]
 
-func attack() -> void:
-	Globals.health.hit_ball()
-	if multiplayer.is_server():
-		Globals.health.hit_ball.rpc_id(Globals.ms.get_second_player_peer_id())
-	else:
-		Globals.health.hit_ball.rpc_id(1)
 	
 @rpc("any_peer")
 func change_health(peer_id:int, v:float) -> void:
