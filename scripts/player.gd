@@ -79,18 +79,13 @@ func _physics_process(delta: float) -> void:
 		is_rolling = false
 		blend_off("HandsBlend", 0.1)
 		
-@rpc("any_peer")
 func blend_on(blend_name:String, time:float) -> void:
 	var t = get_tree().create_tween()
 	t.tween_property(animation_tree, "parameters/"+blend_name+"/blend_amount", 1.0, time)
-	if multiplayer.get_unique_id() == 1: blend_on.rpc_id(Globals.ms.get_second_player_peer_id(), blend_name, time)
-	else: blend_on.rpc_id(1, blend_name, time)
-@rpc("any_peer")
+
 func blend_off(blend_name:String, time:float) -> void:
 	var t = get_tree().create_tween()
 	t.tween_property(animation_tree, "parameters/"+blend_name+"/blend_amount", 0.0, time)
-	if multiplayer.get_unique_id() == 1: blend_off.rpc_id(Globals.ms.get_second_player_peer_id(), blend_name, time)
-	else: blend_off.rpc_id(1, blend_name, time)
 
 func apply_gravity(delta:float) -> void:
 	gravity_acceleration += GRAVITY_ACCELERATION * delta
@@ -170,12 +165,11 @@ func apply_impulse() -> void:
 @rpc("any_peer")
 func hit() -> void:
 	animation_tree.set("parameters/hit_melee/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
-	#if multiplayer.get_unique_id() == 1: hit.rpc_id(Globals.ms.get_second_player_peer_id())
-	#else: hit.rpc_id(1)
+	if multiplayer.get_unique_id() == 1: hit.rpc_id(Globals.ms.get_second_player_peer_id())
+	else: hit.rpc_id(1)
 func hit_check() -> void:
-	#if !multiplayer.is_server(): return
+	if !is_multiplayer_authority(): return
 	for i in $Model/Body/AreaMelee.get_overlapping_bodies():
-		print(i)
 		if i == Globals.ball:
 			#Globals.processor.hit_ball()
 			if multiplayer.get_unique_id() != 1:

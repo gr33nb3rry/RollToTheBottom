@@ -37,6 +37,9 @@ properties/6/replication_mode = 2
 properties/7/path = NodePath(".:jump_buffer")
 properties/7/spawn = true
 properties/7/replication_mode = 2
+properties/8/path = NodePath("Model/AnimationTree:parameters/HandsBlend/blend_amount")
+properties/8/spawn = true
+properties/8/replication_mode = 1
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_feul3"]
 
