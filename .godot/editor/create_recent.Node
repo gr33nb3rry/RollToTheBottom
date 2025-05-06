@@ -1,6 +1,6 @@
+Node3D
 Label
 SubViewport
-Node3D
 Decal
 RigidBody3D
 MeshInstance3D
@@ -12,4 +12,3 @@ Control
 VBoxContainer
 RichTextLabel
 HBoxContainer
-Marker3D

@@ -32,3 +32,7 @@ res://scripts/activity_point.gd
 res://scripts/player.gd
 res://scripts/processor.gd
 res://scripts/health.gd
+res://scenes/barrier_p.tscn
+res://scripts/zone.gd
+res://scripts/ball.gd
+res://scripts/world.gd

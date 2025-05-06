@@ -148,3 +148,4 @@ func refresh_size() -> void:
 func stop() -> void:
 	angular_velocity = Vector3.ZERO
 	linear_velocity = Vector3.ZERO
+	

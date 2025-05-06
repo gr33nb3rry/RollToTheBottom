@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://yhpgoa10oh6y"]
+[gd_scene load_steps=17 format=3 uid="uid://yhpgoa10oh6y"]
 
 [ext_resource type="Script" path="res://scripts/zone.gd" id="1_7maf6"]
 [ext_resource type="Script" path="res://addons/curvemesh3d/curvemesh3d.gd" id="2_keamj"]
@@ -8,7 +8,6 @@
 [ext_resource type="Material" uid="uid://btw6bhbo8oi8k" path="res://materials/steb_item_m_s.tres" id="6_tq0b3"]
 [ext_resource type="Script" path="res://scripts/activity_point.gd" id="7_r25wt"]
 [ext_resource type="Texture2D" uid="uid://r7gwyasg7fnl" path="res://images/decals/decal4.png" id="8_3jj46"]
-[ext_resource type="PackedScene" uid="uid://3pgt2e0unu3v" path="res://scenes/box.tscn" id="9_fo4fw"]
 
 [sub_resource type="Curve3D" id="Curve3D_r7bhb"]
 bake_interval = 1.0
@@ -86,7 +85,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0, 0)
 mesh = SubResource("BoxMesh_8qa26")
 
 [node name="DecalsMaker" type="PathFollow3D" parent="Curve"]
-transform = Transform3D(0.872579, 0, 0.488451, 0, 0.999992, 0, -0.48845, 0, 0.872579, 5.08328, -0.305542, 0.0300232)
+transform = Transform3D(0.872573, 0, 0.488448, 0, 0.999992, 0, -0.488447, 0, 0.872574, 5.08328, -0.305542, 0.0300232)
 rotation_mode = 1
 loop = false
 
@@ -159,13 +158,4 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 17.5, 0)
 [node name="BallPos" type="Marker3D" parent="ActivityPoint"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 25, 0)
 
-[node name="Boxes" type="Node3D" parent="ActivityPoint"]
-
-[node name="E" parent="ActivityPoint/Boxes" instance=ExtResource("9_fo4fw")]
-transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 7.45058e-09, 5.96046e-08, 2.98023e-08, 1, 0, 18, 0)
-
-[node name="E2" parent="ActivityPoint/Boxes" instance=ExtResource("9_fo4fw")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 18, 0)
-
-[node name="E3" parent="ActivityPoint/Boxes" instance=ExtResource("9_fo4fw")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 18, 0)
+[node name="Markers" type="Node3D" parent="."]

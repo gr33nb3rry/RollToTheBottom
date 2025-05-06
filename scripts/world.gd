@@ -33,6 +33,8 @@ func start() -> void:
 			$Map.get_child(zone-2).disable()
 			#$Map.get_child(zone-2).call_deferred("set_process_mode", Node.PROCESS_MODE_DISABLED)
 	for decal in Globals.world.get_node("Decals").get_children(): decal.queue_free()
+	for decal in Globals.world.get_node("Barriers").get_children(): decal.queue_free()
+	await get_tree().create_timer(0.2).timeout
 	current_zone_instance.generate_decals()
 	
 func end() -> void:

@@ -1,6 +1,7 @@
 extends Node3D
 
 const SOOT_WAITING = preload("res://scenes/soot_waiting.tscn")
+const BARRIER_P = preload("res://scenes/barrier_p.tscn")
 const DECAL_0 = preload("res://images/decals/decal0.png")
 const DECAL_1 = preload("res://images/decals/decal1.png")
 const DECAL_2 = preload("res://images/decals/decal2.png")
@@ -19,6 +20,7 @@ const DECAL_5 = preload("res://images/decals/decal5.png")
 
 
 var decals_count : Array = [0, 0, 0, 0, 0, 0]
+var barrier_pivots : Array = []
 var is_activity_started : bool = false
 var is_activity_finished : bool = false
 var is_finished : bool = false
@@ -57,12 +59,14 @@ func _process(_delta: float) -> void:
 		is_activity_started = true
 		Globals.ball.stop()
 		Globals.ball.is_active = false
+		Globals.ball.freeze = true
 		var t = get_tree().create_tween()
 		t.tween_property(Globals.ball, "global_position", $ActivityPoint/BallPos.global_position, 2.0).set_trans(Tween.TRANS_SPRING).set_ease(Tween.EASE_OUT)
 		Globals.world.start_activity()
 	elif !is_finished and is_activity_started and is_activity_finished:
 		is_finished = true
 		Globals.ball.is_active = true
+		Globals.ball.freeze = false
 	
 func generate_decals() -> void:
 	if !multiplayer.is_server(): return
@@ -71,7 +75,7 @@ func generate_decals() -> void:
 	var max : float = path.curve.get_baked_length() - offset
 	var iteration_count : int = floori(max / step)
 	decals_maker.progress = offset
-	
+	# DECALS
 	for i in iteration_count:
 		var decal : Decal = decals_center.get_node("Mesh/Decal")
 		var type : int = randi_range(0, 5)
@@ -79,16 +83,45 @@ func generate_decals() -> void:
 		decals_maker.progress += step
 		decals_center.get_node("Mesh").rotation_degrees.y = randf_range(0.0, 360.0)
 		decals_center.rotation_degrees.z = randf_range(0.0, 360.0)
-		await get_tree().process_frame
-		await get_tree().process_frame
+		await get_tree().physics_frame
 		var d : Decal = decal.duplicate()
 		d.type = type
 		Globals.world.get_node("Decals").add_child(d, true)
 		update_decal_position_rotation_type(Globals.world.get_node("Decals").get_child_count()-1, decal.global_position, decal.global_rotation, d.type)
 		update_decal_position_rotation_type.rpc_id(Globals.ms.get_second_player_peer_id(), Globals.world.get_node("Decals").get_child_count()-1, decal.global_position, decal.global_rotation, d.type)
-		
+	# REFRESH
+	decals_maker.progress = offset
+	barrier_pivots = []
+	for i in $Markers.get_children(): i.queue_free()
+	# MARKERS
+	for i in iteration_count:
+		decals_maker.progress += step
+		decals_center.rotation_degrees.z = randf_range(-33.0, 33.0)
+		await get_tree().physics_frame
+		var m : Marker3D = Marker3D.new()
+		$Markers.add_child(m)
+		barrier_pivots.append(decals_maker.global_position)
+		m.global_position = decals_center.get_node("Mesh").global_position
 	decals_maker.queue_free()
-	print(decals_count)
+	var arr : Array[Vector3] = []
+	for i in $Markers.get_children():
+		arr.append(i.global_position)
+	add_barriers(arr, barrier_pivots)
+
+func add_barriers(arr:Array, barrier_pivots:Array) -> void:
+	var count : int = 0
+	for i in arr:
+		var b : RigidBody3D = BARRIER_P.instantiate()
+		Globals.world.get_node("Barriers").add_child(b, true)
+		update_barrier(count, arr[count], barrier_pivots[count])
+		update_barrier.rpc_id(Globals.ms.get_second_player_peer_id(), count, arr[count], barrier_pivots[count])
+		count += 1
+		
+@rpc("any_peer")
+func update_barrier(index:int, pos:Vector3, pivot:Vector3) -> void:
+	print("Index: ", index, " pivot: ", pivot, " Pipa: ", Globals.world.get_node("Barriers").get_child(index))
+	Globals.world.get_node("Barriers").get_child(index).global_position = pos
+	Globals.world.get_node("Barriers").get_child(index).clip_to_ground(pivot)
 
 @rpc("any_peer")
 func update_decal_position_rotation_type(index:int, pos:Vector3, rot:Vector3, type:int) -> void:

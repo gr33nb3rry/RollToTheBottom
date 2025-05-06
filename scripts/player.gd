@@ -179,18 +179,18 @@ func apply_impulse() -> void:
 @rpc("any_peer")
 func hit() -> void:
 	animation_tree.set("parameters/hit_melee/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
-	if multiplayer.get_unique_id() == 1: hit.rpc_id(Globals.ms.get_second_player_peer_id())
-	else: hit.rpc_id(1)
+	#if multiplayer.get_unique_id() == 1: hit.rpc_id(Globals.ms.get_second_player_peer_id())
+	#else: hit.rpc_id(1)
 func hit_check() -> void:
-	if !multiplayer.is_server(): return
+	#if !multiplayer.is_server(): return
 	for i in $Model/Body/AreaMelee.get_overlapping_bodies():
 		print(i)
 		if i == Globals.ball:
-			Globals.processor.hit_ball()
-			#if multiplayer.get_unique_id() != 1:
-			#	Globals.processor.rpc_id(1, "hit_ball", multiplayer.get_unique_id())
-			#else:
-			#	Globals.processor.hit_ball(1)
+			#Globals.processor.hit_ball()
+			if multiplayer.get_unique_id() != 1:
+				Globals.processor.hit_ball.rpc_id()
+			else:
+				Globals.processor.hit_ball()
 			print("Hit melee: Ball")
 		elif i.is_in_group("Attackable"):
 			i.damage(0)
@@ -222,7 +222,8 @@ func attack() -> void:
 	if attack_count > 5: attack_count = 0
 	
 	if ray_crosshair.is_colliding() and ray_crosshair.get_collider() == Globals.ball:
-		Globals.ball.jump()
+		if multiplayer.get_unique_id() == 1: Globals.ball.jump()
+		else: Globals.ball.jump.rpc_id(1)
 	elif ray_crosshair.is_colliding() and ray_crosshair.get_collider().is_in_group("Attackable"):
 		ray_crosshair.get_collider().damage(1)
 	
@@ -266,12 +267,8 @@ func _input(_event) -> void:
 		jump()
 	elif Input.is_action_just_pressed("aim"):
 		aim(true)
-		if type == 0: blend_on("SuckBlend", 0.2)
 	elif Input.is_action_just_released("aim"):
 		aim(false)
-		if type == 0: 
-			blend_off("SuckBlend", 0.2)
-			blow_soot_animation()
 	elif type == 0 and !Input.is_action_pressed("aim") and Input.is_action_just_pressed("hit"):
 		hit()
 	elif type == 1 and Input.is_action_just_pressed("hit"):
