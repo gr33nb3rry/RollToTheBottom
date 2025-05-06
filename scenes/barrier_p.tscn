@@ -2,11 +2,10 @@
 
 [ext_resource type="Script" path="res://scripts/box.gd" id="1_pgj23"]
 [ext_resource type="Texture2D" uid="uid://dljn4dn7d1r2q" path="res://images/kohaku_icon.png" id="2_fu31s"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_w38o8"]
+[ext_resource type="Material" uid="uid://hf6j4t6eoadu" path="res://materials/copper_material.tres" id="2_takmo"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_gaegr"]
-material = SubResource("StandardMaterial3D_w38o8")
+material = ExtResource("2_takmo")
 radius = 1.0
 height = 2.0
 

@@ -31,3 +31,4 @@ res://scenes/coin.tscn
 res://scenes/character_select.tscn
 res://scenes/zones/zone2.tscn
 res://scripts/processor.gd
+res://materials/copper_material.tres

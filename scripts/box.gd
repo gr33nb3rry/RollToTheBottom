@@ -4,9 +4,23 @@ const DECAL_0 = preload("res://images/kohaku_icon.png")
 const DECAL_1 = preload("res://images/utsuri_icon.png")
 
 var type : int = 0
+var rotation_speed : Vector3
 
 func _ready() -> void:
 	generate_type()
+	rotation_speed = Vector3(randf_range(-1.0, 1.0), randf_range(-1.0, 1.0), randf_range(-1.0, 1.0))
+	match randi_range(1, 3):
+		1: rotation_speed.x = 0.0
+		2: rotation_speed.y = 0.0
+		3: rotation_speed.z = 0.0
+	rotation_speed = rotation_speed.normalized()
+	
+
+func _physics_process(delta: float) -> void:
+	$Mesh.rotate_object_local(Vector3.RIGHT, rotation_speed.x * delta)
+	$Mesh.rotate_object_local(Vector3.UP, rotation_speed.y * delta)
+	$Mesh.rotate_object_local(Vector3.BACK, rotation_speed.z * delta)
+
 
 func generate_type() -> void:
 	if multiplayer.is_server(): return
