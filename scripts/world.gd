@@ -13,6 +13,7 @@ var selected_decals : int
 var current_zone_instance : Node3D
 var is_able_to_zone_up : bool = false
 var current_room : Node3D
+var dead_line : float
 
 func _ready() -> void:
 	Globals.define()
@@ -25,6 +26,8 @@ func start() -> void:
 	is_able_to_zone_up = true
 	activity_type = -1
 	selected_decals = 0
+	dead_line = get_room().global_position.y - 25.0
+	sync_dead_line.rpc_id(Globals.ms.get_second_player_peer_id(), dead_line)
 	#add_waiting_soots()
 	$Map.get_child(zone).get_node("Room").process_mode = Node.PROCESS_MODE_INHERIT
 	if zone >= 2:
@@ -45,6 +48,10 @@ func end() -> void:
 		is_able_to_zone_up = false
 		start()
 	
+@rpc("any_peer")
+func sync_dead_line(dl:float) -> void:
+	dead_line = dl
+
 func generate_activity() -> void:
 	activity_type = Activities.COUNTER
 	match activity_type:
@@ -89,9 +96,11 @@ func finish_activity() -> void:
 	
 func get_zone() -> Node3D:
 	return $Map.get_child(zone)
-	
 func get_room() -> Node3D:
 	return current_zone_instance.get_node("Room")
+func get_previous_room() -> Node3D:
+	if zone == 1: return $Map.get_child(0)
+	return $Map.get_child(zone - 1).get_node("Room")
 	
 func get_zone_next_marker() -> Vector3:
 	return current_zone_instance.get_next_marker()

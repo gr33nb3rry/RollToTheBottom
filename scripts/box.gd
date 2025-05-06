@@ -5,9 +5,9 @@ const DECAL_1 = preload("res://images/utsuri_icon.png")
 
 var type : int = 0
 var rotation_speed : Vector3
+var pivot : Vector3
 
 func _ready() -> void:
-	generate_type()
 	rotation_speed = Vector3(randf_range(-1.0, 1.0), randf_range(-1.0, 1.0), randf_range(-1.0, 1.0))
 	match randi_range(1, 3):
 		1: rotation_speed.x = 0.0
@@ -23,17 +23,18 @@ func _physics_process(delta: float) -> void:
 
 
 func generate_type() -> void:
-	if multiplayer.is_server(): return
+	#if multiplayer.is_server(): return
 	type = randi_range(0, 1)
-	update_by_type(type)
-	update_by_type.rpc_id(1, type)
+	var h : float = randf_range(1.5, 2.5)
+	update_by_type(type, h)
+	update_by_type.rpc_id(1, type, h)
 
 @rpc("any_peer")
-func update_by_type(t:int) -> void:
+func update_by_type(t:int, height:float) -> void:
 	type = t
 	$Mesh/Decal.texture_albedo = DECAL_0 if type == 0 else DECAL_1
 	$Mesh.mesh.material.albedo_color = Color.WHITE if type == 0 else Color.BLACK
-
+	clip_to_ground(height)
 	
 	
 func damage(player_type:int) -> void:
@@ -43,12 +44,13 @@ func damage(player_type:int) -> void:
 		
 @rpc("any_peer")
 func death() -> void:
-	queue_free()
+	$Stick/Sphere.visible = true
+	$Mesh.visible = false
 
-func clip_to_ground(pivot:Vector3) -> void:
+func clip_to_ground(height:float) -> void:
 	visible = false
 	look_at(pivot)
 	rotation_degrees.x += 90
 	await get_tree().create_timer(0.2).timeout
-	global_position = $Ray.get_collision_point() + ($Ray.get_collision_point() - pivot).normalized() * 2.0
+	global_position = $Ray.get_collision_point() + ($Ray.get_collision_point() - pivot).normalized() * height
 	visible = true

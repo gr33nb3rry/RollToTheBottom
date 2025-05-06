@@ -33,6 +33,7 @@ const GRAVITY : float = 9.8
 const GRAVITY_ACCELERATION : float = 1.0
 
 var is_active : bool = false
+var is_alive : bool = true
 @export var is_running : bool = false
 
 @export var jump_buffer : float = 0.0
@@ -55,7 +56,8 @@ func _physics_process(delta: float) -> void:
 	apply_gravity(delta)
 	rotate_to_gravity(delta)
 	#if !is_active: return
-	
+	if is_alive and global_position.y < Globals.world.dead_line: death()
+	if !is_alive: return
 	var movement = move(delta)
 		
 	if !ray_ground.is_colliding() and vel.y < 0:
@@ -146,12 +148,14 @@ func damage(amount:int) -> void:
 
 @rpc("any_peer")
 func death() -> void:
+	is_alive = false
 	model.visible = false
 	await get_tree().create_timer(5.0).timeout
 	resurrect()
 
 func resurrect() -> void:
 	model.visible = true
+	is_alive = true
 
 func apply_impulse() -> void:
 	if is_ball_near_enough(0.2):

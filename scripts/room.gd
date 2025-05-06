@@ -30,14 +30,13 @@ func _process(delta: float) -> void:
 		print("Everybody in")
 		status = 1
 		close_door($Door1)
-		open_door($Door2)
 		if !is_initial: Globals.world.end()
 		else: Globals.world.start()
 	elif status == 1 and !is_ball_inside and !is_both_players_inside:
 		print("Everybody out")
 		status = 2
 		close_door($Door2)
-		Globals.enemy_spawner.start()
+		#Globals.enemy_spawner.start()
 
 func disable() -> void:
 	process_mode = Node.PROCESS_MODE_DISABLED

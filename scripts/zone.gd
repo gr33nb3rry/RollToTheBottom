@@ -72,7 +72,7 @@ func generate_decals() -> void:
 	if !multiplayer.is_server(): return
 	var offset : float = 20.0
 	var step : float = 7.0
-	var max : float = path.curve.get_baked_length() - offset
+	var max : float = path.curve.get_baked_length() - offset * 2
 	var iteration_count : int = floori(max / step)
 	decals_maker.progress = offset
 	# DECALS
@@ -115,13 +115,18 @@ func add_barriers(arr:Array, barrier_pivots:Array) -> void:
 		Globals.world.get_node("Barriers").add_child(b, true)
 		update_barrier(count, arr[count], barrier_pivots[count])
 		update_barrier.rpc_id(Globals.ms.get_second_player_peer_id(), count, arr[count], barrier_pivots[count])
+		if count == arr.size() - 1:
+			print("End")
+			Globals.world.get_previous_room().open_door(Globals.world.get_previous_room().get_node("Door2"))
 		count += 1
 		
 @rpc("any_peer")
 func update_barrier(index:int, pos:Vector3, pivot:Vector3) -> void:
-	print("Index: ", index, " pivot: ", pivot, " Pipa: ", Globals.world.get_node("Barriers").get_child(index))
+	#print("Index: ", index, " pivot: ", pivot, " Pipa: ", Globals.world.get_node("Barriers").get_child(index))
 	Globals.world.get_node("Barriers").get_child(index).global_position = pos
-	Globals.world.get_node("Barriers").get_child(index).clip_to_ground(pivot)
+	Globals.world.get_node("Barriers").get_child(index).pivot = pivot
+	Globals.world.get_node("Barriers").get_child(index).generate_type()
+	#Globals.world.get_node("Barriers").get_child(index).clip_to_ground(pivot)
 
 @rpc("any_peer")
 func update_decal_position_rotation_type(index:int, pos:Vector3, rot:Vector3, type:int) -> void:
