@@ -36,5 +36,5 @@ func clip_to_ground(pivot:Vector3) -> void:
 	look_at(pivot)
 	rotation_degrees.x += 90
 	await get_tree().create_timer(0.2).timeout
-	global_position = $Ray.get_collision_point() + ($Ray.get_collision_point() - pivot).normalized() * 1.5
+	global_position = $Ray.get_collision_point() + ($Ray.get_collision_point() - pivot).normalized() * 2.0
 	visible = true

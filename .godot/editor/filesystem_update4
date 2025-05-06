@@ -19,3 +19,15 @@ res://shaders/card_perspective.gdshader
 res://scripts/player.gd
 res://scenes/ball.tscn
 res://scripts/ball.gd
+res://scenes/barrier_p.tscn
+res://scripts/box.gd
+res://scenes/zones/zone1.tscn
+res://scenes/room.tscn
+res://world.tscn
+res://scenes/skill.tscn
+res://main.tscn
+res://skills.tscn
+res://scenes/coin.tscn
+res://scenes/character_select.tscn
+res://scenes/zones/zone2.tscn
+res://scripts/processor.gd
