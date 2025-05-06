@@ -35,12 +35,13 @@ const GRAVITY_ACCELERATION : float = 1.0
 var is_active : bool = false
 @export var is_running : bool = false
 
-@export var jump_buffer := 0.0
-const ROTATION_SPEED := 10.0
-const WALK_SPEED := 10.0
-const RUN_SPEED := 20.0
-const JUMP_VELOCITY := 25.0
-const HIT_FORCE := 14.0
+@export var jump_buffer : float = 0.0
+const ROTATION_SPEED : float = 10.0
+const WALK_SPEED : float = 10.0
+const RUN_SPEED : float = 20.0
+const JUMP_VELOCITY : float = 25.0
+const HIT_FORCE : float = 14.0
+const RADIUS : float = 0.5
 
 func _ready() -> void:
 	if is_multiplayer_authority():
@@ -153,14 +154,16 @@ func resurrect() -> void:
 	model.visible = true
 
 func apply_impulse() -> void:
-	for i in get_slide_collision_count():
-		var collision = get_slide_collision(i)
-		if collision.get_collider().name == "Ball":
-			if multiplayer.get_unique_id() != 1:
-				Globals.processor.rpc_id(1, "push_ball", multiplayer.get_unique_id(), is_attacking)
-			else:
-				Globals.processor.push_ball(1, is_attacking)
-			break
+	if is_ball_near_enough(0.2):
+		if multiplayer.get_unique_id() != 1:
+			Globals.processor.rpc_id(1, "push_ball", multiplayer.get_unique_id(), is_attacking)
+		else:
+			Globals.processor.push_ball(1, is_attacking)
+			
+func is_ball_near_enough(distance:float) -> bool:
+	var distance_squared = global_position.distance_squared_to(Globals.ball.global_position)
+	var min_distance : float = Globals.ball.radius + RADIUS + distance
+	return distance_squared < min_distance * min_distance
 			
 @rpc("any_peer")
 func hit() -> void:
@@ -189,7 +192,7 @@ func attack() -> void:
 	attack_count += 1
 	if attack_count > 5: attack_count = 0
 	
-	if ray_crosshair.is_colliding() and ray_crosshair.get_collider() == Globals.ball:
+	if is_ball_near_enough(1.8) and ray_crosshair.is_colliding() and ray_crosshair.get_collider() == Globals.ball:
 		if multiplayer.get_unique_id() == 1: Globals.ball.jump()
 		else: Globals.ball.jump.rpc_id(1)
 	elif ray_crosshair.is_colliding() and ray_crosshair.get_collider().is_in_group("Attackable"):
