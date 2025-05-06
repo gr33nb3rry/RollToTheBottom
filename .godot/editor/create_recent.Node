@@ -1,9 +1,9 @@
+MeshInstance3D
 Node3D
 Label
 SubViewport
 Decal
 RigidBody3D
-MeshInstance3D
 RayCast3D
 CollisionShape3D
 StaticBody3D
