@@ -60,6 +60,7 @@ func add_impulse(from:Node3D, push_force:float, is_hit:bool = false) -> void:
 		is_hitted = is_hit
 	simplicity_current = 1.0
 
+@rpc("any_peer")
 func jump() -> void:
 	direction.y = jump_force
 		

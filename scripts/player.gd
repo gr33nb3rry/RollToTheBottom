@@ -42,8 +42,6 @@ const RUN_SPEED := 20.0
 const JUMP_VELOCITY := 25.0
 const HIT_FORCE := 14.0
 
-var sucked_soot : Node3D = null
-
 func _ready() -> void:
 	if is_multiplayer_authority():
 		camera.current = true
@@ -81,13 +79,6 @@ func _physics_process(delta: float) -> void:
 		is_rolling = false
 		blend_off("HandsBlend", 0.1)
 		
-func _process(delta: float) -> void:
-	if type == 0 and Input.is_action_pressed("aim") and sucked_soot == null:
-		suck_soot()
-	if sucked_soot != null:
-		if multiplayer.get_unique_id() != 1: Globals.processor.change_soot_position.rpc_id(1, sucked_soot, sucked_soot.global_position.lerp(sucked_soot_pos.global_position, 10.0 * delta))
-		else: Globals.processor.change_soot_position(sucked_soot, sucked_soot.global_position.lerp(sucked_soot_pos.global_position, 10.0 * delta))
-
 @rpc("any_peer")
 func blend_on(blend_name:String, time:float) -> void:
 	var t = get_tree().create_tween()
@@ -195,24 +186,7 @@ func hit_check() -> void:
 		elif i.is_in_group("Attackable"):
 			i.damage(0)
 
-func suck_soot() -> void:
-	if ray_crosshair.is_colliding() and sucked_soot == null:
-		var collider = ray_crosshair.get_collider()
-		print(collider)
-		if collider.has_meta("suckable") and collider.get_meta("suckable"):
-			sucked_soot = collider
-func blow_soot() -> void:
-	if sucked_soot != null:
-		#if multiplayer.get_unique_id() != 1: Globals.processor.blow_soot.rpc_id(1, sucked_soot, global_position + (-camera.global_transform.basis.z).normalized())
-		#else: Globals.processor.blow_soot(sucked_soot, global_position + (-camera.global_transform.basis.z).normalized())
-		var t = get_tree().create_tween()
-		t.tween_property(sucked_soot, "global_position", global_position + (-camera.global_transform.basis.z).normalized() * 30.0, 3.0).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
-		sucked_soot = null
-@rpc("any_peer")
-func blow_soot_animation() -> void:
-	animation_tree.set("parameters/blow/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
-	if multiplayer.get_unique_id() == 1: blow_soot_animation.rpc_id(Globals.ms.get_second_player_peer_id())
-	else: blow_soot_animation.rpc_id(1)
+
 	
 func attack() -> void:
 	var anim : String = "hit_" + str(attack_count)
