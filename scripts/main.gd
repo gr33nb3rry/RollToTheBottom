@@ -14,6 +14,15 @@ func _ready() -> void:
 	peer.lobby_joined.connect(_on_lobby_joined)
 	open_lobby_list()
 	#$Canvas/HostButton.emit_signal("pressed")
+	check_command_line()
+	
+func check_command_line() -> void:
+	var these_arguments: Array = OS.get_cmdline_args()
+	if these_arguments.size() > 0:
+		if these_arguments[0] == "+connect_lobby":
+			if int(these_arguments[1]) > 0:
+				print("Command line lobby ID: %s" % these_arguments[1])
+				join_lobby(int(these_arguments[1]))
 
 func spawn_level(data):
 	var a = (load(data) as PackedScene).instantiate()

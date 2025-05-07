@@ -34,3 +34,6 @@ res://scripts/room.gd
 res://scripts/world.gd
 res://scenes/map.tscn
 res://scripts/player.gd
+res://scripts/ball.gd
+res://scripts/processor.gd
+res://scripts/main.gd

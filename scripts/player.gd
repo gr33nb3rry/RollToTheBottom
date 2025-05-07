@@ -54,7 +54,6 @@ func _physics_process(delta: float) -> void:
 	if !is_multiplayer_authority(): return
 	apply_impulse()
 	apply_gravity(delta)
-	rotate_to_gravity(delta)
 	#if !is_active: return
 	if is_alive and global_position.y < Globals.world.dead_line: death()
 	if !is_alive: return
@@ -95,11 +94,6 @@ func apply_gravity(delta:float) -> void:
 	jump_buffer = clamp((jump_buffer - delta * 10.0), 0.0, 50.0)
 	vel = gravity_force * (GRAVITY + GRAVITY * gravity_acceleration) + global_transform.basis.y * jump_buffer
 
-func rotate_to_gravity(delta:float) -> void :
-	var up_dir = -gravity_force.normalized()
-	var orientation_direction = Quaternion(global_transform.basis.y, up_dir) * global_transform.basis.get_rotation_quaternion()
-	var rot = global_transform.basis.get_rotation_quaternion().slerp(orientation_direction.normalized(), 5.0 * delta)
-	global_rotation = rot.get_euler()
 	
 func rotate_model_to_direction(delta:float, direction:Vector2) -> void:
 	$Look/Point.position = Vector3(direction.x, 0, -direction.y)

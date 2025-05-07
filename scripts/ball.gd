@@ -24,6 +24,10 @@ var is_active : bool = true:
 		gravity_scale = 1 if is_active else 0
 
 func _physics_process(delta: float) -> void:
+	if !multiplayer.is_server(): return
+	if Globals.world.is_playing and global_position.y < Globals.world.dead_line:
+		Globals.world.is_playing = false
+		Globals.world.game_over()
 	if !is_active: return
 	$/root/Main/Canvas/DebugLabel.text = str(is_on_ground)
 	#if !is_on_ground:

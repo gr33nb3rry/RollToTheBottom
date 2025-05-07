@@ -33,7 +33,6 @@ func generate_type() -> void:
 func update_by_type(t:int, height:float) -> void:
 	type = t
 	$Mesh/Decal.texture_albedo = DECAL_0 if type == 0 else DECAL_1
-	$Mesh.mesh.material.albedo_color = Color.WHITE if type == 0 else Color.BLACK
 	clip_to_ground(height)
 	
 	

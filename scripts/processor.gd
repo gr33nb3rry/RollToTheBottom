@@ -134,11 +134,3 @@ func damage_soot(soot:Node3D, peer_id:int, damage:float) -> void:
 		#add_coin(soot.global_position)
 		soot.death()
 		soot.death.rpc_id(Globals.ms.get_second_player_peer_id())
-
-@rpc("any_peer")
-func change_soot_position(soot:Node3D, pos:Vector3) -> void:
-	soot.global_position = pos
-@rpc("any_peer")
-func blow_soot(soot:Node3D, dir:Vector3) -> void:
-	var t = get_tree().create_tween()
-	t.tween_property(soot, "global_position", dir * 30.0, 3.0).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)

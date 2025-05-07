@@ -14,6 +14,7 @@ var current_zone_instance : Node3D
 var is_able_to_zone_up : bool = false
 var current_room : Node3D
 var dead_line : float
+var is_playing : bool = true
 
 func _ready() -> void:
 	Globals.define()
@@ -47,6 +48,10 @@ func end() -> void:
 		Globals.ball.is_simplified = false
 		is_able_to_zone_up = false
 		start()
+	
+func game_over() -> void:
+	print("Game over")
+	Globals.ball.freeze = true
 	
 @rpc("any_peer")
 func sync_dead_line(dl:float) -> void:
