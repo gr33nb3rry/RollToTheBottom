@@ -231,7 +231,7 @@ func _input(_event) -> void:
 		flying_camera()
 	if !is_active: return
 	if Input.is_action_just_pressed("ui_cancel"):
-		get_tree().quit()
+		Globals.main.leave_lobby()
 	elif Input.is_action_just_pressed("jump"): 
 		jump()
 	elif Input.is_action_just_pressed("aim"):

@@ -8,9 +8,10 @@ var peer = SteamMultiplayerPeer.new()
 
 func _ready() -> void:
 	multiplayer_spawner.spawn_function = spawn_level
-	peer.lobby_created.connect(_on_lobby_created)
+	Steam.lobby_created.connect(_on_lobby_created)
 	Steam.lobby_match_list.connect(show_lobby_list)
 	Steam.join_requested.connect(accept_invite)
+	Steam.lobby_chat_update.connect(_on_lobby_chat_update)
 	peer.lobby_joined.connect(_on_lobby_joined)
 	open_lobby_list()
 	#$Canvas/HostButton.emit_signal("pressed")
@@ -39,10 +40,29 @@ func join_lobby(this_lobby_id: int) -> void:
 func _on_lobby_joined(_this_lobby_id: int, _permissions: int, _locked: bool, _response: int) -> void:
 	#start_game()
 	pass
+	
+func leave_lobby() -> void:
+	# If in a lobby, leave it
+	var xxx : int = lobby_id
+	if lobby_id != 0:
+		var lobby_member_count : int = Steam.getNumLobbyMembers(lobby_id)
+		Steam.leaveLobby(lobby_id)
+		lobby_id = 0
+		for member in lobby_member_count:
+			var member_steam_id : int = Steam.getLobbyMemberByIndex(lobby_id, member)
+			if member_steam_id != SteamGlobal.steam_id:
+				Steam.closeP2PSessionWithUser(member_steam_id)
+		if has_node("World"):
+			$World.queue_free()
+			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+			$Canvas/Start.show()
+			await get_tree().create_timer(5).timeout
+			print(Steam.getNumLobbyMembers(xxx))
+	
 
 func create_lobby() -> void:
 	if lobby_id == 0:
-		peer.create_lobby(peer.LOBBY_TYPE_FRIENDS_ONLY)
+		Steam.createLobby(Steam.LOBBY_TYPE_FRIENDS_ONLY)
 		multiplayer.multiplayer_peer = peer
 
 func _on_lobby_created(is_connect, this_lobby_id) -> void:
@@ -51,10 +71,30 @@ func _on_lobby_created(is_connect, this_lobby_id) -> void:
 		var lobby_name : String = str(Steam.getPersonaName())+"'s lobby"
 		Steam.setLobbyData(lobby_id, "name", lobby_name)
 		Steam.setLobbyJoinable(lobby_id, true)
-		#var relay = Steam.allowP2PPacketRelay(true)
+		var relay = Steam.allowP2PPacketRelay(true)
 		print("Lobby created.               ID: ", lobby_id, "  NAME: ", lobby_name)
 		multiplayer_spawner.spawn("res://world.tscn")
 		start_game()
+
+func _on_lobby_chat_update(this_lobby_id: int, change_id: int, making_change_id: int, chat_state: int) -> void:
+	# Get the user who has made the lobby change
+	var changer_name: String = Steam.getFriendPersonaName(change_id)
+	# If a player has joined the lobby
+	if chat_state == Steam.CHAT_MEMBER_STATE_CHANGE_ENTERED:
+		print("%s has joined the lobby." % changer_name)
+	# Else if a player has left the lobby
+	elif chat_state == Steam.CHAT_MEMBER_STATE_CHANGE_LEFT:
+		print("%s has left the lobby." % changer_name)
+	# Else if a player has been kicked
+	elif chat_state == Steam.CHAT_MEMBER_STATE_CHANGE_KICKED:
+		print("%s has been kicked from the lobby." % changer_name)
+	# Else if a player has been banned
+	elif chat_state == Steam.CHAT_MEMBER_STATE_CHANGE_BANNED:
+		print("%s has been banned from the lobby." % changer_name)
+	# Else there was some unknown change
+	else:
+		print("%s did... something." % changer_name)
+
 
 func pregame() -> void:
 	var lobby_members_count : int = Steam.getNumLobbyMembers(lobby_id)

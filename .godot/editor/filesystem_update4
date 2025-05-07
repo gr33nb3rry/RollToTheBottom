@@ -37,3 +37,4 @@ res://scripts/player.gd
 res://scripts/ball.gd
 res://scripts/processor.gd
 res://scripts/main.gd
+res://scripts/map.gd
