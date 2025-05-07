@@ -8,7 +8,7 @@ var peer = SteamMultiplayerPeer.new()
 
 func _ready() -> void:
 	multiplayer_spawner.spawn_function = spawn_level
-	Steam.lobby_created.connect(_on_lobby_created)
+	peer.lobby_created.connect(_on_lobby_created)
 	Steam.lobby_match_list.connect(show_lobby_list)
 	Steam.join_requested.connect(accept_invite)
 	Steam.lobby_chat_update.connect(_on_lobby_chat_update)
@@ -42,27 +42,29 @@ func _on_lobby_joined(_this_lobby_id: int, _permissions: int, _locked: bool, _re
 	pass
 	
 func leave_lobby() -> void:
-	# If in a lobby, leave it
-	var xxx : int = lobby_id
 	if lobby_id != 0:
-		var lobby_member_count : int = Steam.getNumLobbyMembers(lobby_id)
-		Steam.leaveLobby(lobby_id)
-		lobby_id = 0
-		for member in lobby_member_count:
-			var member_steam_id : int = Steam.getLobbyMemberByIndex(lobby_id, member)
+		var member_count : int = Steam.getNumLobbyMembers(lobby_id)
+		for i in range(member_count):
+			var member_steam_id : int = Steam.getLobbyMemberByIndex(lobby_id, i)
 			if member_steam_id != SteamGlobal.steam_id:
 				Steam.closeP2PSessionWithUser(member_steam_id)
+
+		Steam.leaveLobby(lobby_id)
+		var left_lobby_id = lobby_id  # сохранить для дебага, если надо
+		lobby_id = 0
+		multiplayer.multiplayer_peer = null
+
 		if has_node("World"):
 			$World.queue_free()
 			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 			$Canvas/Start.show()
-			await get_tree().create_timer(5).timeout
-			print(Steam.getNumLobbyMembers(xxx))
+
 	
 
 func create_lobby() -> void:
 	if lobby_id == 0:
-		Steam.createLobby(Steam.LOBBY_TYPE_FRIENDS_ONLY)
+		#Steam.createLobby(Steam.LOBBY_TYPE_FRIENDS_ONLY)
+		peer.create_lobby(SteamMultiplayerPeer.LOBBY_TYPE_FRIENDS_ONLY, 2)
 		multiplayer.multiplayer_peer = peer
 
 func _on_lobby_created(is_connect, this_lobby_id) -> void:

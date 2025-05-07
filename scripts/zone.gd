@@ -9,6 +9,13 @@ const DECAL_3 = preload("res://images/decals/decal3.png")
 const DECAL_4 = preload("res://images/decals/decal4.png")
 const DECAL_5 = preload("res://images/decals/decal5.png")
 
+var STEPS : Dictionary = {
+	"BARRIER_MIN": 75.0,
+	"BARRIER_AVG": 30.0,
+	"BARRIER_MAX": 10.0,
+	"BARRIER_CHAOS": 2.5
+}
+
 @onready var path: Path3D = $Path3D
 @onready var path_follow: PathFollow3D = $Curve/PathFollow
 @onready var marker: MeshInstance3D = $Curve/PathFollow/Marker
@@ -71,8 +78,8 @@ func _process(_delta: float) -> void:
 func generate_decals() -> void:
 	if !multiplayer.is_server(): return
 	var offset : float = 20.0
-	var step : float = 7.0
 	var max : float = path.curve.get_baked_length() - offset * 2
+	var step : float = 7.0
 	var iteration_count : int = floori(max / step)
 	decals_maker.progress = offset
 	# DECALS
@@ -92,6 +99,8 @@ func generate_decals() -> void:
 	# REFRESH
 	decals_maker.progress = offset
 	barrier_pivots = []
+	step = STEPS["BARRIER_AVG"]
+	iteration_count = floori(max / step)
 	for i in $Markers.get_children(): i.queue_free()
 	# MARKERS
 	for i in iteration_count:
