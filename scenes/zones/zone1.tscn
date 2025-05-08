@@ -90,6 +90,7 @@ rotation_mode = 1
 loop = false
 
 [node name="Center" type="MeshInstance3D" parent="Curve/DecalsMaker"]
+transform = Transform3D(0.837719, 0.546102, 0, -0.546102, 0.837719, 0, 0, 0, 1, 0, 0, 0)
 mesh = SubResource("SphereMesh_kpajd")
 skeleton = NodePath("")
 
@@ -98,6 +99,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 25, 0)
 mesh = SubResource("BoxMesh_8qa26")
 
 [node name="Decal" parent="Curve/DecalsMaker/Center/Mesh" instance=ExtResource("4_nfwk7")]
+transform = Transform3D(1, -7.45058e-09, 0, 7.45058e-09, 1, -2.98023e-08, -5.96046e-08, 0, 1, 4.76837e-07, -8, 4.76837e-07)
 
 [node name="Room" parent="." instance=ExtResource("3_4veeh")]
 transform = Transform3D(-0.809017, 0, -0.587785, 0, 1, 0, 0.587785, 0, -0.809017, 54.4111, -80.9182, -191.874)

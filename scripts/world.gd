@@ -25,8 +25,6 @@ func start() -> void:
 	current_zone_instance = get_zone()
 	Globals.ball.is_simplified = true
 	is_able_to_zone_up = true
-	activity_type = -1
-	selected_decals = 0
 	dead_line = get_room().global_position.y - 25.0
 	sync_dead_line.rpc_id(Globals.ms.get_second_player_peer_id(), dead_line)
 	#add_waiting_soots()
@@ -36,6 +34,12 @@ func start() -> void:
 		if zone >= 3:
 			$Map.get_child(zone-2).disable()
 			#$Map.get_child(zone-2).call_deferred("set_process_mode", Node.PROCESS_MODE_DISABLED)
+	generate_zone()
+
+func generate_zone() -> void:
+	selected_decals = 0
+	activity_type = -1
+	is_playing = true
 	for decal in Globals.world.get_node("Decals").get_children(): decal.queue_free()
 	for decal in Globals.world.get_node("Barriers").get_children(): decal.queue_free()
 	await get_tree().create_timer(0.2).timeout
@@ -51,7 +55,16 @@ func end() -> void:
 	
 func game_over() -> void:
 	print("Game over")
-	Globals.ball.freeze = true
+	# tp to room
+	var count : int = 0
+	for player in get_tree().get_nodes_in_group("Player"):
+		player.global_position = get_previous_room().get_node("StartPos" + str(count)).global_position
+		count += 1
+	Globals.ball.global_position = get_previous_room().get_node("StartPosBall").global_position
+	# start
+	generate_zone()
+	#Globals.ball.freeze = true
+	
 	
 @rpc("any_peer")
 func sync_dead_line(dl:float) -> void:

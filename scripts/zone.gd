@@ -1,6 +1,7 @@
 extends Node3D
 
 const SOOT_WAITING = preload("res://scenes/soot_waiting.tscn")
+const DECAL_ZONE = preload("res://scenes/decal_zone.tscn")
 const BARRIER_P = preload("res://scenes/barrier_p.tscn")
 const DECAL_0 = preload("res://images/decals/decal0.png")
 const DECAL_1 = preload("res://images/decals/decal1.png")
@@ -84,18 +85,18 @@ func generate_decals() -> void:
 	decals_maker.progress = offset
 	# DECALS
 	for i in iteration_count:
-		var decal : Decal = decals_center.get_node("Mesh/Decal")
+		var m : MeshInstance3D = decals_center.get_node("Mesh")
 		var type : int = randi_range(0, 5)
 		decals_count[type] += 1
 		decals_maker.progress += step
 		decals_center.get_node("Mesh").rotation_degrees.y = randf_range(0.0, 360.0)
 		decals_center.rotation_degrees.z = randf_range(0.0, 360.0)
 		await get_tree().physics_frame
-		var d : Decal = decal.duplicate()
-		d.type = type
+		var d : Decal = DECAL_ZONE.instantiate()
 		Globals.world.get_node("Decals").add_child(d, true)
-		update_decal_position_rotation_type(Globals.world.get_node("Decals").get_child_count()-1, decal.global_position, decal.global_rotation, d.type)
-		update_decal_position_rotation_type.rpc_id(Globals.ms.get_second_player_peer_id(), Globals.world.get_node("Decals").get_child_count()-1, decal.global_position, decal.global_rotation, d.type)
+		var pos : Vector3 = m.global_position - m.global_transform.basis.y * 8.0
+		update_decal_position_rotation_type(Globals.world.get_node("Decals").get_child_count()-1, pos, m.global_rotation, type)
+		update_decal_position_rotation_type.rpc_id(Globals.ms.get_second_player_peer_id(), Globals.world.get_node("Decals").get_child_count()-1, pos, m.global_rotation, type)
 	# REFRESH
 	decals_maker.progress = offset
 	barrier_pivots = []
@@ -111,7 +112,6 @@ func generate_decals() -> void:
 		$Markers.add_child(m)
 		barrier_pivots.append(decals_maker.global_position)
 		m.global_position = decals_center.get_node("Mesh").global_position
-	decals_maker.queue_free()
 	var arr : Array[Vector3] = []
 	for i in $Markers.get_children():
 		arr.append(i.global_position)
