@@ -5,7 +5,7 @@ const COIN = preload("res://scenes/coin.tscn")
 const BALL_PUSH_FORCE : float = 7.0
 const BALL_HIT_FORCE : float = 20.0
 
-var max_health : Array = [20.0, 20.0]
+var max_health : Array = [100.0, 100.0]
 var health : Array = [max_health[0], max_health[1]]
 var coins : float = 0.0
 
@@ -68,31 +68,17 @@ func is_skill_max(peer_id:int, skill_name:String) -> bool:
 
 	
 @rpc("any_peer")
-func change_health(peer_id:int, v:float) -> void:
+func change_stamina(peer_id:int, v:float) -> void:
 	print("Damage in processor")
 	print("peer id: ", peer_id, " MS: ", Globals.ms.get_second_player_peer_id())
 	var index : int = 0 if peer_id == 1 else 1
 	if v < 0:
 		var percent : float = float(get_skill(peer_id, "Iron Will")) / 100.0
 		var damage : float = -v - -v * percent
-		health[index] = clamp(health[index] - damage, 0.0, max_health[index])
-		if health[index] == 0.0:
-			Globals.ms.get_player_by_id(peer_id).death()
-			Globals.ms.get_player_by_id(peer_id).death.rpc_id(Globals.ms.get_second_player_peer_id())
+		health[index] = clamp(snapped(health[index] - damage, 0.01), 0.0, max_health[index])
 	Globals.health.update(max_health, health)
 	Globals.health.update.rpc_id(Globals.ms.get_second_player_peer_id(), max_health, health)
-	
-@rpc("any_peer")
-func change_coins(v:float) -> void:
-	print("Change coins: ", v)
-	if v > 0:
-		coins += v + v * float(get_skill(1, "Fortune Beckons")) / 100.0
-@rpc("any_peer")
-func add_coin(pos:Vector3) -> void:
-	var c = COIN.instantiate()
-	Globals.projectile_spawner.add_child(c, true)
-	c.global_position = pos
-	c.move()
+	print(health[index])
 	
 @rpc("any_peer")
 func push_ball(peer_id: int, is_attacking: bool) -> void:
@@ -100,37 +86,13 @@ func push_ball(peer_id: int, is_attacking: bool) -> void:
 	var force : float = BALL_PUSH_FORCE + BALL_PUSH_FORCE * float(get_skill(peer_id, "Mountain’s Strength")) / 100.0
 	if is_attacking: force /= 2.0
 	Globals.ball.add_impulse(player, force, false)
+	change_stamina(peer_id, -0.16)
 @rpc("any_peer")
 func hit_ball() -> void:
 	var player = Globals.ms.players.values()[0] if Globals.ms.players.values()[0].type == 0 else Globals.ms.players.values()[1]
 	Globals.ball.add_impulse(player, BALL_HIT_FORCE, true)
-	
+	change_stamina(1 if Globals.ms.get_player_by_id(1).type == 0 else Globals.ms.get_second_player_peer_id(), -10.0)
 @rpc("any_peer")
-func shoot(peer_id: int, is_in_the_air:bool) -> void:
-	var player = Globals.ms.get_player_by_id(peer_id)
-	var direction : Vector3
-	var pos : Vector3 = player.global_position + Vector3(0, 1.7, 0)
-	if player.ray_crosshair.is_colliding():
-		direction = (player.ray_crosshair.get_collision_point() - pos).normalized()
-	else:
-		direction = (-player.camera.global_transform.basis.z).normalized()
-	var p = PROJECTILE.instantiate()
-	Globals.projectile_spawner.add_child(p, true)
-	p.global_position = pos
-	p.direction = direction
-	p.owner_peer_id = peer_id
-	var damage : float = 1.0
-	p.damage = damage + damage * float(get_skill(peer_id, "Way of the Blade")) / 100.0
-	if is_in_the_air: p.damage += damage * float(get_skill(peer_id, "Skyward Strike")) / 100.0
-
-@rpc("any_peer")
-func damage_soot(soot:Node3D, peer_id:int, damage:float) -> void:
-	print("Damage soot ", soot, " : ", peer_id)
-	soot.health -= damage
-	if soot.health <= 0.0:
-		print("Kill soot ", soot)
-		change_health(peer_id, damage * float(get_skill(peer_id, "Blood Pact")) / 100.0)
-		print("Heal player on kill: ", damage * float(get_skill(peer_id, "Blood Pact")) / 100.0)
-		#add_coin(soot.global_position)
-		soot.death()
-		soot.death.rpc_id(Globals.ms.get_second_player_peer_id())
+func toss_ball() -> void:
+	Globals.ball.jump()
+	change_stamina(1 if Globals.ms.get_player_by_id(1).type == 1 else Globals.ms.get_second_player_peer_id(), -10.0)

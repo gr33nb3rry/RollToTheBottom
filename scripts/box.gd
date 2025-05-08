@@ -23,7 +23,7 @@ func _physics_process(delta: float) -> void:
 
 
 func generate_type() -> void:
-	if multiplayer.is_server(): return
+	#if multiplayer.is_server(): return
 	type = randi_range(0, 1)
 	var h : float = randf_range(1.5, 2.5)
 	update_by_type(type, h)
@@ -46,6 +46,7 @@ func damage(player_type:int) -> void:
 func death() -> void:
 	$Stick/Sphere.visible = true
 	$Mesh.visible = false
+	$Collision.call_deferred("set_disabled", true)
 
 func clip_to_ground(height:float) -> void:
 	visible = false

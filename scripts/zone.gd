@@ -99,7 +99,7 @@ func generate_decals() -> void:
 	# REFRESH
 	decals_maker.progress = offset
 	barrier_pivots = []
-	step = STEPS["BARRIER_AVG"]
+	step = STEPS["BARRIER_CHAOS"]
 	iteration_count = floori(max / step)
 	for i in $Markers.get_children(): i.queue_free()
 	# MARKERS

@@ -154,7 +154,7 @@ func resurrect() -> void:
 func apply_impulse() -> void:
 	if is_ball_near_enough(0.2):
 		if multiplayer.get_unique_id() != 1:
-			Globals.processor.rpc_id(1, "push_ball", multiplayer.get_unique_id(), is_attacking)
+			Globals.processor.push_ball.rpc_id(1, multiplayer.get_unique_id(), is_attacking)
 		else:
 			Globals.processor.push_ball(1, is_attacking)
 			
@@ -191,8 +191,8 @@ func attack() -> void:
 	if attack_count > 5: attack_count = 0
 	
 	if is_ball_near_enough(1.8) and ray_crosshair.is_colliding() and ray_crosshair.get_collider() == Globals.ball:
-		if multiplayer.get_unique_id() == 1: Globals.ball.jump()
-		else: Globals.ball.jump.rpc_id(1)
+		if multiplayer.get_unique_id() == 1: Globals.processor.toss_ball()
+		else: Globals.processor.toss_ball.rpc_id(1)
 	elif ray_crosshair.is_colliding() and ray_crosshair.get_collider().is_in_group("Attackable"):
 		ray_crosshair.get_collider().damage(1)
 	
