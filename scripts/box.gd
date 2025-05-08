@@ -38,7 +38,8 @@ func update_by_type(t:int, height:float) -> void:
 	
 func damage(player_type:int) -> void:
 	if player_type == type:
-		if multiplayer.is_server(): death()
+		death()
+		if multiplayer.get_unique_id() == 1: death.rpc_id(Globals.ms.get_second_player_peer_id())
 		else: death.rpc_id(1)
 		
 @rpc("any_peer")
