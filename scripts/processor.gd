@@ -76,9 +76,27 @@ func change_stamina(peer_id:int, v:float) -> void:
 		var percent : float = float(get_skill(peer_id, "Iron Will")) / 100.0
 		var damage : float = -v - -v * percent
 		health[index] = clamp(snapped(health[index] - damage, 0.01), 0.0, max_health[index])
+	else:
+		health[index] = v
 	Globals.health.update(max_health, health)
 	Globals.health.update.rpc_id(Globals.ms.get_second_player_peer_id(), max_health, health)
-	print(health[index])
+	get_node("RefreshStamina" + str(index + 1)).start()
+
+func refresh_stamina_1(last_stamina:float = health[0]) -> void:
+	if last_stamina > health[0]: return
+	var refresh_time : float = 100.0
+	var new_stamina : float = clamp(snapped(last_stamina + max_health[0] / refresh_time, 0.01), 0.0, max_health[0])
+	change_stamina(1, new_stamina)
+	await get_tree().create_timer(0.1).timeout
+	refresh_stamina_1(new_stamina)
+	
+func refresh_stamina_2(last_stamina:float = health[1]) -> void:
+	if last_stamina > health[1]: return
+	var refresh_time : float = 100.0
+	var new_stamina : float = clamp(snapped(last_stamina + max_health[1] / refresh_time, 0.01), 0.0, max_health[1])
+	change_stamina(Globals.ms.get_second_player_peer_id(), new_stamina)
+	await get_tree().create_timer(0.1).timeout
+	refresh_stamina_2(new_stamina)
 	
 @rpc("any_peer")
 func push_ball(peer_id: int, is_attacking: bool) -> void:
