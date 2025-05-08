@@ -194,12 +194,11 @@ func get_next_near_flying_position() -> Vector3:
 	print("h: ",h_off," v: ",v_off)
 	return pos
 
-func get_next_jumping_position(pos:Vector3) -> Vector3:
+func get_resurrect_position(pos:Vector3) -> Vector3:
 	var r = get_radius_on_pos(path.to_local(pos))
 	var p : Vector3 = path.curve.get_closest_point(path.to_local(pos))
 	var result_pos : Vector3 = path.to_global(p)
-	result_pos.y += r
-	print("r: ",r," pos: ",pos," result_pos: ",result_pos)
+	result_pos.y += r + 5.0
 	return result_pos
 
 func add_waiting_soots() -> void:

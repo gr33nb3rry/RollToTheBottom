@@ -144,12 +144,14 @@ func damage(amount:int) -> void:
 func death() -> void:
 	is_alive = false
 	model.visible = false
-	await get_tree().create_timer(5.0).timeout
+	await get_tree().create_timer(1.0).timeout
 	resurrect()
 
 func resurrect() -> void:
 	model.visible = true
 	is_alive = true
+	if multiplayer.get_unique_id() == 1: Globals.processor.resurrect(1)
+	else: Globals.processor.resurrect.rpc_id(1, multiplayer.get_unique_id())
 
 func apply_impulse() -> void:
 	if is_ball_near_enough(0.2):

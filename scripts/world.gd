@@ -142,8 +142,8 @@ func get_near_flying_position() -> Vector3:
 func get_next_near_flying_position() -> Vector3:
 	return current_zone_instance.get_next_near_flying_position()
 	
-func get_next_jumping_position(pos:Vector3) -> Vector3:
-	return current_zone_instance.get_next_jumping_position(pos)
+func get_resurrect_position(pos:Vector3) -> Vector3:
+	return current_zone_instance.get_resurrect_position(pos)
 	
 func add_waiting_soots() -> void:
 	current_zone_instance.add_waiting_soots()

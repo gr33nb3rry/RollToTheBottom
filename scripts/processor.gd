@@ -97,6 +97,11 @@ func refresh_stamina_2(last_stamina:float = health[1]) -> void:
 	change_stamina(Globals.ms.get_second_player_peer_id(), new_stamina)
 	await get_tree().create_timer(0.1).timeout
 	refresh_stamina_2(new_stamina)
+
+@rpc("any_peer")
+func resurrect(peer_id:int) -> void:
+	var player = Globals.ms.get_player_by_id(peer_id)
+	player.global_position = Globals.world.get_resurrect_position(player.global_position)
 	
 @rpc("any_peer")
 func push_ball(peer_id: int, is_attacking: bool) -> void:
