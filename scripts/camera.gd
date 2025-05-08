@@ -64,7 +64,8 @@ func _physics_process(delta):
 		var movement := Vector3.ZERO
 		var forward : Vector3 = -$CamYaw/CamPitch.global_transform.basis.z
 		var right : Vector3 = $CamYaw.global_transform.basis.x
-		var up : Vector3 = $CamYaw/CamPitch.global_transform.basis.y
+		#var up : Vector3 = $CamYaw/CamPitch.global_transform.basis.y
+		var up : Vector3 = Vector3.UP
 		var direction = Input.get_vector("move_left", "move_right", "move_back", "move_forward")
 		forward *= direction.y
 		right *= direction.x
@@ -72,7 +73,7 @@ func _physics_process(delta):
 		elif Input.is_action_pressed("flying_camera_down"): up *= -1
 		else: up *= 0
 		movement += forward + right + up
-		velocity = lerp(velocity, movement.normalized() * (player.RUN_SPEED * 4.0 if Input.is_action_pressed("run") else player.RUN_SPEED * 2.0), 0.15)
+		velocity = lerp(velocity, movement.normalized() * (player.RUN_SPEED * 4.0 if Input.is_action_pressed("run") else player.RUN_SPEED * 2.0), 0.1)
 		#global_position += movement * delta
 		move_and_slide()
 
