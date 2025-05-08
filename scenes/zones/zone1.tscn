@@ -1,10 +1,9 @@
-[gd_scene load_steps=17 format=3 uid="uid://yhpgoa10oh6y"]
+[gd_scene load_steps=16 format=3 uid="uid://yhpgoa10oh6y"]
 
 [ext_resource type="Script" path="res://scripts/zone.gd" id="1_7maf6"]
 [ext_resource type="Script" path="res://addons/curvemesh3d/curvemesh3d.gd" id="2_keamj"]
 [ext_resource type="PackedScene" uid="uid://bwf13nepw51ts" path="res://scenes/room.tscn" id="3_4veeh"]
 [ext_resource type="Material" uid="uid://c4n2awfh8fos1" path="res://materials/steb_a_m_s.tres" id="3_7jgtr"]
-[ext_resource type="PackedScene" uid="uid://rugtnvlvhw3s" path="res://scenes/decal_zone.tscn" id="4_nfwk7"]
 [ext_resource type="Material" uid="uid://btw6bhbo8oi8k" path="res://materials/steb_item_m_s.tres" id="6_tq0b3"]
 [ext_resource type="Script" path="res://scripts/activity_point.gd" id="7_r25wt"]
 [ext_resource type="Texture2D" uid="uid://r7gwyasg7fnl" path="res://images/decals/decal4.png" id="8_3jj46"]
@@ -97,9 +96,6 @@ skeleton = NodePath("")
 [node name="Mesh" type="MeshInstance3D" parent="Curve/DecalsMaker/Center"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 25, 0)
 mesh = SubResource("BoxMesh_8qa26")
-
-[node name="Decal" parent="Curve/DecalsMaker/Center/Mesh" instance=ExtResource("4_nfwk7")]
-transform = Transform3D(1, -7.45058e-09, 0, 7.45058e-09, 1, -2.98023e-08, -5.96046e-08, 0, 1, 4.76837e-07, -8, 4.76837e-07)
 
 [node name="Room" parent="." instance=ExtResource("3_4veeh")]
 transform = Transform3D(-0.809017, 0, -0.587785, 0, 1, 0, 0.587785, 0, -0.809017, 54.4111, -80.9182, -191.874)

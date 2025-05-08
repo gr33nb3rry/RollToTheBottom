@@ -5,7 +5,6 @@ var is_rolling : bool = false
 
 @rpc("any_peer")
 func update(max_health:Array, health:Array) -> void:
-	print("Damage in health")
 	var type_0_index : int = 0 if Globals.ms.players.values()[0].type == 0 else 1
 	var type_1_index : int = 0 if Globals.ms.players.values()[0].type == 1 else 1
 	

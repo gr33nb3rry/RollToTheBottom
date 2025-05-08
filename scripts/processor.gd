@@ -69,8 +69,6 @@ func is_skill_max(peer_id:int, skill_name:String) -> bool:
 	
 @rpc("any_peer")
 func change_stamina(peer_id:int, v:float) -> void:
-	print("Damage in processor")
-	print("peer id: ", peer_id, " MS: ", Globals.ms.get_second_player_peer_id())
 	var index : int = 0 if peer_id == 1 else 1
 	if v < 0:
 		var percent : float = float(get_skill(peer_id, "Iron Will")) / 100.0
@@ -83,7 +81,7 @@ func change_stamina(peer_id:int, v:float) -> void:
 	get_node("RefreshStamina" + str(index + 1)).start()
 
 func refresh_stamina_1(last_stamina:float = health[0]) -> void:
-	if last_stamina > health[0]: return
+	if last_stamina > health[0] or last_stamina >= max_health[0]: return
 	var refresh_time : float = 100.0
 	var new_stamina : float = clamp(snapped(last_stamina + max_health[0] / refresh_time, 0.01), 0.0, max_health[0])
 	change_stamina(1, new_stamina)
@@ -91,7 +89,7 @@ func refresh_stamina_1(last_stamina:float = health[0]) -> void:
 	refresh_stamina_1(new_stamina)
 	
 func refresh_stamina_2(last_stamina:float = health[1]) -> void:
-	if last_stamina > health[1]: return
+	if last_stamina > health[1] or last_stamina >= max_health[1]: return
 	var refresh_time : float = 100.0
 	var new_stamina : float = clamp(snapped(last_stamina + max_health[1] / refresh_time, 0.01), 0.0, max_health[1])
 	change_stamina(Globals.ms.get_second_player_peer_id(), new_stamina)

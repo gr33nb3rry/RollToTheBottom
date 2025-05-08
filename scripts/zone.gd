@@ -83,6 +83,7 @@ func generate_decals() -> void:
 	var step : float = 7.0
 	var iteration_count : int = floori(max / step)
 	decals_maker.progress = offset
+	decals_count = [0, 0, 0, 0, 0, 0]
 	# DECALS
 	for i in iteration_count:
 		var m : MeshInstance3D = decals_center.get_node("Mesh")
@@ -100,7 +101,7 @@ func generate_decals() -> void:
 	# REFRESH
 	decals_maker.progress = offset
 	barrier_pivots = []
-	step = STEPS["BARRIER_CHAOS"]
+	step = STEPS["BARRIER_AVG"]
 	iteration_count = floori(max / step)
 	for i in $Markers.get_children(): i.queue_free()
 	# MARKERS
