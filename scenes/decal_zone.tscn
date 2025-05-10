@@ -7,7 +7,7 @@
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -8.195, 0)
 size = Vector3(1.4, 15, 1.4)
 texture_albedo = ExtResource("1_guwqb")
-modulate = Color(0.265841, 0.47776, 0.207303, 1)
+modulate = Color(0.28938, 0.516996, 0.226498, 1)
 upper_fade = 3.18806e-05
 lower_fade = 3.92494e-05
 cull_mask = 524288

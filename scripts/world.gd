@@ -25,10 +25,12 @@ func start() -> void:
 	current_zone_instance = get_zone()
 	Globals.ball.is_simplified = true
 	is_able_to_zone_up = true
-	dead_line = get_room().global_position.y - 25.0
+	if current_zone_instance.has_node("Room"): dead_line = get_room().global_position.y - 25.0
+	else: dead_line = 0.0
 	sync_dead_line.rpc_id(Globals.ms.get_second_player_peer_id(), dead_line)
 	#add_waiting_soots()
-	$Map.get_child(zone).get_node("Room").process_mode = Node.PROCESS_MODE_INHERIT
+	if $Map.get_child(zone).has_node("Room"):
+		$Map.get_child(zone).get_node("Room").process_mode = Node.PROCESS_MODE_INHERIT
 	if zone >= 2:
 		$Map.get_node("Room").disable()
 		if zone >= 3:

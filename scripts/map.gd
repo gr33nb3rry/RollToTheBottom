@@ -3,17 +3,18 @@ extends Node3D
 const ZONES : Array[PackedScene] = [
 	preload("res://scenes/zones/zone1.tscn"),
 	preload("res://scenes/zones/zone2.tscn"),
-	preload("res://scenes/zones/zone3.tscn")
+	preload("res://scenes/zones/zone3.tscn"),
+	preload("res://scenes/zones/zone_end.tscn")
 ]
 
 var zones : Array
 
 func _ready() -> void:
-	for i in 5:
-		generate()
+	for i in 3:
+		generate(i == 2)
 
-func generate() -> void:
-	var zone = ZONES[0].instantiate()
+func generate(is_end:bool) -> void:
+	var zone = ZONES[0 if !is_end else -1].instantiate()
 	add_child(zone)
 	var pos = $Room/Pos2.global_position if zones.size() == 0 else zones[-1].get_next_zone_position() 
 	var rot = Vector3.ZERO if zones.size() == 0 else zones[-1].get_next_zone_rotation()

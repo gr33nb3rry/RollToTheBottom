@@ -1,9 +1,9 @@
+MeshInstance3D
 CurveMesh3D
 AudioStreamPlayer3D
 MultiplayerSynchronizer
 Marker3D
 Timer
-MeshInstance3D
 Node3D
 Label
 SubViewport
@@ -12,4 +12,3 @@ RigidBody3D
 RayCast3D
 CollisionShape3D
 StaticBody3D
-AnimationPlayer
