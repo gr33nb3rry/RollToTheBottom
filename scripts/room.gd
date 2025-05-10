@@ -17,7 +17,7 @@ func _ready() -> void:
 		disable()
 
 func _process(delta: float) -> void:
-	if !multiplayer.is_server(): return
+	#if !multiplayer.is_server(): return
 	var distance_to_ball : float = global_position.distance_squared_to(Globals.ball.global_position)
 	is_ball_inside = distance_to_ball < RADIUS * RADIUS
 	var players_inside_count : int = 0

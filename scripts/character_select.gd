@@ -88,6 +88,7 @@ func play() -> void:
 	player.type = type
 	#Globals.ms.get_player_by_id(Globals.ms.get_second_player_peer_id()).type = 0 if type == 1 else 1
 	play_not_host.rpc_id(Globals.ms.get_second_player_peer_id())
+	Globals.map.generate()
 	close()
 
 @rpc("any_peer")

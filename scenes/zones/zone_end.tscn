@@ -55,7 +55,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0, 0)
 mesh = SubResource("BoxMesh_8qa26")
 
 [node name="DecalsMaker" type="PathFollow3D" parent="Curve"]
-transform = Transform3D(-0.99636, 0, -0.0850282, 0, 0.999992, 0, 0.0850281, 0, -0.996361, -21.6615, 129.494, -8.34915)
+transform = Transform3D(-0.996359, 0, -0.0850281, 0, 0.999992, 0, 0.0850281, 0, -0.99636, -21.6615, 129.494, -8.34915)
 rotation_mode = 1
 loop = false
 

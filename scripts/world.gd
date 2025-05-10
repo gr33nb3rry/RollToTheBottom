@@ -44,6 +44,7 @@ func generate_zone() -> void:
 	is_playing = true
 	current_zone_instance.is_activity_started = false
 	current_zone_instance.is_activity_finished = false
+	current_zone_instance.is_finished = false
 	for decal in Globals.world.get_node("Decals").get_children(): decal.queue_free()
 	for decal in Globals.world.get_node("Barriers").get_children(): decal.queue_free()
 	await get_tree().create_timer(0.2).timeout
@@ -60,8 +61,11 @@ func end() -> void:
 func game_over() -> void:
 	# tp to room
 	var count : int = 0
-	for player in get_tree().get_nodes_in_group("Player"):
-		player.tp_resurrect(get_previous_room().get_node("StartPos" + str(count)).global_position)
+	for p in Globals.ms.players:
+		if p == 1:
+			Globals.ms.players[p].tp_resurrect(get_previous_room().get_node("StartPos" + str(count)).global_position)
+		else:
+			Globals.ms.players[p].tp_resurrect.rpc_id(Globals.ms.get_second_player_peer_id(), get_previous_room().get_node("StartPos" + str(count)).global_position)
 		count += 1
 	Globals.ball.global_position = get_previous_room().get_node("StartPosBall").global_position
 	# start

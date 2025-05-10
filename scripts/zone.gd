@@ -32,6 +32,7 @@ var barrier_pivots : Array = []
 var is_activity_started : bool = false
 var is_activity_finished : bool = false
 var is_finished : bool = false
+var is_end : bool = false
 
 var ball_radius : float = 2.0
 var max_h_offset : float = 10.0
@@ -80,7 +81,8 @@ func _process(_delta: float) -> void:
 func generate_decals() -> void:
 	if !multiplayer.is_server(): return
 	var offset : float = 20.0
-	var max : float = path.curve.get_baked_length() - offset * 2
+	var end_offset : float = 40.0 if !is_end else 120.0
+	var max : float = path.curve.get_baked_length() - end_offset
 	var step : float = 7.0
 	var iteration_count : int = floori(max / step)
 	decals_maker.progress = offset
@@ -131,7 +133,7 @@ func add_barriers(arr:Array, barrier_pivots:Array) -> void:
 			Globals.world.get_previous_room().open_door(Globals.world.get_previous_room().get_node("Door2"))
 		count += 1
 		
-@rpc("any_peer")
+@rpc("any_peer", "reliable")
 func update_barrier(index:int, pos:Vector3, pivot:Vector3) -> void:
 	#print("Index: ", index, " pivot: ", pivot, " Pipa: ", Globals.world.get_node("Barriers").get_child(index))
 	Globals.world.get_node("Barriers").get_child(index).global_position = pos
@@ -139,7 +141,7 @@ func update_barrier(index:int, pos:Vector3, pivot:Vector3) -> void:
 	Globals.world.get_node("Barriers").get_child(index).generate_type()
 	#Globals.world.get_node("Barriers").get_child(index).clip_to_ground(pivot)
 
-@rpc("any_peer")
+@rpc("any_peer", "reliable")
 func update_decal_position_rotation_type(index:int, pos:Vector3, rot:Vector3, type:int) -> void:
 	Globals.world.get_node("Decals").get_child(index).global_position = pos
 	Globals.world.get_node("Decals").get_child(index).global_rotation = rot
@@ -153,7 +155,11 @@ func update_decal_position_rotation_type(index:int, pos:Vector3, rot:Vector3, ty
 		5: Globals.world.get_node("Decals").get_child(index).texture_albedo = DECAL_5
 	
 func get_barriers_step() -> float:
-	var steps : Array = ["BARRIER_MIN", "BARRIER_AVG", "BARRIER_MAX", "BARRIER_CHAOS"]
+	var steps : Array
+	if !is_end:
+		steps = ["BARRIER_MIN","BARRIER_MIN","BARRIER_AVG","BARRIER_AVG","BARRIER_AVG","BARRIER_MAX","BARRIER_MAX","BARRIER_CHAOS"]
+	else:
+		steps = ["BARRIER_MIN","BARRIER_MIN","BARRIER_AVG"]
 	return STEPS[steps[randi_range(0, steps.size() - 1)]]
 	
 func get_decal_count(type:int) -> int:

@@ -148,12 +148,16 @@ func death() -> void:
 
 func resurrect() -> void:
 	model.visible = true
-	if multiplayer.get_unique_id() == 1: Globals.processor.resurrect(1)
-	else: Globals.processor.resurrect.rpc_id(1, multiplayer.get_unique_id())
+	if multiplayer.get_unique_id() != 1:
+		Globals.processor.resurrect.rpc_id(1, multiplayer.get_unique_id())
+	else:
+		Globals.processor.resurrect(multiplayer.get_unique_id())
 
 @rpc("any_peer")
 func tp_resurrect(pos:Vector3) -> void:
+	print(global_position)
 	global_position = pos
+	print("Resurrect   pos: ", pos, "  after: ", global_position)
 	is_alive = true
 
 func apply_impulse() -> void:
@@ -173,15 +177,13 @@ func is_ball_near_enough(distance:float) -> bool:
 func hit() -> void:
 	if Globals.processor.health[0 if multiplayer.get_unique_id() == 1 else 1] < 10.0: return
 	animation_tree.set("parameters/hit_melee/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
-	if multiplayer.get_unique_id() == 1: hit.rpc_id(Globals.ms.get_second_player_peer_id())
-	else: hit.rpc_id(1)
 func hit_check() -> void:
 	if !is_multiplayer_authority(): return
 	for i in $Model/Body/AreaMelee.get_overlapping_bodies():
 		if i == Globals.ball:
 			#Globals.processor.hit_ball()
 			if multiplayer.get_unique_id() != 1:
-				Globals.processor.hit_ball.rpc_id()
+				Globals.processor.hit_ball.rpc_id(1)
 			else:
 				Globals.processor.hit_ball()
 			print("Hit melee: Ball")
