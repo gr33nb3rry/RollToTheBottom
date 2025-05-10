@@ -76,6 +76,7 @@ func _process(_delta: float) -> void:
 		Globals.ball.is_active = true
 		Globals.ball.freeze = false
 	
+
 func generate_decals() -> void:
 	if !multiplayer.is_server(): return
 	var offset : float = 20.0
@@ -101,7 +102,7 @@ func generate_decals() -> void:
 	# REFRESH
 	decals_maker.progress = offset
 	barrier_pivots = []
-	step = STEPS["BARRIER_AVG"]
+	step = get_barriers_step()
 	iteration_count = floori(max / step)
 	for i in $Markers.get_children(): i.queue_free()
 	# MARKERS
@@ -151,6 +152,9 @@ func update_decal_position_rotation_type(index:int, pos:Vector3, rot:Vector3, ty
 		4: Globals.world.get_node("Decals").get_child(index).texture_albedo = DECAL_4
 		5: Globals.world.get_node("Decals").get_child(index).texture_albedo = DECAL_5
 	
+func get_barriers_step() -> float:
+	var steps : Array = ["BARRIER_MIN", "BARRIER_AVG", "BARRIER_MAX", "BARRIER_CHAOS"]
+	return STEPS[steps[randi_range(0, steps.size() - 1)]]
 	
 func get_decal_count(type:int) -> int:
 	return decals_count[type]
