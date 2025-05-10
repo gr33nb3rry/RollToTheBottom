@@ -1,0 +1,26 @@
+[gd_resource type="StandardMaterial3D" load_steps=4 format=3 uid="uid://bxmjgglyxmta1"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_cl3tg"]
+load_path = "res://.godot/imported/plant_material_orm.png-5d3f295881532b80326708de1be011ff.s3tc.ctex"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_w4p46"]
+load_path = "res://.godot/imported/plant_material_heightmap.png-cd567e51ee2bf5222be29dccf8904241.s3tc.ctex"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_yoksg"]
+load_path = "res://.godot/imported/plant_material_normal.png-a75ff0766e29e0e66b7c6bb2463679b7.s3tc.ctex"
+
+[resource]
+albedo_color = Color(1, 0.372341, 0.878552, 1)
+emission_enabled = true
+emission = Color(0.662732, 0.592009, 1, 1)
+emission_energy_multiplier = 0.01
+normal_scale = 0.8
+normal_texture = SubResource("CompressedTexture2D_yoksg")
+rim = 0.0
+ao_texture = SubResource("CompressedTexture2D_cl3tg")
+heightmap_scale = 1.0
+heightmap_deep_parallax = true
+heightmap_min_layers = 8
+heightmap_max_layers = 32
+heightmap_texture = SubResource("CompressedTexture2D_w4p46")
+uv1_triplanar = true

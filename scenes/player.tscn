@@ -1,7 +1,13 @@
-[gd_scene load_steps=61 format=3 uid="uid://cxlkxr1ykhym6"]
+[gd_scene load_steps=67 format=3 uid="uid://cxlkxr1ykhym6"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_x72jo"]
 [ext_resource type="Script" path="res://scripts/camera.gd" id="2_5wcse"]
+[ext_resource type="AudioStream" uid="uid://dxtej6ulaq47f" path="res://sounds/swoosh.tres" id="3_io6n6"]
+[ext_resource type="Texture2D" uid="uid://e6ievp3gc3lp" path="res://materials/fabric_material_albedo.png" id="3_w0h1a"]
+[ext_resource type="AudioStream" uid="uid://c56gwcbvllm25" path="res://sounds/step_grass.tres" id="3_yshoy"]
+[ext_resource type="Texture2D" uid="uid://cqm726jb1gg17" path="res://materials/fabric_material_heightmap.png" id="4_aq38q"]
+[ext_resource type="Texture2D" uid="uid://sug0t7aen8e" path="res://materials/fabric_material_normal.png" id="5_spwtp"]
+[ext_resource type="Texture2D" uid="uid://d1t2c8jrq723" path="res://materials/fabric_material_orm.png" id="6_incad"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ue1hd"]
 height = 1.32
@@ -41,16 +47,41 @@ properties/8/path = NodePath("Model/AnimationTree:parameters/HandsBlend/blend_am
 properties/8/spawn = true
 properties/8/replication_mode = 1
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_feul3"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wqos3"]
+albedo_color = Color(1, 0.97833, 0.857634, 1)
+albedo_texture = ExtResource("3_w0h1a")
+roughness_texture = ExtResource("6_incad")
+roughness_texture_channel = 1
+normal_enabled = true
+normal_scale = 0.5
+normal_texture = ExtResource("5_spwtp")
+heightmap_deep_parallax = true
+heightmap_min_layers = 8
+heightmap_max_layers = 32
+heightmap_texture = ExtResource("4_aq38q")
+uv1_scale = Vector3(0.5, 0.5, 0.5)
+uv1_triplanar = true
 
 [sub_resource type="SphereMesh" id="SphereMesh_wmb2u"]
-material = SubResource("StandardMaterial3D_feul3")
+material = SubResource("StandardMaterial3D_wqos3")
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kqk7b"]
-albedo_color = Color(0.0656105, 0.0656061, 0.0951202, 1)
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_j00o0"]
+albedo_color = Color(0.0745098, 0.0588235, 0.0862745, 1)
+albedo_texture = ExtResource("3_w0h1a")
+roughness_texture = ExtResource("6_incad")
+roughness_texture_channel = 1
+normal_enabled = true
+normal_scale = 0.5
+normal_texture = ExtResource("5_spwtp")
+heightmap_deep_parallax = true
+heightmap_min_layers = 8
+heightmap_max_layers = 32
+heightmap_texture = ExtResource("4_aq38q")
+uv1_scale = Vector3(0.5, 0.5, 0.5)
+uv1_triplanar = true
 
 [sub_resource type="SphereMesh" id="SphereMesh_gc2ie"]
-material = SubResource("StandardMaterial3D_kqk7b")
+material = SubResource("StandardMaterial3D_j00o0")
 
 [sub_resource type="SphereMesh" id="SphereMesh_i11u5"]
 radius = 0.15
@@ -691,6 +722,21 @@ tracks/9/keys = {
 "method": &"end_attack"
 }]
 }
+tracks/10/type = "audio"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("Audio")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"clips": [{
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource("3_io6n6")
+}],
+"times": PackedFloat32Array(0)
+}
+tracks/10/use_blend = true
 
 [sub_resource type="Animation" id="Animation_5pe3a"]
 resource_name = "hit_2"
@@ -811,6 +857,21 @@ tracks/9/keys = {
 "method": &"end_attack"
 }]
 }
+tracks/10/type = "audio"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("Audio")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"clips": [{
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource("3_io6n6")
+}],
+"times": PackedFloat32Array(0)
+}
+tracks/10/use_blend = true
 
 [sub_resource type="Animation" id="Animation_bpcdn"]
 resource_name = "hit_3"
@@ -931,6 +992,21 @@ tracks/9/keys = {
 "method": &"end_attack"
 }]
 }
+tracks/10/type = "audio"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("Audio")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"clips": [{
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource("3_io6n6")
+}],
+"times": PackedFloat32Array(0)
+}
+tracks/10/use_blend = true
 
 [sub_resource type="Animation" id="Animation_u2xht"]
 resource_name = "hit"
@@ -1051,6 +1127,21 @@ tracks/9/keys = {
 "method": &"end_attack"
 }]
 }
+tracks/10/type = "audio"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("Audio")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"clips": [{
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource("3_io6n6")
+}],
+"times": PackedFloat32Array(0)
+}
+tracks/10/use_blend = true
 
 [sub_resource type="Animation" id="Animation_3so83"]
 resource_name = "hit_4"
@@ -1171,6 +1262,21 @@ tracks/9/keys = {
 "method": &"end_attack"
 }]
 }
+tracks/10/type = "audio"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("Audio")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"clips": [{
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource("3_io6n6")
+}],
+"times": PackedFloat32Array(0)
+}
+tracks/10/use_blend = true
 
 [sub_resource type="Animation" id="Animation_ux8wm"]
 resource_name = "hit_5"
@@ -1291,6 +1397,21 @@ tracks/9/keys = {
 "method": &"end_attack"
 }]
 }
+tracks/10/type = "audio"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("Audio")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"clips": [{
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource("3_io6n6")
+}],
+"times": PackedFloat32Array(0)
+}
+tracks/10/use_blend = true
 
 [sub_resource type="Animation" id="Animation_8n6ei"]
 resource_name = "hit_melee"
@@ -1423,6 +1544,21 @@ tracks/10/keys = {
 "update": 1,
 "values": [true, false]
 }
+tracks/11/type = "audio"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("Audio")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"clips": [{
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource("3_io6n6")
+}],
+"times": PackedFloat32Array(0.633333)
+}
+tracks/11/use_blend = true
 
 [sub_resource type="Animation" id="Animation_0usav"]
 resource_name = "idle"
@@ -1868,6 +2004,25 @@ tracks/11/keys = {
 "update": 1,
 "values": [false]
 }
+tracks/12/type = "audio"
+tracks/12/imported = false
+tracks/12/enabled = true
+tracks/12/path = NodePath("Audio")
+tracks/12/interp = 1
+tracks/12/loop_wrap = true
+tracks/12/keys = {
+"clips": [{
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource("3_yshoy")
+}, {
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource("3_yshoy")
+}],
+"times": PackedFloat32Array(0.373134, 1.1194)
+}
+tracks/12/use_blend = true
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_81jhr"]
 _data = {
@@ -1992,7 +2147,7 @@ animation = &"blow"
 
 [sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_6dyii"]
 filter_enabled = true
-filters = ["..", "..:is_attacking", "Body/ArmR/Hand/Knife:visible", "Body/ArmR/Hand:rotation:x", "Body/ArmR/Hand:rotation:y", "Body/ArmR/Hand:rotation:z", "Body/ArmR:rotation:x", "Body/ArmR:rotation:y", "Body/ArmR:rotation:z"]
+filters = ["..", "..:is_attacking", "Audio", "Body/ArmR/Hand/Knife:visible", "Body/ArmR/Hand:rotation:x", "Body/ArmR/Hand:rotation:y", "Body/ArmR/Hand:rotation:z", "Body/ArmR:rotation:x", "Body/ArmR:rotation:y", "Body/ArmR:rotation:z"]
 fadeout_time = 0.1
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_f157o"]
@@ -2003,12 +2158,12 @@ animation = &"hit_melee"
 
 [sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_rvof4"]
 filter_enabled = true
-filters = ["..", "..:is_attacking", "Body/ArmR/Hand/Melee/Melee2:visible", "Body/ArmR/Hand/Melee:visible", "Body/ArmR/Hand:rotation:x", "Body/ArmR/Hand:rotation:y", "Body/ArmR/Hand:rotation:z", "Body/ArmR:rotation:x", "Body/ArmR:rotation:y", "Body/ArmR:rotation:z"]
+filters = ["..", "..:is_attacking", "Audio", "Body/ArmR/Hand/Melee/Melee2:visible", "Body/ArmR/Hand/Melee:visible", "Body/ArmR/Hand:rotation:x", "Body/ArmR/Hand:rotation:y", "Body/ArmR/Hand:rotation:z", "Body/ArmR:rotation:x", "Body/ArmR:rotation:y", "Body/ArmR:rotation:z"]
 fadein_time = 0.1
 fadeout_time = 0.1
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_i3hi0"]
-graph_offset = Vector2(-498.768, -33.7066)
+graph_offset = Vector2(-495.832, 7.56415)
 nodes/Animation/node = SubResource("AnimationNodeAnimation_1lmj8")
 nodes/Animation/position = Vector2(80, 280)
 "nodes/Animation 2/node" = SubResource("AnimationNodeAnimation_5ouse")
@@ -2199,3 +2354,5 @@ parameters/hit/request = 0
 parameters/hit_melee/active = false
 parameters/hit_melee/internal_active = false
 parameters/hit_melee/request = 0
+
+[node name="Audio" type="AudioStreamPlayer3D" parent="Model"]

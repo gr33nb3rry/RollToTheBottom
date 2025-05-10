@@ -31,7 +31,7 @@ window/vsync/vsync_mode=0
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/SunshineVolumetricClouds/plugin.cfg", "res://addons/curvemesh3d/plugin.cfg", "res://addons/deformablemesh/plugin.cfg", "res://addons/jigglebones/plugin.cfg")
+enabled=PackedStringArray("res://addons/curvemesh3d/plugin.cfg", "res://addons/deformablemesh/plugin.cfg", "res://addons/jigglebones/plugin.cfg")
 
 [global_group]
 

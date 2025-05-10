@@ -1,16 +1,23 @@
-[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://bkjbdrip5slfm"]
+[gd_resource type="StandardMaterial3D" load_steps=5 format=3 uid="uid://b3ka3emru1nk"]
 
-[ext_resource type="Shader" path="res://materials/shaders/toon_shader.gdshader" id="1_c5tt6"]
+[ext_resource type="Texture2D" uid="uid://twl6lvpelp4b" path="res://materials/steb_material_albedo.png" id="1"]
+[ext_resource type="Texture2D" uid="uid://bffj3a2vxiwro" path="res://materials/steb_material_orm.png" id="2"]
+[ext_resource type="Texture2D" uid="uid://5wnnylaagjcp" path="res://materials/steb_material_normal.png" id="3"]
+[ext_resource type="Texture2D" uid="uid://bxngwncquvqhe" path="res://materials/steb_material_heightmap.png" id="4"]
 
 [resource]
-render_priority = 0
-shader = ExtResource("1_c5tt6")
-shader_parameter/color = Color(0.517789, 0.677467, 0.42208, 1)
-shader_parameter/shadow = 0.5
-shader_parameter/shadow_width = 0.375
-shader_parameter/shadow_color = Color(0.256248, 0.929014, 0.964814, 1)
-shader_parameter/_specular_smoothness = 0.4
-shader_parameter/_specular_strength = 0.075
-shader_parameter/_glossiness = 0.065
-shader_parameter/_rim_size = 0.175
-shader_parameter/_rim_smoothness = 0.08
+albedo_texture = ExtResource("1")
+roughness = 0.71
+roughness_texture = ExtResource("2")
+roughness_texture_channel = 1
+normal_enabled = true
+normal_texture = ExtResource("3")
+ao_enabled = true
+ao_texture = ExtResource("2")
+heightmap_scale = 16.0
+heightmap_deep_parallax = true
+heightmap_min_layers = 8
+heightmap_max_layers = 32
+heightmap_texture = ExtResource("4")
+uv1_scale = Vector3(0.15, 0.15, 0.15)
+uv1_triplanar = true

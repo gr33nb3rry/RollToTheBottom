@@ -59,10 +59,10 @@ func _physics_process(delta: float) -> void:
 	if !is_alive: return
 	var movement = move(delta)
 		
-	if !ray_ground.is_colliding() and vel.y < 0:
+	if !is_on_floor() and vel.y < 0:
 		#animation_tree["parameters/Movement/conditions/fall"] = true
 		pass
-	elif ray_ground.is_colliding() and vel.y <= 0: 
+	elif is_on_floor() and vel.y <= 0: 
 		is_jumping = false
 		jump_count = 0
 		gravity_acceleration = 0.0
@@ -74,10 +74,10 @@ func _physics_process(delta: float) -> void:
 			animation_tree["parameters/Movement/walk/TimeScale/scale"] = 1.5
 	
 	move_and_slide()
-	if ray_push.is_colliding() and ray_push.get_collider() == Globals.ball and !is_rolling:
+	if !is_rolling and is_ball_near_enough(0.3):
 		is_rolling = true
 		blend_on("HandsBlend", 0.1)
-	elif !ray_push.is_colliding() and is_rolling:
+	elif is_rolling and !is_ball_near_enough(0.3):
 		is_rolling = false
 		blend_off("HandsBlend", 0.1)
 		
@@ -140,7 +140,6 @@ func damage(amount:int) -> void:
 	else:
 		Globals.processor.change_health(multiplayer.get_unique_id(), -amount)
 
-@rpc("any_peer")
 func death() -> void:
 	is_alive = false
 	model.visible = false
@@ -149,12 +148,17 @@ func death() -> void:
 
 func resurrect() -> void:
 	model.visible = true
-	is_alive = true
 	if multiplayer.get_unique_id() == 1: Globals.processor.resurrect(1)
 	else: Globals.processor.resurrect.rpc_id(1, multiplayer.get_unique_id())
 
+@rpc("any_peer")
+func tp_resurrect(pos:Vector3) -> void:
+	global_position = pos
+	is_alive = true
+
 func apply_impulse() -> void:
-	if is_ball_near_enough(0.2):
+	if Globals.processor.health[0 if multiplayer.get_unique_id() == 1 else 1] < 0.16: return
+	if is_ball_near_enough(0.25):
 		if multiplayer.get_unique_id() != 1:
 			Globals.processor.push_ball.rpc_id(1, multiplayer.get_unique_id(), is_attacking)
 		else:
@@ -167,6 +171,7 @@ func is_ball_near_enough(distance:float) -> bool:
 			
 @rpc("any_peer")
 func hit() -> void:
+	if Globals.processor.health[0 if multiplayer.get_unique_id() == 1 else 1] < 10.0: return
 	animation_tree.set("parameters/hit_melee/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
 	if multiplayer.get_unique_id() == 1: hit.rpc_id(Globals.ms.get_second_player_peer_id())
 	else: hit.rpc_id(1)
@@ -186,6 +191,7 @@ func hit_check() -> void:
 
 	
 func attack() -> void:
+	if Globals.processor.health[0 if multiplayer.get_unique_id() == 1 else 1] < 10.0: return
 	var anim : String = "hit_" + str(attack_count)
 	animation_tree.tree_root.get_node("hit_knife").animation = anim
 	animation_tree.set("parameters/hit/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
@@ -234,7 +240,7 @@ func _input(_event) -> void:
 	if !is_active: return
 	if Input.is_action_just_pressed("ui_cancel"):
 		Globals.main.leave_lobby()
-	elif Input.is_action_just_pressed("jump"): 
+	elif Input.is_action_just_pressed("jump") and is_on_floor(): 
 		jump()
 	elif Input.is_action_just_pressed("aim"):
 		aim(true)

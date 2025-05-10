@@ -1,10 +1,9 @@
-[gd_scene load_steps=16 format=3 uid="uid://yhpgoa10oh6y"]
+[gd_scene load_steps=15 format=3 uid="uid://yhpgoa10oh6y"]
 
 [ext_resource type="Script" path="res://scripts/zone.gd" id="1_7maf6"]
 [ext_resource type="Script" path="res://addons/curvemesh3d/curvemesh3d.gd" id="2_keamj"]
 [ext_resource type="PackedScene" uid="uid://bwf13nepw51ts" path="res://scenes/room.tscn" id="3_4veeh"]
-[ext_resource type="Material" uid="uid://c4n2awfh8fos1" path="res://materials/steb_a_m_s.tres" id="3_7jgtr"]
-[ext_resource type="Material" uid="uid://btw6bhbo8oi8k" path="res://materials/steb_item_m_s.tres" id="6_tq0b3"]
+[ext_resource type="Material" uid="uid://b3ka3emru1nk" path="res://materials/steb_material.tres" id="3_7064v"]
 [ext_resource type="Script" path="res://scripts/activity_point.gd" id="7_r25wt"]
 [ext_resource type="Texture2D" uid="uid://r7gwyasg7fnl" path="res://images/decals/decal4.png" id="8_3jj46"]
 
@@ -64,7 +63,7 @@ script = ExtResource("2_keamj")
 radius = 17.0
 radius_profile = SubResource("Curve_dymi8")
 radial_resolution = 32
-material = ExtResource("3_7jgtr")
+material = ExtResource("3_7064v")
 
 [node name="PathFollow" type="PathFollow3D" parent="Curve"]
 transform = Transform3D(0.872586, 0, 0.488454, 0, 0.999998, 0, -0.488454, 0, 0.872585, 5.08328, -0.305542, 0.0300232)
@@ -110,7 +109,7 @@ script = ExtResource("2_keamj")
 radius = 3.0
 radius_profile = SubResource("Curve_il8gj")
 radial_resolution = 32
-material = ExtResource("6_tq0b3")
+material = ExtResource("3_7064v")
 
 [node name="CurveB2" type="Path3D" parent="CurveB"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 23.7106, -14.659, -61.8908)
@@ -118,7 +117,7 @@ curve = SubResource("Curve3D_50vrx")
 script = ExtResource("2_keamj")
 radius = 3.0
 radius_profile = SubResource("Curve_il8gj")
-material = ExtResource("6_tq0b3")
+material = ExtResource("3_7064v")
 
 [node name="CurveB3" type="Path3D" parent="CurveB"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22.0834, -40.9226, -128.457)
@@ -126,7 +125,7 @@ curve = SubResource("Curve3D_v4joe")
 script = ExtResource("2_keamj")
 radius = 3.0
 radius_profile = SubResource("Curve_il8gj")
-material = ExtResource("6_tq0b3")
+material = ExtResource("3_7064v")
 
 [node name="Path3D" type="Path3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.424, 0, 0)

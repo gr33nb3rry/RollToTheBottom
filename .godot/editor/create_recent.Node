@@ -1,3 +1,5 @@
+AudioStreamPlayer3D
+MultiplayerSynchronizer
 Marker3D
 Timer
 MeshInstance3D
@@ -11,5 +13,3 @@ CollisionShape3D
 StaticBody3D
 AnimationPlayer
 Control
-VBoxContainer
-RichTextLabel

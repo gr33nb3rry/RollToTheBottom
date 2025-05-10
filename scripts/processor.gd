@@ -6,7 +6,7 @@ const BALL_PUSH_FORCE : float = 7.0
 const BALL_HIT_FORCE : float = 20.0
 
 var max_health : Array = [100.0, 100.0]
-var health : Array = [max_health[0], max_health[1]]
+@export var health : Array = [max_health[0], max_health[1]]
 var coins : float = 0.0
 
 # NAME: [P, FOR, Step, Max]
@@ -71,8 +71,7 @@ func is_skill_max(peer_id:int, skill_name:String) -> bool:
 func change_stamina(peer_id:int, v:float) -> void:
 	var index : int = 0 if peer_id == 1 else 1
 	if v < 0:
-		var percent : float = float(get_skill(peer_id, "Iron Will")) / 100.0
-		var damage : float = -v - -v * percent
+		var damage : float = -v
 		health[index] = clamp(snapped(health[index] - damage, 0.01), 0.0, max_health[index])
 	else:
 		health[index] = v
@@ -99,7 +98,7 @@ func refresh_stamina_2(last_stamina:float = health[1]) -> void:
 @rpc("any_peer")
 func resurrect(peer_id:int) -> void:
 	var player = Globals.ms.get_player_by_id(peer_id)
-	player.global_position = Globals.world.get_resurrect_position(player.global_position)
+	player.tp_resurrect(Globals.world.get_resurrect_position(player.global_position))
 	
 @rpc("any_peer")
 func push_ball(peer_id: int, is_attacking: bool) -> void:

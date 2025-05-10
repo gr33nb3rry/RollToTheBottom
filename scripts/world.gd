@@ -40,6 +40,8 @@ func generate_zone() -> void:
 	selected_decals = 0
 	activity_type = -1
 	is_playing = true
+	current_zone_instance.is_activity_started = false
+	current_zone_instance.is_activity_finished = false
 	for decal in Globals.world.get_node("Decals").get_children(): decal.queue_free()
 	for decal in Globals.world.get_node("Barriers").get_children(): decal.queue_free()
 	await get_tree().create_timer(0.2).timeout
@@ -54,11 +56,10 @@ func end() -> void:
 		start()
 	
 func game_over() -> void:
-	print("Game over")
 	# tp to room
 	var count : int = 0
 	for player in get_tree().get_nodes_in_group("Player"):
-		player.global_position = get_previous_room().get_node("StartPos" + str(count)).global_position
+		player.tp_resurrect(get_previous_room().get_node("StartPos" + str(count)).global_position)
 		count += 1
 	Globals.ball.global_position = get_previous_room().get_node("StartPosBall").global_position
 	# start

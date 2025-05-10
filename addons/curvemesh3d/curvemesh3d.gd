@@ -53,7 +53,7 @@ const CM_HALF_PI = PI / 2.0
 		curve_changed.emit()
 
 ## Material of the generated mesh surface
-@export var material: ShaderMaterial:
+@export var material: StandardMaterial3D:
 	set(value):
 		material = value
 		if(cm_mesh && cm_mesh.get_surface_count() > 0): 
@@ -314,8 +314,8 @@ func cm_create_default_curve() -> Curve3D:
 	c.bake_interval = 0.1
 	return c
 
-func cm_create_default_material() -> ShaderMaterial:
-	var mat = ShaderMaterial.new()
+func cm_create_default_material() -> StandardMaterial3D:
+	var mat = StandardMaterial3D.new()
 	return mat
 
 func cm_create_default_radius_profile() -> Curve:

@@ -1,0 +1,13 @@
+[gd_resource type="AudioStreamRandomizer" load_steps=5 format=3 uid="uid://c56gwcbvllm25"]
+
+[ext_resource type="AudioStream" uid="uid://i5cvsvpic6ne" path="res://sounds/step_grass_1.mp3" id="1_f6gtx"]
+[ext_resource type="AudioStream" uid="uid://buh866uepklol" path="res://sounds/step_grass_2.mp3" id="2_qcct1"]
+[ext_resource type="AudioStream" uid="uid://cvql85um2n0o4" path="res://sounds/step_grass_3.mp3" id="3_k8nn7"]
+[ext_resource type="AudioStream" uid="uid://csnp6kv8umbcv" path="res://sounds/step_grass_4.mp3" id="4_dsyt2"]
+
+[resource]
+streams_count = 4
+stream_0/stream = ExtResource("1_f6gtx")
+stream_1/stream = ExtResource("2_qcct1")
+stream_2/stream = ExtResource("3_k8nn7")
+stream_3/stream = ExtResource("4_dsyt2")
