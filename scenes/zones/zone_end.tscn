@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://bulb8cgqpj1ea"]
+[gd_scene load_steps=13 format=3 uid="uid://bulb8cgqpj1ea"]
 
 [ext_resource type="Script" path="res://scripts/zone.gd" id="1_e8smg"]
 [ext_resource type="Script" path="res://addons/curvemesh3d/curvemesh3d.gd" id="2_t8q5l"]
@@ -25,6 +25,25 @@ height = 4.0
 
 [sub_resource type="BoxMesh" id="BoxMesh_8qa26"]
 
+[sub_resource type="Curve3D" id="Curve3D_5klag"]
+_data = {
+"points": PackedVector3Array(3.41688, -0.730036, 11.2242, -3.41688, 0.730036, -11.2242, 5.9336, -1.63701, 9.08747, 0.877632, 2.38717, 15.0079, -0.877632, -2.38717, -15.0079, -2.10165, -3.71804, -20.389, -17.0419, 0.751754, 12.6886, 17.0419, -0.751754, -12.6886, 24.0966, -7.32258, -61.1429, -16.1386, 3.30528, -5.37238, 16.1386, -3.30528, 5.37238, 84.8987, -12.1542, -71.391, -8.20719, 3.35538, -10.588, 8.20719, -3.35538, 10.588, 122.703, -20.4607, -44.2827, 14.0823, 1.44094, -27.8267, -14.0823, -1.44094, 27.8267, 131.129, -29.0629, 16.2481),
+"tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0)
+}
+point_count = 6
+
+[sub_resource type="Curve" id="Curve_bqj66"]
+min_value = 0.5
+_data = [Vector2(0, 0.5), 0.0, 0.0, 0, 0, Vector2(0.503106, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.5), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Curve3D" id="Curve3D_ek2pb"]
+_data = {
+"points": PackedVector3Array(9.48987, 2.66955, 18.4445, -9.48987, -2.66955, -18.4445, -0.562859, 7.62939e-06, -1.44867, 17.2793, 0.478584, 1.14542, -17.2793, -0.478584, -1.14542, -41.1089, -1.1553, -33.1132, 3.62997, 0.360783, -2.19108, -3.62997, -0.360783, 2.19108, -73.2561, -3.26094, -22.9339, 8.00292, 0.363163, 6.9127, -8.00292, -0.363163, -6.9127, -94.9012, -5.61621, -20.3632),
+"tilts": PackedFloat32Array(0, 0, 0, 0)
+}
+point_count = 4
+
 [node name="Zone" type="Node3D"]
 script = ExtResource("1_e8smg")
 
@@ -38,7 +57,7 @@ radial_resolution = 32
 material = ExtResource("3_bpvxc")
 
 [node name="PathFollow" type="PathFollow3D" parent="Curve"]
-transform = Transform3D(-0.996375, 0, -0.0850293, 0, 0.999998, 0, 0.0850294, 0, -0.996374, -21.6615, 129.494, -8.34915)
+transform = Transform3D(-0.996375, 0, -0.0850296, 0, 0.999998, 0, 0.0850297, 0, -0.996374, -21.6615, 129.494, -8.34915)
 rotation_mode = 1
 loop = false
 
@@ -55,7 +74,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0, 0)
 mesh = SubResource("BoxMesh_8qa26")
 
 [node name="DecalsMaker" type="PathFollow3D" parent="Curve"]
-transform = Transform3D(-0.996359, 0, -0.0850281, 0, 0.999992, 0, 0.0850281, 0, -0.99636, -21.6615, 129.494, -8.34915)
+transform = Transform3D(-0.996359, 0, -0.0850284, 0, 0.999992, 0, 0.0850283, 0, -0.99636, -21.6615, 129.494, -8.34915)
 rotation_mode = 1
 loop = false
 
@@ -92,7 +111,28 @@ transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -21.66
 curve = SubResource("Curve3D_c774w")
 
 [node name="PathFollow3D" type="PathFollow3D" parent="Path3D"]
-transform = Transform3D(-0.99637, 9.80061e-08, -0.0850287, 0, 0.999987, 1.15261e-06, 0.085029, 1.14844e-06, -0.996367, -21.6615, 129.494, -8.34915)
+transform = Transform3D(-0.99637, 9.80064e-08, -0.085029, 0, 0.999987, 1.15261e-06, 0.0850293, 1.14844e-06, -0.996367, -21.6615, 129.494, -8.34915)
 rotation_mode = 2
 
 [node name="Markers" type="Node3D" parent="."]
+
+[node name="CurveB" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.4245, 0, 0)
+
+[node name="CurveB1" type="Path3D" parent="CurveB"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16.1865, 5.89278, -37.0212)
+curve = SubResource("Curve3D_5klag")
+script = ExtResource("2_t8q5l")
+radius = 3.0
+radius_profile = SubResource("Curve_bqj66")
+radial_resolution = 32
+material = ExtResource("3_bpvxc")
+
+[node name="CurveB2" type="Path3D" parent="CurveB"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 52.3976, -35.3546, -22.4355)
+curve = SubResource("Curve3D_ek2pb")
+script = ExtResource("2_t8q5l")
+radius = 3.0
+radius_profile = SubResource("Curve_bqj66")
+radial_resolution = 32
+material = ExtResource("3_bpvxc")

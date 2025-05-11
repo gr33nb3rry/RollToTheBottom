@@ -130,7 +130,7 @@ func add_barriers(arr:Array, barrier_pivots:Array) -> void:
 		update_barrier.rpc_id(Globals.ms.get_second_player_peer_id(), count, arr[count], barrier_pivots[count])
 		if count == arr.size() - 1:
 			print("End")
-			Globals.world.get_previous_room().open_door(Globals.world.get_previous_room().get_node("Door2"))
+			Globals.world.get_previous_room().open()
 		count += 1
 		
 @rpc("any_peer", "reliable")

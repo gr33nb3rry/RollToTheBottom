@@ -32,6 +32,7 @@ func _process(delta: float) -> void:
 		print("Everybody in")
 		status = 1
 		close_door($Door1)
+		catch_ball()
 		if !is_initial: Globals.world.end()
 		else: Globals.world.start()
 	elif status == 1 and !is_ball_inside and !is_both_players_inside:
@@ -39,6 +40,19 @@ func _process(delta: float) -> void:
 		status = 2
 		close_door($Door2)
 		#Globals.enemy_spawner.start()
+
+func open() -> void:
+	open_door($Door2)
+	Globals.ball.is_active = true
+	Globals.ball.freeze = false
+	
+func catch_ball() -> void:
+	Globals.ball.stop()
+	Globals.ball.is_active = false
+	Globals.ball.freeze = true
+	var t = get_tree().create_tween()
+	t.tween_property(Globals.ball, "global_position", $StartPosBall.global_position, 2.0).set_trans(Tween.TRANS_SPRING).set_ease(Tween.EASE_OUT)
+
 
 func disable() -> void:
 	process_mode = Node.PROCESS_MODE_DISABLED
