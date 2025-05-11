@@ -13,11 +13,12 @@ func _ready() -> void:
 	if !is_initial: process_mode = Node.PROCESS_MODE_DISABLED
 	if multiplayer.is_server():
 		open_door($Door1)
-	if multiplayer.get_unique_id() != 1:
-		disable()
+	#if multiplayer.get_unique_id() != 1:
+	#	disable()
 
 func _process(delta: float) -> void:
-	#if !multiplayer.is_server(): return
+	$Flower.rotation.y += 0.05 * delta
+	if !multiplayer.is_server(): return
 	var distance_to_ball : float = global_position.distance_squared_to(Globals.ball.global_position)
 	is_ball_inside = distance_to_ball < RADIUS * RADIUS
 	var players_inside_count : int = 0
