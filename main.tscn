@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://w4nuv4h3gluq"]
+[gd_scene load_steps=10 format=3 uid="uid://w4nuv4h3gluq"]
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_7hsgq"]
 [ext_resource type="Texture2D" uid="uid://ceeq0teln8w3p" path="res://images/ui/UI_BG.png" id="2_ciw2i"]
@@ -6,6 +6,8 @@
 [ext_resource type="PackedScene" uid="uid://f5pqnl7dhvpd" path="res://scenes/button_ui.tscn" id="4_41jnk"]
 [ext_resource type="FontFile" uid="uid://2lxwscltdxg7" path="res://fonts/Carlito-Italic.ttf" id="5_y3i25"]
 [ext_resource type="FontFile" uid="uid://cvi3gyfvhx2xl" path="res://fonts/Carlito-BoldItalic.ttf" id="6_7wptk"]
+[ext_resource type="Script" path="res://scripts/gallery.gd" id="7_5e5cu"]
+[ext_resource type="PackedScene" uid="uid://ckflxjf61hcrs" path="res://scenes/bonus_decal_ui.tscn" id="8_4jt57"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_5m8hc"]
 texture = ExtResource("2_ciw2i")
@@ -111,7 +113,8 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 1
 method_owner = NodePath("../../../../..")
-method_name = "continue"
+method_name = "open_panel"
+additional_parameter = "Gallery"
 title = "Gallery"
 scale_factor = 0.93
 font_size = 42
@@ -231,3 +234,159 @@ title = "Back"
 scale_factor = 0.9
 font_color = Color(1, 1, 1, 1)
 bg_color = Color(0.431373, 0.776471, 0.298039, 1)
+
+[node name="Gallery" type="Control" parent="Canvas"]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("7_5e5cu")
+
+[node name="Container" type="MarginContainer" parent="Canvas/Gallery"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 150
+theme_override_constants/margin_top = 50
+theme_override_constants/margin_right = 100
+theme_override_constants/margin_bottom = 50
+
+[node name="VBox" type="VBoxContainer" parent="Canvas/Gallery/Container"]
+layout_mode = 2
+theme_override_constants/separation = 32
+
+[node name="FoundCount" type="HBoxContainer" parent="Canvas/Gallery/Container/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 7
+alignment = 1
+
+[node name="Label" type="Label" parent="Canvas/Gallery/Container/VBox/FoundCount"]
+layout_mode = 2
+theme_override_colors/font_shadow_color = Color(0.0392157, 0, 0.388235, 0.254902)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/shadow_outline_size = 3
+theme_override_fonts/font = ExtResource("6_7wptk")
+theme_override_font_sizes/font_size = 32
+text = "You have found"
+horizontal_alignment = 1
+
+[node name="Count" type="Label" parent="Canvas/Gallery/Container/VBox/FoundCount"]
+layout_mode = 2
+theme_override_colors/font_shadow_color = Color(0.0392157, 0, 0.388235, 0.254902)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/shadow_outline_size = 3
+theme_override_fonts/font = ExtResource("6_7wptk")
+theme_override_font_sizes/font_size = 40
+text = "0/24"
+horizontal_alignment = 1
+
+[node name="Label2" type="Label" parent="Canvas/Gallery/Container/VBox/FoundCount"]
+layout_mode = 2
+theme_override_colors/font_shadow_color = Color(0.0392157, 0, 0.388235, 0.254902)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/shadow_outline_size = 3
+theme_override_fonts/font = ExtResource("6_7wptk")
+theme_override_font_sizes/font_size = 32
+text = "collectables"
+horizontal_alignment = 1
+
+[node name="Grid" type="GridContainer" parent="Canvas/Gallery/Container/VBox"]
+layout_mode = 2
+theme_override_constants/h_separation = 30
+theme_override_constants/v_separation = 30
+columns = 8
+
+[node name="Decal" parent="Canvas/Gallery/Container/VBox/Grid" instance=ExtResource("8_4jt57")]
+layout_mode = 2
+
+[node name="Decal2" parent="Canvas/Gallery/Container/VBox/Grid" instance=ExtResource("8_4jt57")]
+layout_mode = 2
+
+[node name="Decal3" parent="Canvas/Gallery/Container/VBox/Grid" instance=ExtResource("8_4jt57")]
+layout_mode = 2
+
+[node name="Decal4" parent="Canvas/Gallery/Container/VBox/Grid" instance=ExtResource("8_4jt57")]
+layout_mode = 2
+
+[node name="Decal5" parent="Canvas/Gallery/Container/VBox/Grid" instance=ExtResource("8_4jt57")]
+layout_mode = 2
+
+[node name="Decal6" parent="Canvas/Gallery/Container/VBox/Grid" instance=ExtResource("8_4jt57")]
+layout_mode = 2
+
+[node name="Decal7" parent="Canvas/Gallery/Container/VBox/Grid" instance=ExtResource("8_4jt57")]
+layout_mode = 2
+
+[node name="Decal8" parent="Canvas/Gallery/Container/VBox/Grid" instance=ExtResource("8_4jt57")]
+layout_mode = 2
+
+[node name="Decal9" parent="Canvas/Gallery/Container/VBox/Grid" instance=ExtResource("8_4jt57")]
+layout_mode = 2
+
+[node name="Decal10" parent="Canvas/Gallery/Container/VBox/Grid" instance=ExtResource("8_4jt57")]
+layout_mode = 2
+
+[node name="Decal11" parent="Canvas/Gallery/Container/VBox/Grid" instance=ExtResource("8_4jt57")]
+layout_mode = 2
+
+[node name="Decal12" parent="Canvas/Gallery/Container/VBox/Grid" instance=ExtResource("8_4jt57")]
+layout_mode = 2
+
+[node name="Decal13" parent="Canvas/Gallery/Container/VBox/Grid" instance=ExtResource("8_4jt57")]
+layout_mode = 2
+
+[node name="Decal14" parent="Canvas/Gallery/Container/VBox/Grid" instance=ExtResource("8_4jt57")]
+layout_mode = 2
+
+[node name="Decal15" parent="Canvas/Gallery/Container/VBox/Grid" instance=ExtResource("8_4jt57")]
+layout_mode = 2
+
+[node name="Decal16" parent="Canvas/Gallery/Container/VBox/Grid" instance=ExtResource("8_4jt57")]
+layout_mode = 2
+
+[node name="Decal17" parent="Canvas/Gallery/Container/VBox/Grid" instance=ExtResource("8_4jt57")]
+layout_mode = 2
+
+[node name="Decal18" parent="Canvas/Gallery/Container/VBox/Grid" instance=ExtResource("8_4jt57")]
+layout_mode = 2
+
+[node name="Decal19" parent="Canvas/Gallery/Container/VBox/Grid" instance=ExtResource("8_4jt57")]
+layout_mode = 2
+
+[node name="Decal20" parent="Canvas/Gallery/Container/VBox/Grid" instance=ExtResource("8_4jt57")]
+layout_mode = 2
+
+[node name="Decal21" parent="Canvas/Gallery/Container/VBox/Grid" instance=ExtResource("8_4jt57")]
+layout_mode = 2
+
+[node name="Decal22" parent="Canvas/Gallery/Container/VBox/Grid" instance=ExtResource("8_4jt57")]
+layout_mode = 2
+
+[node name="Decal23" parent="Canvas/Gallery/Container/VBox/Grid" instance=ExtResource("8_4jt57")]
+layout_mode = 2
+
+[node name="Decal24" parent="Canvas/Gallery/Container/VBox/Grid" instance=ExtResource("8_4jt57")]
+layout_mode = 2
+
+[node name="Back" parent="Canvas/Gallery" node_paths=PackedStringArray("method_owner") instance=ExtResource("4_41jnk")]
+layout_mode = 1
+offset_left = 30.0
+offset_top = 25.0
+offset_right = 130.0
+offset_bottom = 75.0
+method_owner = NodePath("../../..")
+method_name = "open_panel"
+additional_parameter = "Start"
+title = "Back"
+scale_factor = 0.9
+font_color = Color(1, 1, 1, 1)
+bg_color = Color(0.917647, 0.305882, 0.380392, 1)

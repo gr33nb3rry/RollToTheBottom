@@ -7,7 +7,8 @@ var peer = SteamMultiplayerPeer.new()
 
 const BG_COLORS : Dictionary = {
 	"Start": Color(0.951, 0.74, 0.397),
-	"HowToPlay": Color(0.433, 0.775, 0.298)
+	"HowToPlay": Color(0.433, 0.775, 0.298),
+	"Gallery": Color(0.917, 0.306, 0.382)
 }
 var active_panel : String = "Start"
 
@@ -202,6 +203,7 @@ func open_panel(title:String) -> void:
 	print(title)
 	$Canvas.get_node(active_panel).hide()
 	$Canvas.get_node(title).show()
+	if title == "Gallery": $Canvas.get_node(title).update()
 	$Canvas/BG.self_modulate = BG_COLORS[title]
 	active_panel = title
 
