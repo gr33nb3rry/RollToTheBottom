@@ -110,6 +110,9 @@ func invite() -> void:
 func get_friends() -> void:
 	friends.clear()
 	var new_friends : Array = Globals.main.get_friends()
+	new_friends.sort_custom(func(a, b):
+		return Steam.getFriendPersonaState(a) > Steam.getFriendPersonaState(b)
+	)
 	if $FriendsContainer/Friends.get_child_count() > 0:
 		for f in $FriendsContainer/Friends.get_children(): f.queue_free()
 	for f in new_friends:
