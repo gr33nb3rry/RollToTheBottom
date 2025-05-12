@@ -182,8 +182,8 @@ func get_friends() -> Array:
 			results.append(steam_id)
 	return results
 
-func invite(steam_id:int) -> void:
-	Steam.inviteUserToLobby(lobby_id, steam_id)
+func invite(steam_id:String) -> void:
+	Steam.inviteUserToLobby(lobby_id, int(steam_id))
 	print("User ", steam_id, " invited")
 
 func accept_invite(lobby_id: int, steam_id: int) -> void:

@@ -7,6 +7,7 @@ var is_clicked : bool = false
 @export var title : String
 @export var scale_factor : float = 1.2
 @export var font_size : int = 24
+@export var font_max_length : int = -1
 @export var font_color : Color = Color.BLACK
 @export var bg_color : Color = Color.WHITE
 @export var initial_bg_alpha : float = 0.5
@@ -19,10 +20,17 @@ func update() -> void:
 	$Main.pivot_offset.y = $Main.size.y/2
 	$Main/ButtonContainer/Button.self_modulate = bg_color
 	$Main/ButtonContainer/Button.self_modulate.a = initial_bg_alpha
+	if font_max_length != -1:
+		title = shorten_string(title, font_max_length)
 	$Main/ButtonContainer/Button/Label.text = title if !is_uppercase else title.to_upper()
 	$Main/ButtonContainer/Button/Label.set("theme_override_font_sizes/font_size", font_size)
-	#$Main/ButtonContainer/Button/Label.set("theme_override_constants/outline_size", font_outline_size)
 	$Main/ButtonContainer/Button/Label.set("theme_override_colors/font_color", font_color)
+
+func shorten_string(text: String, max_length: int) -> String:
+	if text.length() <= max_length:
+		return text
+	return text.substr(0, max_length - 3) + "..."
+
 
 func hover_selection_start() -> void:
 	if is_clicked: return

@@ -1,7 +1,8 @@
+PanelContainer
+TextureRect
 HBoxContainer
 VBoxContainer
 Label
-TextureRect
 Control
 GridContainer
 MultiplayerSynchronizer
@@ -12,4 +13,3 @@ MeshInstance3D
 StaticBody3D
 CurveMesh3D
 AudioStreamPlayer3D
-Marker3D

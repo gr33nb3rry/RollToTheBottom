@@ -10,7 +10,6 @@
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_uqwrl"]
 texture = ExtResource("2_ru48q")
-modulate_color = Color(0.631455, 0.792811, 0.965144, 1)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_stw2p"]
 
@@ -24,6 +23,7 @@ grow_vertical = 2
 script = ExtResource("1_mloob")
 
 [node name="BG" type="Panel" parent="."]
+self_modulate = Color(0.561477, 0.746421, 0.982232, 1)
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -467,12 +467,14 @@ bg_color = Color(1, 0.878431, 0, 1)
 initial_bg_alpha = 0.7
 
 [node name="FriendsContainer" type="ScrollContainer" parent="."]
+clip_contents = false
 custom_minimum_size = Vector2(250, 0)
 layout_mode = 1
 anchors_preset = 11
 anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_right = 250.0
 grow_horizontal = 0
 grow_vertical = 2
 horizontal_scroll_mode = 0

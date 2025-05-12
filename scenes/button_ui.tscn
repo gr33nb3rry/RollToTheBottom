@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://f5pqnl7dhvpd"]
+[gd_scene load_steps=7 format=3 uid="uid://f5pqnl7dhvpd"]
 
 [ext_resource type="Script" path="res://scripts/button_ui.gd" id="1_4whvp"]
 [ext_resource type="FontFile" uid="uid://cvi3gyfvhx2xl" path="res://fonts/Carlito-BoldItalic.ttf" id="2_w22jv"]
+[ext_resource type="Texture2D" uid="uid://dh5vg6ngnipbx" path="res://images/fruits/14.png" id="3_ccr2x"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2p613"]
 content_margin_left = 10.0
@@ -35,6 +36,15 @@ corner_radius_top_left = 25
 corner_radius_top_right = 25
 corner_radius_bottom_right = 25
 corner_radius_bottom_left = 25
+corner_detail = 16
+anti_aliasing_size = 0.25
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jwt6v"]
+bg_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
 corner_detail = 16
 anti_aliasing_size = 0.25
 
@@ -104,6 +114,30 @@ theme_override_font_sizes/font_size = 24
 text = "Play"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="Profile" type="PanelContainer" parent="Main/ButtonContainer/Button"]
+visible = false
+clip_children = 2
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -25.0
+offset_right = 50.0
+offset_bottom = 25.0
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_jwt6v")
+
+[node name="Texture" type="TextureRect" parent="Main/ButtonContainer/Button/Profile"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("3_ccr2x")
+expand_mode = 3
 
 [connection signal="resized" from="Main" to="." method="update"]
 [connection signal="mouse_entered" from="Main/ButtonContainer/Button" to="." method="hover_selection_start"]

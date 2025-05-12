@@ -1,5 +1,6 @@
 extends Control
 
+const BUTTON_UI = preload("res://scenes/button_ui.tscn")
 @onready var c_1_p_1: Control = $"VBox/Cards/1/Main/Players/P1"
 @onready var c_1_p_2: Control = $"VBox/Cards/1/Main/Players/P2"
 @onready var c_2_p_1: Control = $"VBox/Cards/2/Main/Players/P1"
@@ -8,7 +9,8 @@ extends Control
 var selection : Array = [-1, -1]
 var is_able_to_select : bool = true
 
-var friends : Array = []
+var friends : Dictionary = {}
+var is_friend_list_opened : bool = false
 
 func _ready() -> void:
 	Steam.avatar_loaded.connect(update_avatar)
@@ -100,30 +102,48 @@ func play_not_host() -> void:
 	close()
 
 func invite() -> void:
+	if is_friend_list_opened: return
 	#Globals.main.open_invite_overlay()
 	get_friends()
+	is_friend_list_opened = true
 
 func get_friends() -> void:
-	friends = []
+	friends.clear()
 	var new_friends : Array = Globals.main.get_friends()
 	if $FriendsContainer/Friends.get_child_count() > 0:
 		for f in $FriendsContainer/Friends.get_children(): f.queue_free()
 	for f in new_friends:
-		friends.append(f)
-		create_friend(f)
+		friends[f] = create_friend(f)
 		Steam.getPlayerAvatar(2, f)
+	var t = get_tree().create_tween()
+	t.tween_property($FriendsContainer, "position:x", 1030, 0.5).set_trans(Tween.TRANS_SPRING).set_ease(Tween.EASE_OUT)
+	await get_tree().create_timer(10.0).timeout
+	is_friend_list_opened = false
+	var t2 = get_tree().create_tween()
+	t2.tween_property($FriendsContainer, "position:x", 1280, 0.2).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 	
-func create_friend(steam_id) -> void:
-	var btn = Button.new()
-	btn.set_size(Vector2(250, 50))
-	btn.set_text(str(Steam.getFriendPersonaName(steam_id)))
-	btn.set("theme_override_constants/icon_max_width", 50)
+func create_friend(steam_id) -> Node:
+	var b = BUTTON_UI.instantiate()
+	b.title = str(Steam.getFriendPersonaName(steam_id))
 	if Steam.getFriendPersonaState(steam_id) == Steam.PERSONA_STATE_OFFLINE:
-		btn.modulate = Color(0.502, 0.502, 0.502)
-	#btn.set("theme_override_icons/icon", ImageTexture.create_from_image(avatar_image))
-	btn.connect("pressed", Callable(Globals.main,"invite").bind(steam_id))
-	$FriendsContainer/Friends.add_child(btn)
+		b.modulate = Color(0.5, 0.5, 0.5)
+	b.method_owner = Globals.main
+	b.method_name = "invite"
+	b.additional_parameter = str(steam_id)
+	b.scale_factor = 0.9
+	b.font_max_length = 15
+	b.font_color = Color.WHITE
+	b.bg_color = Color(0.561, 0.746, 0.982)
+	b.custom_minimum_size = Vector2(250, 50)
+	$FriendsContainer/Friends.add_child(b)
+	return b
+
 
 func update_avatar(id:int, s:int, data:Array) -> void:
+	if not friends.has(id):
+		print("No friend found for avatar: ", id)
+		return
 	var avatar_image: Image = Image.create_from_data(s, s, false, Image.FORMAT_RGBA8, data)
-	$FriendsContainer/Friends.get_child(friends.find(id)).set("theme_override_icons/icon", ImageTexture.create_from_image(avatar_image))
+	var friend_button = friends[id]
+	friend_button.get_node("Main/ButtonContainer/Button/Profile/Texture").texture = ImageTexture.create_from_image(avatar_image)
+	friend_button.get_node("Main/ButtonContainer/Button/Profile").visible = true
