@@ -10,7 +10,7 @@ var is_both_players_inside : bool = false
 var status : int = 0
 
 func _ready() -> void:
-	if !is_initial: process_mode = Node.PROCESS_MODE_DISABLED
+	#if !is_initial: process_mode = Node.PROCESS_MODE_DISABLED
 	if multiplayer.is_server():
 		open_door($Door1)
 	#if multiplayer.get_unique_id() != 1:
@@ -52,7 +52,9 @@ func catch_ball() -> void:
 	Globals.ball.freeze = true
 	var t = get_tree().create_tween()
 	t.tween_property(Globals.ball, "global_position", $StartPosBall.global_position, 2.0).set_trans(Tween.TRANS_SPRING).set_ease(Tween.EASE_OUT)
-
+	await t.finished
+	if Globals.world.zone == 1:
+		Globals.world.start_level()
 
 func disable() -> void:
 	process_mode = Node.PROCESS_MODE_DISABLED

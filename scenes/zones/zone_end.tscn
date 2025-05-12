@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://bulb8cgqpj1ea"]
+[gd_scene load_steps=15 format=3 uid="uid://bulb8cgqpj1ea"]
 
 [ext_resource type="Script" path="res://scripts/zone.gd" id="1_e8smg"]
 [ext_resource type="Script" path="res://addons/curvemesh3d/curvemesh3d.gd" id="2_t8q5l"]
@@ -43,6 +43,12 @@ _data = {
 "tilts": PackedFloat32Array(0, 0, 0, 0)
 }
 point_count = 4
+
+[sub_resource type="BoxMesh" id="BoxMesh_qkvqs"]
+size = Vector3(400, 3, 400)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gfkcl"]
+size = Vector3(400, 3, 400)
 
 [node name="Zone" type="Node3D"]
 script = ExtResource("1_e8smg")
@@ -111,7 +117,7 @@ transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -21.66
 curve = SubResource("Curve3D_c774w")
 
 [node name="PathFollow3D" type="PathFollow3D" parent="Path3D"]
-transform = Transform3D(-0.99637, 9.80064e-08, -0.085029, 0, 0.999987, 1.15261e-06, 0.0850293, 1.14844e-06, -0.996367, -21.6615, 129.494, -8.34915)
+transform = Transform3D(-0.99637, 9.80064e-08, -0.085029, 0, 0.999987, 1.15261e-06, 0.0850292, 1.14844e-06, -0.996367, -21.6615, 129.494, -8.34915)
 rotation_mode = 2
 
 [node name="Markers" type="Node3D" parent="."]
@@ -136,3 +142,12 @@ radius = 3.0
 radius_profile = SubResource("Curve_bqj66")
 radial_resolution = 32
 material = ExtResource("3_bpvxc")
+
+[node name="Ground" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -200.335, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground"]
+mesh = SubResource("BoxMesh_qkvqs")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground"]
+shape = SubResource("BoxShape3D_gfkcl")

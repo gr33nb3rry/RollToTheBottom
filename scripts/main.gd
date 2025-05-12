@@ -5,6 +5,11 @@ var peer = SteamMultiplayerPeer.new()
 
 @onready var multiplayer_spawner: MultiplayerSpawner = $MultiplayerSpawner
 
+const BG_COLORS : Dictionary = {
+	"Start": Color(0.951, 0.74, 0.397),
+	"HowToPlay": Color(0.433, 0.775, 0.298)
+}
+var active_panel : String = "Start"
 
 func _ready() -> void:
 	multiplayer_spawner.spawn_function = spawn_level
@@ -57,6 +62,7 @@ func leave_lobby() -> void:
 		if has_node("World"):
 			$World.queue_free()
 			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+			$Canvas/BG.show()
 			$Canvas/Start.show()
 
 	
@@ -109,10 +115,7 @@ func start_game() -> void:
 	#var is_host : bool = Steam.getLobbyOwner(lobby_id) == SteamGlobal.steam_id
 	#print("Start game.   is host: ", is_host)
 	#if is_host: multiplayer_spawner.spawn("res://world.tscn")
-	$Canvas/HostButton.hide()
-	$Canvas/RefreshButton.hide()
-	$Canvas/StartButton.hide()
-	$Canvas/LobbiesContainer/Lobbies.hide()
+	$Canvas/BG.hide()
 	$Canvas/Start.hide()
 
 
@@ -144,7 +147,6 @@ func show_lobby_list_with_profiles(lobbies:Dictionary):
 		lobby_button.set_text(str(lobby_name,"  //  Players: ", member_count))
 		lobby_button.set_size(Vector2(500, 10))
 		lobby_button.connect("pressed", Callable(self,"join_lobby").bind(lobby))
-		$Canvas/LobbiesContainer/Lobbies.add_child(lobby_button)
 
 func get_lobbies_with_friends() -> Dictionary:
 	var results: Dictionary = {}
@@ -195,3 +197,10 @@ func refresh_lobby_list() -> void:
 func _process(_delta: float) -> void:
 	$Canvas/FPSLabel.text = str(Engine.get_frames_per_second())
 	
+	
+func open_panel(title:String) -> void:
+	print(title)
+	$Canvas.get_node(active_panel).hide()
+	$Canvas.get_node(title).show()
+	$Canvas/BG.self_modulate = BG_COLORS[title]
+	active_panel = title

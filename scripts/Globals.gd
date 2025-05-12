@@ -11,6 +11,8 @@ var enemy_spawner
 var health
 var activity
 var stats
+var decals
+var barriers
 var character_select
 
 func define() -> void:
@@ -25,4 +27,6 @@ func define() -> void:
 	health = $/root/Main/World/Canvas/Health
 	activity = $/root/Main/World/Canvas/Activity
 	stats = $/root/Main/World/Stats
+	decals = $/root/Main/World/Decals
+	barriers = $/root/Main/World/Barriers
 	character_select = $/root/Main/World/Canvas/CharacterSelect

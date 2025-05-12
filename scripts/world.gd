@@ -4,17 +4,68 @@ enum Activities {
 	COUNTER
 }
 
-var zone : int = 1
+@export var zone : int = 1
 var activity_type : int = -1
 var activity_value : String
 var activity_answer : String
 var selected_decals : int
 
-var current_zone_instance : Node3D
+@export var current_zone_instance : Node3D
 var is_able_to_zone_up : bool = false
 var current_room : Node3D
 var dead_line : float
 var is_playing : bool = true
+var is_waiting_to_remove_elements : bool = false
+
+@export var decal_info : Array = []
+@export var barrier_info : Array = []
+
+@rpc("any_peer")
+func add_decal(i) -> void:
+	print(222)
+	var pos = decal_info[i][0]
+	var rot = decal_info[i][1]
+	var type = decal_info[i][2]
+	update_decal_position_rotation_type(i, pos, rot, type)
+	update_decal_position_rotation_type.rpc_id(Globals.ms.get_second_player_peer_id(), i, pos, rot, type)
+@rpc("any_peer")
+func add_barrier(i) -> void:
+	var pos = barrier_info[i][0]
+	var pivot = barrier_info[i][1]
+	update_barrier(i, pos, pivot)
+	update_barrier.rpc_id(Globals.ms.get_second_player_peer_id(), i, pos, pivot)
+
+@rpc("any_peer")
+func update_barrier(index:int, pos:Vector3, pivot:Vector3) -> void:
+	print("Index: ", index, " pivot: ", pivot, " Pipa: ", Globals.world.get_node("Barriers").get_child(index))
+	Globals.world.get_node("Barriers").get_child(index).global_position = pos
+	Globals.world.get_node("Barriers").get_child(index).pivot = pivot
+	Globals.world.get_node("Barriers").get_child(index).generate_type()
+
+const DECAL_0 = preload("res://images/decals/decal0.png")
+const DECAL_1 = preload("res://images/decals/decal1.png")
+const DECAL_2 = preload("res://images/decals/decal2.png")
+const DECAL_3 = preload("res://images/decals/decal3.png")
+const DECAL_4 = preload("res://images/decals/decal4.png")
+const DECAL_5 = preload("res://images/decals/decal5.png")
+
+@rpc("any_peer")
+func update_decal_position_rotation_type(index:int, pos:Vector3, rot:Vector3, type:int) -> void:
+	print(333)
+	print("Index: ", index, " pos: ", pos)
+	
+	Globals.world.get_node("Decals").get_child(index).global_position = pos
+	Globals.world.get_node("Decals").get_child(index).global_rotation = rot
+	Globals.world.get_node("Decals").get_child(index).type = type
+	match type:
+		0: Globals.world.get_node("Decals").get_child(index).texture_albedo = DECAL_0
+		1: Globals.world.get_node("Decals").get_child(index).texture_albedo = DECAL_1
+		2: Globals.world.get_node("Decals").get_child(index).texture_albedo = DECAL_2
+		3: Globals.world.get_node("Decals").get_child(index).texture_albedo = DECAL_3
+		4: Globals.world.get_node("Decals").get_child(index).texture_albedo = DECAL_4
+		5: Globals.world.get_node("Decals").get_child(index).texture_albedo = DECAL_5
+
+
 
 func _ready() -> void:
 	Globals.define()
@@ -29,30 +80,43 @@ func start() -> void:
 	else: dead_line = 0.0
 	sync_dead_line.rpc_id(Globals.ms.get_second_player_peer_id(), dead_line)
 	#add_waiting_soots()
+	
 	if $Map.get_child(zone).has_node("Room"):
 		$Map.get_child(zone).get_node("Room").process_mode = Node.PROCESS_MODE_INHERIT
 	if zone >= 2:
 		$Map.get_node("Room").disable()
 		if zone >= 3:
 			$Map.get_child(zone-2).disable()
-			#$Map.get_child(zone-2).call_deferred("set_process_mode", Node.PROCESS_MODE_DISABLED)
+			
 	generate_zone()
 
 func generate_zone() -> void:
+	if !multiplayer.is_server(): return
 	selected_decals = 0
+	sync_selected_decals.rpc_id(Globals.ms.get_second_player_peer_id(), selected_decals)
 	activity_type = -1
 	is_playing = true
+	decal_info = []
+	barrier_info = []
+	is_waiting_to_remove_elements = true
 	current_zone_instance.is_activity_started = false
 	current_zone_instance.is_activity_finished = false
 	current_zone_instance.is_finished = false
 	for decal in Globals.world.get_node("Decals").get_children(): decal.queue_free()
-	for decal in Globals.world.get_node("Barriers").get_children(): decal.queue_free()
-	await get_tree().create_timer(0.2).timeout
+	for barrier in Globals.world.get_node("Barriers").get_children(): barrier.queue_free()
+	#await get_tree().create_timer(0.2).timeout
+	#current_zone_instance.generate_decals()
+
+@rpc("any_peer")
+func start_level() -> void:
+	if !is_waiting_to_remove_elements: return
+	is_waiting_to_remove_elements = false
+	Globals.ball.is_active = true
+	Globals.ball.freeze = false
 	current_zone_instance.generate_decals()
 	
 func end() -> void:
 	if is_able_to_zone_up:
-		get_tree().call_group("Soot", "death")
 		zone += 1
 		Globals.ball.is_simplified = false
 		is_able_to_zone_up = false

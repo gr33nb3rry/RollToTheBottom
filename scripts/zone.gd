@@ -88,6 +88,8 @@ func generate_decals() -> void:
 	decals_maker.progress = offset
 	decals_count = [0, 0, 0, 0, 0, 0]
 	# DECALS
+	
+	var count : int = 0
 	for i in iteration_count:
 		var m : MeshInstance3D = decals_center.get_node("Mesh")
 		var type : int = randi_range(0, 5)
@@ -97,15 +99,19 @@ func generate_decals() -> void:
 		decals_center.rotation_degrees.z = randf_range(0.0, 360.0)
 		await get_tree().physics_frame
 		var d : Decal = DECAL_ZONE.instantiate()
-		Globals.world.get_node("Decals").add_child(d, true)
 		var pos : Vector3 = m.global_position - m.global_transform.basis.y * 8.0
-		update_decal_position_rotation_type(Globals.world.get_node("Decals").get_child_count()-1, pos, m.global_rotation, type)
-		update_decal_position_rotation_type.rpc_id(Globals.ms.get_second_player_peer_id(), Globals.world.get_node("Decals").get_child_count()-1, pos, m.global_rotation, type)
+		var rot : Vector3 = m.global_rotation
+		Globals.world.decal_info.append([pos, rot, type])
+		Globals.world.get_node("Decals").add_child(d, true)
+		#update_decal_position_rotation_type(count, pos, rot, type)
+		#update_decal_position_rotation_type.rpc_id(Globals.ms.get_second_player_peer_id(), count, pos, rot, type)
+		count += 1
 	# REFRESH
 	decals_maker.progress = offset
 	barrier_pivots = []
 	step = get_barriers_step()
 	iteration_count = floori(max / step)
+	#iteration_count = 1
 	for i in $Markers.get_children(): i.queue_free()
 	# MARKERS
 	for i in iteration_count:
@@ -125,24 +131,27 @@ func add_barriers(arr:Array, barrier_pivots:Array) -> void:
 	var count : int = 0
 	for i in arr:
 		var b : RigidBody3D = BARRIER_P.instantiate()
+		Globals.world.barrier_info.append([arr[count], barrier_pivots[count]])
 		Globals.world.get_node("Barriers").add_child(b, true)
-		update_barrier(count, arr[count], barrier_pivots[count])
-		update_barrier.rpc_id(Globals.ms.get_second_player_peer_id(), count, arr[count], barrier_pivots[count])
+		#update_barrier(count, arr[count], barrier_pivots[count])
+		#update_barrier.rpc_id(Globals.ms.get_second_player_peer_id(), count, arr[count], barrier_pivots[count])
 		if count == arr.size() - 1:
 			print("End")
 			Globals.world.get_previous_room().open()
 		count += 1
 		
-@rpc("any_peer", "reliable")
+@rpc("any_peer")
 func update_barrier(index:int, pos:Vector3, pivot:Vector3) -> void:
-	#print("Index: ", index, " pivot: ", pivot, " Pipa: ", Globals.world.get_node("Barriers").get_child(index))
+	print("Index: ", index, " pivot: ", pivot, " Pipa: ", Globals.world.get_node("Barriers").get_child(index))
 	Globals.world.get_node("Barriers").get_child(index).global_position = pos
 	Globals.world.get_node("Barriers").get_child(index).pivot = pivot
 	Globals.world.get_node("Barriers").get_child(index).generate_type()
-	#Globals.world.get_node("Barriers").get_child(index).clip_to_ground(pivot)
 
-@rpc("any_peer", "reliable")
+@rpc("any_peer")
 func update_decal_position_rotation_type(index:int, pos:Vector3, rot:Vector3, type:int) -> void:
+	print(333)
+	print("Index: ", index, " pos: ", pos)
+	
 	Globals.world.get_node("Decals").get_child(index).global_position = pos
 	Globals.world.get_node("Decals").get_child(index).global_rotation = rot
 	Globals.world.get_node("Decals").get_child(index).type = type
@@ -243,3 +252,8 @@ func activity_decal_animation() -> void:
 func disable() -> void:
 	process_mode = PROCESS_MODE_DISABLED
 	$Room.disable()
+
+func _input(event: InputEvent) -> void:
+	if multiplayer.is_server():
+		if Input.is_key_pressed(KEY_L):
+			update_decal_position_rotation_type.rpc_id(Globals.ms.get_second_player_peer_id(), 0, Vector3(1, 1000, 3), Vector3.ZERO, 0)

@@ -1,7 +1,14 @@
-[gd_scene load_steps=3 format=3 uid="uid://w4nuv4h3gluq"]
+[gd_scene load_steps=8 format=3 uid="uid://w4nuv4h3gluq"]
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_7hsgq"]
+[ext_resource type="Texture2D" uid="uid://ceeq0teln8w3p" path="res://images/ui/UI_BG.png" id="2_ciw2i"]
 [ext_resource type="Texture2D" uid="uid://daw00knq6lhld" path="res://crosshair.png" id="2_sr0mf"]
+[ext_resource type="PackedScene" uid="uid://f5pqnl7dhvpd" path="res://scenes/button_ui.tscn" id="4_41jnk"]
+[ext_resource type="FontFile" uid="uid://2lxwscltdxg7" path="res://fonts/Carlito-Italic.ttf" id="5_y3i25"]
+[ext_resource type="FontFile" uid="uid://cvi3gyfvhx2xl" path="res://fonts/Carlito-BoldItalic.ttf" id="6_7wptk"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_5m8hc"]
+texture = ExtResource("2_ciw2i")
 
 [node name="Main" type="Node3D"]
 script = ExtResource("1_7hsgq")
@@ -12,37 +19,14 @@ spawn_path = NodePath("..")
 
 [node name="Canvas" type="CanvasLayer" parent="."]
 
-[node name="HostButton" type="Button" parent="Canvas"]
-visible = false
-offset_right = 78.0
-offset_bottom = 51.0
-theme_override_font_sizes/font_size = 16
-text = "HOST"
-
-[node name="RefreshButton" type="Button" parent="Canvas"]
-visible = false
-offset_top = 51.0
-offset_right = 78.0
-offset_bottom = 102.0
-theme_override_font_sizes/font_size = 16
-text = "REFRESH"
-
-[node name="StartButton" type="Button" parent="Canvas"]
-visible = false
-offset_top = 102.0
-offset_right = 78.0
-offset_bottom = 153.0
-theme_override_font_sizes/font_size = 16
-text = "START"
-
-[node name="LobbiesContainer" type="ScrollContainer" parent="Canvas"]
-visible = false
-offset_left = 78.0
-offset_right = 578.0
-offset_bottom = 300.0
-
-[node name="Lobbies" type="VBoxContainer" parent="Canvas/LobbiesContainer"]
-layout_mode = 2
+[node name="BG" type="Panel" parent="Canvas"]
+self_modulate = Color(0.94902, 0.741176, 0.396078, 1)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_5m8hc")
 
 [node name="FPSLabel" type="Label" parent="Canvas"]
 offset_left = 7.59
@@ -87,56 +71,163 @@ theme_override_constants/margin_bottom = 50
 [node name="VBoxContainer" type="VBoxContainer" parent="Canvas/Start"]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Canvas/Start/VBoxContainer"]
+[node name="HBox3" type="HBoxContainer" parent="Canvas/Start/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 1.2
 
-[node name="NewGame" type="Button" parent="Canvas/Start/VBoxContainer/HBoxContainer"]
+[node name="NewGame" parent="Canvas/Start/VBoxContainer/HBox3" node_paths=PackedStringArray("method_owner") instance=ExtResource("4_41jnk")]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "NEW GAME"
+size_flags_vertical = 1
+method_owner = NodePath("../../../../..")
+method_name = "create_lobby"
+title = "New game"
+scale_factor = 0.93
+font_size = 45
+font_color = Color(1, 1, 1, 1)
+bg_color = Color(1, 0.847059, 0, 1)
+font_outline_size = 12
 
-[node name="Continue" type="Button" parent="Canvas/Start/VBoxContainer/HBoxContainer"]
+[node name="Continue" parent="Canvas/Start/VBoxContainer/HBox3" node_paths=PackedStringArray("method_owner") instance=ExtResource("4_41jnk")]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "CONTINUE"
+size_flags_vertical = 1
+method_owner = NodePath("../../../../..")
+method_name = "continue"
+title = "Continue"
+scale_factor = 0.93
+font_size = 45
+font_color = Color(1, 1, 1, 1)
+bg_color = Color(0.344004, 0.629549, 0.906502, 1)
+font_outline_size = 12
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="Canvas/Start/VBoxContainer"]
+[node name="HBox" type="HBoxContainer" parent="Canvas/Start/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Gallery" type="Button" parent="Canvas/Start/VBoxContainer/HBoxContainer2"]
+[node name="Gallery" parent="Canvas/Start/VBoxContainer/HBox" node_paths=PackedStringArray("method_owner") instance=ExtResource("4_41jnk")]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "GALLERY"
+size_flags_vertical = 1
+method_owner = NodePath("../../../../..")
+method_name = "continue"
+title = "Gallery"
+scale_factor = 0.93
+font_size = 42
+font_color = Color(1, 1, 1, 1)
+bg_color = Color(0.916942, 0.306209, 0.381865, 1)
+font_outline_size = 12
 
-[node name="Stats" type="Button" parent="Canvas/Start/VBoxContainer/HBoxContainer2"]
+[node name="Stats" parent="Canvas/Start/VBoxContainer/HBox" node_paths=PackedStringArray("method_owner") instance=ExtResource("4_41jnk")]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "STATS"
+size_flags_vertical = 1
+method_owner = NodePath("../../../../..")
+method_name = "continue"
+title = "Stats"
+scale_factor = 0.93
+font_size = 42
+font_color = Color(1, 1, 1, 1)
+bg_color = Color(0.887816, 0.612343, 0.176602, 1)
+font_outline_size = 12
 
-[node name="HowToPlay" type="Button" parent="Canvas/Start/VBoxContainer/HBoxContainer2"]
+[node name="HowToPlay" parent="Canvas/Start/VBoxContainer/HBox" node_paths=PackedStringArray("method_owner") instance=ExtResource("4_41jnk")]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "HOW TO PLAY"
+size_flags_vertical = 1
+method_owner = NodePath("../../../../..")
+method_name = "open_panel"
+additional_parameter = "HowToPlay"
+title = "How to play"
+scale_factor = 0.93
+font_size = 42
+font_color = Color(1, 1, 1, 1)
+bg_color = Color(0.432978, 0.774836, 0.298012, 1)
+font_outline_size = 12
 
-[node name="HBoxContainer3" type="HBoxContainer" parent="Canvas/Start/VBoxContainer"]
+[node name="HBox2" type="HBoxContainer" parent="Canvas/Start/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.8
 
-[node name="Options" type="Button" parent="Canvas/Start/VBoxContainer/HBoxContainer3"]
+[node name="Options" parent="Canvas/Start/VBoxContainer/HBox2" node_paths=PackedStringArray("method_owner") instance=ExtResource("4_41jnk")]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "OPTIONS"
+size_flags_vertical = 1
+method_owner = NodePath("../../../../..")
+method_name = "continue"
+title = "Options"
+scale_factor = 0.93
+font_size = 42
+font_color = Color(1, 1, 1, 1)
+bg_color = Color(0.660954, 0.592814, 1, 1)
+font_outline_size = 12
 
-[node name="About" type="Button" parent="Canvas/Start/VBoxContainer/HBoxContainer3"]
+[node name="Quit" parent="Canvas/Start/VBoxContainer/HBox2" node_paths=PackedStringArray("method_owner") instance=ExtResource("4_41jnk")]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "ABOUT"
+size_flags_vertical = 1
+method_owner = NodePath("../../../../..")
+method_name = "continue"
+title = "Quit"
+scale_factor = 0.93
+font_size = 42
+font_color = Color(1, 1, 1, 1)
+bg_color = Color(0.923931, 0.524851, 0.230593, 1)
+font_outline_size = 12
 
-[connection signal="pressed" from="Canvas/HostButton" to="." method="create_lobby"]
-[connection signal="pressed" from="Canvas/RefreshButton" to="." method="refresh_lobby_list"]
-[connection signal="pressed" from="Canvas/StartButton" to="." method="refresh_lobby_list"]
-[connection signal="pressed" from="Canvas/Start/VBoxContainer/HBoxContainer/NewGame" to="." method="create_lobby"]
+[node name="HowToPlay" type="Control" parent="Canvas"]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Container" type="MarginContainer" parent="Canvas/HowToPlay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 150
+theme_override_constants/margin_top = 50
+theme_override_constants/margin_right = 100
+theme_override_constants/margin_bottom = 50
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Canvas/HowToPlay/Container"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_shadow_color = Color(0.0392157, 0, 0.388235, 0.254902)
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_outline_size = 3
+theme_override_fonts/normal_font = ExtResource("5_y3i25")
+theme_override_fonts/bold_font = ExtResource("6_7wptk")
+theme_override_font_sizes/normal_font_size = 24
+theme_override_font_sizes/bold_font_size = 32
+bbcode_enabled = true
+text = "[p][b]Objective[/b][/p][p align=left][indent]Work together to safely deliver the golden orb from the top of the beanstalk to the very bottom. Along the way, you'll face obstacles, enemies, and puzzles that require both teamwork and smart thinking.[/indent][/p]
+[p][b]The Orb[/b][/p][p align=left][indent]Both players can push or throw the golden orb.[/indent][indent]Be careful! If it falls off the beanstalk, you lose the game.[/indent][/p]
+[p][b]Stamina[/b][/p][p align=left][indent]Interaction with orb uses stamina.[/indent][indent]Stamina regenerates over time when resting.[/indent][indent]Plan your actions carefully — if you run out of stamina, you’ll become vulnerable.[/indent][/p]
+[p][b]Safe Rooms[/b][/p][p][indent]After each level, you’ll reach a circular safe room.[/indent][indent]These rooms act as checkpoints. You can rest and prepare for the next section.[/indent][indent]Progress is saved automatically here.[/indent][/p]
+[p][b]Puzzle: Figure Search[/b][/p][p][indent]Activate drone mode to fly and scan the beanstalk.[/indent][indent]Find and count a specific symbol.[/indent][/p]"
+scroll_active = false
+shortcut_keys_enabled = false
+
+[node name="Back" parent="Canvas/HowToPlay" node_paths=PackedStringArray("method_owner") instance=ExtResource("4_41jnk")]
+layout_mode = 1
+offset_left = 30.0
+offset_top = 25.0
+offset_right = 130.0
+offset_bottom = 75.0
+method_owner = NodePath("../../..")
+method_name = "open_panel"
+additional_parameter = "Start"
+title = "Back"
+scale_factor = 0.9
+font_color = Color(1, 1, 1, 1)
+bg_color = Color(0.431373, 0.776471, 0.298039, 1)

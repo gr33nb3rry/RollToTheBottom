@@ -1,0 +1,111 @@
+[gd_scene load_steps=5 format=3 uid="uid://f5pqnl7dhvpd"]
+
+[ext_resource type="Script" path="res://scripts/button_ui.gd" id="1_4whvp"]
+[ext_resource type="FontFile" uid="uid://cvi3gyfvhx2xl" path="res://fonts/Carlito-BoldItalic.ttf" id="2_w22jv"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2p613"]
+content_margin_left = 10.0
+content_margin_right = 10.0
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+corner_detail = 16
+shadow_color = Color(0.0392157, 0, 0.388235, 0.254902)
+shadow_size = 5
+shadow_offset = Vector2(0, 2)
+anti_aliasing_size = 0.25
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3aux0"]
+content_margin_left = 10.0
+content_margin_right = 10.0
+bg_color = Color(0.501407, 0.501406, 0.501406, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 25
+corner_radius_top_right = 25
+corner_radius_bottom_right = 25
+corner_radius_bottom_left = 25
+corner_detail = 16
+anti_aliasing_size = 0.25
+
+[node name="Button" type="Control"]
+custom_minimum_size = Vector2(100, 50)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 100.0
+offset_bottom = 50.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+script = ExtResource("1_4whvp")
+method_name = "play"
+
+[node name="Main" type="Control" parent="."]
+custom_minimum_size = Vector2(100, 50)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(50, 25)
+
+[node name="ButtonContainer" type="MarginContainer" parent="Main"]
+custom_minimum_size = Vector2(100, 50)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Button" type="Button" parent="Main/ButtonContainer"]
+self_modulate = Color(1, 0.878431, 0, 1)
+custom_minimum_size = Vector2(100, 50)
+layout_mode = 2
+theme_override_colors/font_disabled_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("2_w22jv")
+theme_override_font_sizes/font_size = 24
+theme_override_styles/focus = SubResource("StyleBoxFlat_2p613")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_3aux0")
+theme_override_styles/hover = SubResource("StyleBoxFlat_2p613")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_2p613")
+theme_override_styles/normal = SubResource("StyleBoxFlat_2p613")
+
+[node name="Label" type="Label" parent="Main/ButtonContainer/Button"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_shadow_color = Color(0.0395482, 1.68458e-07, 0.390186, 0.254902)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.490196)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 0
+theme_override_constants/shadow_outline_size = 3
+theme_override_fonts/font = ExtResource("2_w22jv")
+theme_override_font_sizes/font_size = 24
+text = "Play"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="resized" from="Main" to="." method="update"]
+[connection signal="mouse_entered" from="Main/ButtonContainer/Button" to="." method="hover_selection_start"]
+[connection signal="mouse_exited" from="Main/ButtonContainer/Button" to="." method="hover_selection_end"]
+[connection signal="pressed" from="Main/ButtonContainer/Button" to="." method="click"]
