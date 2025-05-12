@@ -1,9 +1,10 @@
+Control
+ScrollContainer
 PanelContainer
 TextureRect
 HBoxContainer
 VBoxContainer
 Label
-Control
 GridContainer
 MultiplayerSynchronizer
 MarginContainer
@@ -11,5 +12,3 @@ RichTextLabel
 CollisionShape3D
 MeshInstance3D
 StaticBody3D
-CurveMesh3D
-AudioStreamPlayer3D

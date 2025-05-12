@@ -113,17 +113,17 @@ func get_friends() -> void:
 	new_friends.sort_custom(func(a, b):
 		return Steam.getFriendPersonaState(a) > Steam.getFriendPersonaState(b)
 	)
-	if $FriendsContainer/Friends.get_child_count() > 0:
-		for f in $FriendsContainer/Friends.get_children(): f.queue_free()
+	if $FriendsContainer/Main/Friends.get_child_count() > 0:
+		for f in $FriendsContainer/Main/Friends.get_children(): f.queue_free()
 	for f in new_friends:
 		friends[f] = create_friend(f)
 		Steam.getPlayerAvatar(2, f)
 	var t = get_tree().create_tween()
-	t.tween_property($FriendsContainer, "position:x", 1030, 0.5).set_trans(Tween.TRANS_SPRING).set_ease(Tween.EASE_OUT)
+	t.tween_property($FriendsContainer/Main, "position:x", 0, 0.5).set_trans(Tween.TRANS_SPRING).set_ease(Tween.EASE_OUT)
 	await get_tree().create_timer(10.0).timeout
 	is_friend_list_opened = false
 	var t2 = get_tree().create_tween()
-	t2.tween_property($FriendsContainer, "position:x", 1280, 0.2).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	t2.tween_property($FriendsContainer/Main, "position:x", 250, 0.2).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 	
 func create_friend(steam_id) -> Node:
 	var b = BUTTON_UI.instantiate()
@@ -138,7 +138,7 @@ func create_friend(steam_id) -> Node:
 	b.font_color = Color.WHITE
 	b.bg_color = Color(0.561, 0.746, 0.982)
 	b.custom_minimum_size = Vector2(250, 50)
-	$FriendsContainer/Friends.add_child(b)
+	$FriendsContainer/Main/Friends.add_child(b)
 	return b
 
 

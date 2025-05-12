@@ -466,21 +466,33 @@ scale_factor = 0.9
 bg_color = Color(1, 0.878431, 0, 1)
 initial_bg_alpha = 0.7
 
-[node name="FriendsContainer" type="ScrollContainer" parent="."]
-clip_contents = false
+[node name="FriendsContainer" type="Control" parent="."]
 custom_minimum_size = Vector2(250, 0)
 layout_mode = 1
 anchors_preset = 11
 anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = 250.0
+offset_left = -250.0
 grow_horizontal = 0
 grow_vertical = 2
+
+[node name="Main" type="ScrollContainer" parent="FriendsContainer"]
+clip_contents = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 250.0
+offset_right = 250.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 horizontal_scroll_mode = 0
 vertical_scroll_mode = 3
 
-[node name="Friends" type="VBoxContainer" parent="FriendsContainer"]
+[node name="Friends" type="VBoxContainer" parent="FriendsContainer/Main"]
 layout_mode = 2
 
 [connection signal="mouse_entered" from="VBox/Cards/1/Main/Button" to="." method="hover_selection_start" binds= [0]]
