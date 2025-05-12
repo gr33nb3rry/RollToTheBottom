@@ -10,7 +10,7 @@ func _on_despawned(node:Node) -> void:
 		#Globals.world.start_level()
 
 func _on_spawned(node: Node) -> void:
-	if multiplayer.is_server(): return
-	Globals.world.add_barrier.rpc_id(1, get_child_count()-1)
-	#Globals.world.add_barrier(get_child_count()-1)
+	#if multiplayer.is_server(): return
+	#Globals.world.add_barrier.rpc_id(1, get_child_count()-1)
+	Globals.world.add_barrier(get_child_count()-1)
 	#update_decal_position_rotation_type(get_child_count()-1, pos, rot, type)

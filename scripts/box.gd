@@ -26,7 +26,7 @@ func generate_type() -> void:
 	if multiplayer.is_server(): return
 	type = randi_range(0, 1)
 	var h : float = randf_range(1.5, 2.5)
-	update_by_type(type, h)
+	#update_by_type(type, h)
 	update_by_type.rpc_id(1, type, h)
 
 @rpc("any_peer")

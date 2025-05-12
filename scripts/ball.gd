@@ -71,7 +71,7 @@ func jump() -> void:
 func _input(_event: InputEvent) -> void:
 	if Input.is_key_pressed(KEY_P):
 		jump()
-	elif Input.is_key_pressed(KEY_BRACKETLEFT):
+	elif Input.is_key_pressed(KEY_O):
 		var pos = Globals.ms.get_player_by_id(1).global_position + Vector3(0, 5, 0)
 		global_position = pos
 
