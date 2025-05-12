@@ -17,8 +17,7 @@ func _on_despawned(node:Node) -> void:
 
 
 func _on_spawned(node: Node) -> void:
-	if multiplayer.is_server(): return
+	#if multiplayer.is_server(): return
 	print("Request add new decal with index ", get_child_count()-1)
-	Globals.world.add_decal.rpc_id(1, get_child_count()-1)
-	#Globals.world.add_decal(get_child_count()-1)
-	#update_decal_position_rotation_type(get_child_count()-1, pos, rot, type)
+	#Globals.world.add_decal.rpc_id(1, get_child_count()-1)
+	Globals.world.add_decal(get_child_count()-1)

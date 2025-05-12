@@ -204,3 +204,6 @@ func open_panel(title:String) -> void:
 	$Canvas.get_node(title).show()
 	$Canvas/BG.self_modulate = BG_COLORS[title]
 	active_panel = title
+
+func exit() -> void:
+	get_tree().quit()

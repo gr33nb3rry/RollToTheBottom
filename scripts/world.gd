@@ -42,12 +42,6 @@ func update_barrier(index:int, pos:Vector3, pivot:Vector3) -> void:
 	Globals.world.get_node("Barriers").get_child(index).pivot = pivot
 	Globals.world.get_node("Barriers").get_child(index).generate_type()
 
-const DECAL_0 = preload("res://images/decals/decal0.png")
-const DECAL_1 = preload("res://images/decals/decal1.png")
-const DECAL_2 = preload("res://images/decals/decal2.png")
-const DECAL_3 = preload("res://images/decals/decal3.png")
-const DECAL_4 = preload("res://images/decals/decal4.png")
-const DECAL_5 = preload("res://images/decals/decal5.png")
 
 @rpc("any_peer")
 func update_decal_position_rotation_type(index:int, pos:Vector3, rot:Vector3, type:int) -> void:
@@ -57,13 +51,7 @@ func update_decal_position_rotation_type(index:int, pos:Vector3, rot:Vector3, ty
 	Globals.world.get_node("Decals").get_child(index).global_position = pos
 	Globals.world.get_node("Decals").get_child(index).global_rotation = rot
 	Globals.world.get_node("Decals").get_child(index).type = type
-	match type:
-		0: Globals.world.get_node("Decals").get_child(index).texture_albedo = DECAL_0
-		1: Globals.world.get_node("Decals").get_child(index).texture_albedo = DECAL_1
-		2: Globals.world.get_node("Decals").get_child(index).texture_albedo = DECAL_2
-		3: Globals.world.get_node("Decals").get_child(index).texture_albedo = DECAL_3
-		4: Globals.world.get_node("Decals").get_child(index).texture_albedo = DECAL_4
-		5: Globals.world.get_node("Decals").get_child(index).texture_albedo = DECAL_5
+	Globals.world.get_node("Decals").get_child(index).update_type()
 
 
 
@@ -104,6 +92,8 @@ func generate_zone() -> void:
 	current_zone_instance.is_finished = false
 	for decal in Globals.world.get_node("Decals").get_children(): decal.queue_free()
 	for barrier in Globals.world.get_node("Barriers").get_children(): barrier.queue_free()
+	
+	start_level()
 	#await get_tree().create_timer(0.2).timeout
 	#current_zone_instance.generate_decals()
 

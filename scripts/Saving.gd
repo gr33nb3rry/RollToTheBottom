@@ -1,6 +1,19 @@
 extends Node
 
 var skills : Array
+var bonus_decals : Dictionary = {
+	0: false,
+	1: false,
+	2: false,
+	3: false,
+	4: false,
+	5: false,
+	6: false,
+	7: false,
+	8: false,
+	9: false,
+	10: false
+}
 
 var save_path = "user://save_data.json"
 
@@ -10,7 +23,7 @@ func _ready() -> void:
 func save_data() -> void:
 	var file = FileAccess.open(save_path, FileAccess.WRITE)
 	var object = {
-		"skills": skills
+		"bonus_decals": bonus_decals
 	}
 	var json_string = JSON.stringify(object)
 	file.store_line(json_string)
@@ -20,8 +33,8 @@ func load_data() -> void:
 		#PlayerStats.coins = 10000
 		return
 	var loaded_data = get_saved_data(save_path)
-	skills = get_loaded_data(loaded_data, "skills", [])
-	
+	bonus_decals = get_loaded_data(loaded_data, "bonus_decals", {0: false,1: false,2: false,3: false,4: false,5: false,6: false,7: false,8: false,9: false,10: false})
+	print("Loaded bonus decals:  ", bonus_decals)
 func get_loaded_data(loaded_data:Dictionary, key:String, default_value):
 	if loaded_data.has(key):
 		return loaded_data[key]

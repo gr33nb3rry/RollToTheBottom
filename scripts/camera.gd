@@ -94,4 +94,5 @@ func select_decal() -> void:
 			nearest_decal_to_point.select.rpc_id(Globals.ms.get_second_player_peer_id())
 		else:
 			nearest_decal_to_point.select.rpc_id(1)
-			
+	elif !nearest_decal_to_point.is_selected and nearest_distance <= 2.0 and nearest_decal_to_point.type == 6:
+		nearest_decal_to_point.select_bonus()

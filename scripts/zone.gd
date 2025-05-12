@@ -88,12 +88,13 @@ func generate_decals() -> void:
 	decals_maker.progress = offset
 	decals_count = [0, 0, 0, 0, 0, 0]
 	# DECALS
-	
 	var count : int = 0
+	var bonus_decals : int = randi_range(0, iteration_count-1)
 	for i in iteration_count:
 		var m : MeshInstance3D = decals_center.get_node("Mesh")
 		var type : int = randi_range(0, 5)
-		decals_count[type] += 1
+		if count == bonus_decals: type = 6
+		if type < 6: decals_count[type] += 1
 		decals_maker.progress += step
 		decals_center.get_node("Mesh").rotation_degrees.y = randf_range(0.0, 360.0)
 		decals_center.rotation_degrees.z = randf_range(0.0, 360.0)
